@@ -1,0 +1,220 @@
+/*
+ * Library to support common Windows NT specific formats
+ *
+ * Copyright (c) 2009-2013, Joachim Metz <joachim.metz@gmail.com>
+ *
+ * Refer to AUTHORS for acknowledgements.
+ *
+ * This software is free software: you can redistribute it and/or modisoy
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this software.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#if !defined( _LIBFWNT_H )
+#define _LIBFWNT_H
+
+#include <libfwnt/definitions.h>
+#include <libfwnt/error.h>
+#include <libfwnt/extern.h>
+#include <libfwnt/features.h>
+#include <libfwnt/types.h>
+
+#include <stdio.h>
+
+#if defined( __cplusplus )
+extern "C" {
+#endif
+
+/* -------------------------------------------------------------------------
+ * Support functions
+ * ------------------------------------------------------------------------- */
+
+/* Returns the library version
+ */
+LIBFWNT_EXTERN \
+const char *libfwnt_get_version(
+             void );
+
+/* -------------------------------------------------------------------------
+ * Error functions
+ * ------------------------------------------------------------------------- */
+
+/* Frees an error
+ */
+LIBFWNT_EXTERN \
+void libfwnt_error_free(
+      libfwnt_error_t **error );
+
+/* Prints a descriptive string of the error to the stream
+ * Returns the amount of printed characters if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_error_fprint(
+     libfwnt_error_t *error,
+     FILE *stream );
+
+/* Prints a descriptive string of the error to the string
+ * The end-of-string character is not included in the return value
+ * Returns the amount of printed characters if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_error_sprint(
+     libfwnt_error_t *error,
+     char *string,
+     size_t size );
+
+/* Prints a backtrace of the error to the stream
+ * Returns the amount of printed characters if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_error_backtrace_fprint(
+     libfwnt_error_t *error,
+     FILE *stream );
+
+/* Prints a backtrace of the error to the string
+ * The end-of-string character is not included in the return value
+ * Returns the amount of printed characters if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_error_backtrace_sprint(
+     libfwnt_error_t *error,
+     char *string,
+     size_t size );
+
+/* -------------------------------------------------------------------------
+ * Locale identifier (LCID) functions
+ * ------------------------------------------------------------------------- */
+
+/* -------------------------------------------------------------------------
+ * Security identifier (SID) functions
+ * ------------------------------------------------------------------------- */
+
+/* Creates a security identifier
+ * Make sure the value security_identifier is referencing, is set to NULL
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_initialize(
+     libfwnt_security_identifier_t **security_identifier,
+     libfwnt_error_t **error );
+
+/* Frees a security identifier
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_free(
+     libfwnt_security_identifier_t **security_identifier,
+     libfwnt_error_t **error );
+
+/* Converts a security identifier stored in a byte stream into a runtime version
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_from_byte_stream(
+     libfwnt_security_identifier_t *security_identifier,
+     uint8_t *byte_stream,
+     size_t byte_stream_size,
+     int byte_order,
+     libfwnt_error_t **error );
+
+/* Deterimes the size of the string for the security identifier
+ * The string size includes the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_get_string_size(
+     libfwnt_security_identifier_t *security_identifier,
+     size_t *string_size,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+/* Converts the security identifier into an UTF-8 string
+ * The string size should include the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_to_utf8_string(
+     libfwnt_security_identifier_t *security_identifier,
+     uint8_t *utf8_string,
+     size_t utf8_string_size,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+/* Converts the security identifier into an UTF-8 string
+ * The string size should include the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_to_utf8_string_with_index(
+     libfwnt_security_identifier_t *security_identifier,
+     uint8_t *utf8_string,
+     size_t utf8_string_size,
+     size_t *utf8_string_index,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+/* Converts the security identifier into an UTF-16 string
+ * The string size should include the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_to_utf16_string(
+     libfwnt_security_identifier_t *security_identifier,
+     uint16_t *utf16_string,
+     size_t utf16_string_size,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+/* Converts the security identifier into an UTF-16 string
+ * The string size should include the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_to_utf16_string_with_index(
+     libfwnt_security_identifier_t *security_identifier,
+     uint16_t *utf16_string,
+     size_t utf16_string_size,
+     size_t *utf16_string_index,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+/* Converts the security identifier into an UTF-32 string
+ * The string size should include the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_to_utf32_string(
+     libfwnt_security_identifier_t *security_identifier,
+     uint32_t *utf32_string,
+     size_t utf32_string_size,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+/* Converts the security identifier into an UTF-32 string
+ * The string size should include the end of string character
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_identifier_copy_to_utf32_string_with_index(
+     libfwnt_security_identifier_t *security_identifier,
+     uint32_t *utf32_string,
+     size_t utf32_string_size,
+     size_t *utf32_string_index,
+     uint32_t string_format_flags,
+     libfwnt_error_t **error );
+
+#if defined( __cplusplus )
+}
+#endif
+
+#endif
+

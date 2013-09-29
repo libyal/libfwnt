@@ -1,0 +1,57 @@
+AM_CPPFLAGS = \
+	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/common \
+	@LIBCSTRING_CPPFLAGS@ \
+	@LIBCERROR_CPPFLAGS@ \
+	@LIBCTHREADS_CPPFLAGS@ \
+	@LIBCDATA_CPPFLAGS@ \
+	@LIBCNOTIFY_CPPFLAGS@ \
+	@PTHREAD_CPPFLAGS@
+
+lib_LTLIBRARIES = libfwnt.la
+
+libfwnt_la_SOURCES = \
+	libfwnt.c \
+	libfwnt_access_control_list.c libfwnt_access_control_list.h \
+	libfwnt_debug.c libfwnt_debug.h \
+	libfwnt_definitions.h \
+	libfwnt_extern.h \
+	libfwnt_error.c libfwnt_error.h \
+	libfwnt_libcerror.h \
+	libfwnt_libcdata.h \
+	libfwnt_libcnotify.h \
+	libfwnt_libcstring.h \
+	libfwnt_locale_identifier.c libfwnt_locale_identifier.h \
+	libfwnt_security_descriptor.c libfwnt_security_descriptor.h \
+	libfwnt_security_identifier.c libfwnt_security_identifier.h \
+	libfwnt_support.c libfwnt_support.h \
+	libfwnt_types.h \
+	libfwnt_unused.h
+
+libfwnt_la_LIBADD = \
+	@LIBCSTRING_LIBADD@ \
+	@LIBCERROR_LIBADD@ \
+	@LIBCTHREADS_LIBADD@ \
+	@LIBCDATA_LIBADD@ \
+	@LIBCNOTIFY_LIBADD@ \
+	@PTHREAD_LIBADD@
+
+libfwnt_la_LDFLAGS = -no-undefined -version-info 1:0:0
+
+EXTRA_DIST = \
+	libfwnt_definitions.h.in \
+	libfwnt.rc \
+	libfwnt.rc.in
+
+MAINTAINERCLEANFILES = \
+	Makefile.in
+
+distclean: clean
+	/bin/rm -f libfwnt_definitions.h
+	/bin/rm -f libfwnt.rc
+	/bin/rm -f Makefile
+
+splint:
+	@echo "Running splint on libfwnt ..."
+	-splint -preproc -redef $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(libfwnt_la_SOURCES)
+

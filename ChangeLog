@@ -1,0 +1,57 @@
+TODO
+* add security descriptor support
+  - access control list
+  - access control entry
+* update include header
+  - locale identifier functions
+* add tests
+  - locale identifier functions
+  - security identifier functions (check)
+* update man pages
+  - locale identifier functions
+  - security identifier functions
+
+* locale identifier:
+  - currently debug functions only
+* security identifier:
+  - use array for sub authorities
+* security descriptor:
+  - implement
+
+20130929
+* worked on libcthreads build support
+* worked on git files
+* fixes for stand-alone build
+* updated msvscpp files
+
+20130718
+* removed unnecessary restriction in library include headers
+
+20130413
+* updated dependencies
+* 2013 update
+
+20120924
+* updated dependencies
+* libcdata update
+* lcid now available outside debug output
+
+20120831
+* worked on security descriptor
+  - worked on access control list
+  - worked on access control entry debug function
+
+20120830
+* create control flag debug print function
+* worked on security descriptor
+  - added access control list
+
+20120827
+* worked on include header
+* worked on man pages
+* worked on tests
+* worked on security descriptor
+
+20120826
+* Created stand-alone version of version used in libregf
+

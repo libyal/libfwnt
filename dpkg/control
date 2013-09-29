@@ -1,0 +1,22 @@
+Source: libfwnt
+Section: unknown
+Priority: extra
+Maintainer: Joachim Metz <joachim.metz@gmail.com>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.8.3
+Homepage: http://code.google.com/p/libflibs/
+
+Package: libfwnt
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Library to support common Windows NT specific formats.
+ libfwnt is a library to support common Windows NT specific formats.
+
+Package: libfwnt-dev
+Section: libdevel
+Architecture: any
+Depends: libfwnt (= ${Source-Version})
+Description: Header files and libraries for developing applications for libfwnt
+ Header files and libraries for developing applications for libfwnt.
+
