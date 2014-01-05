@@ -103,6 +103,7 @@ stamp-h1
 /libfwnt/libfwnt_definitions.h
 /tests/fwnt_test_security_identifier_copy_from
 /tests/fwnt_test_security_identifier_to_string
+/tests/tmp
 
 # Local library dependencies specific files
 /libcdata

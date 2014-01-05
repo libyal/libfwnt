@@ -18,6 +18,10 @@ TODO
 * security descriptor:
   - implement
 
+20140105
+* 2014 update
+* updated dependencies
+
 20130929
 * worked on libcthreads build support
 * worked on git files

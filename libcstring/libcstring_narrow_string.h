@@ -1,7 +1,7 @@
 /*
  * Narrow character string functions
  *
- * Copyright (c) 2010-2013, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (c) 2010-2014, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -82,7 +82,7 @@ extern "C" {
 #define libcstring_narrow_string_compare_no_case( string1, string2, size ) \
 	_strnicmp( string1, string2, size )
 
-#elif defined( WINAPI )
+#elif defined( WINAPI ) || defined( HAVE_STRNICMP )
 #define libcstring_narrow_string_compare_no_case( string1, string2, size ) \
 	strnicmp( string1, string2, size )
 

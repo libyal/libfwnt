@@ -2,8 +2,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
 	@LIBCSTRING_CPPFLAGS@ \
-	@LIBCERROR_CPPFLAGS@ \
-	@MEMWATCH_CPPFLAGS@
+	@LIBCERROR_CPPFLAGS@
 
 TESTS = \
 	test_security_identifier_copy_from.sh \
@@ -27,10 +26,9 @@ fwnt_test_security_identifier_copy_from_SOURCES = \
 	fwnt_test_security_identifier_copy_from.c
 
 fwnt_test_security_identifier_copy_from_LDADD = \
-	@LIBCSTRING_LIBADD@ \
-	@LIBCERROR_LIBADD@ \
 	../libfwnt/libfwnt.la \
-        @MEMWATCH_LIBADD@
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
 
 fwnt_test_security_identifier_to_string_SOURCES = \
 	fwnt_test_libcerror.h \
@@ -39,10 +37,9 @@ fwnt_test_security_identifier_to_string_SOURCES = \
 	fwnt_test_security_identifier_to_string.c
 
 fwnt_test_security_identifier_to_string_LDADD = \
-	@LIBCSTRING_LIBADD@ \
-	@LIBCERROR_LIBADD@ \
 	../libfwnt/libfwnt.la \
-        @MEMWATCH_LIBADD@
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
 
 MAINTAINERCLEANFILES = \
 	Makefile.in
