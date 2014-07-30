@@ -86,4 +86,5 @@ splint:
 	(cd $(srcdir)/libcnotify && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/libfwnt && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/po && $(MAKE) splint $(AM_MAKEFLAGS))
+	(cd $(srcdir)/tests && $(MAKE) splint $(AM_MAKEFLAGS))
 

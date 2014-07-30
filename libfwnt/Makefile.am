@@ -13,6 +13,7 @@ lib_LTLIBRARIES = libfwnt.la
 libfwnt_la_SOURCES = \
 	libfwnt.c \
 	libfwnt_access_control_list.c libfwnt_access_control_list.h \
+	libfwnt_bit_stream.c libfwnt_bit_stream.h \
 	libfwnt_debug.c libfwnt_debug.h \
 	libfwnt_definitions.h \
 	libfwnt_extern.h \
@@ -22,6 +23,8 @@ libfwnt_la_SOURCES = \
 	libfwnt_libcnotify.h \
 	libfwnt_libcstring.h \
 	libfwnt_locale_identifier.c libfwnt_locale_identifier.h \
+	libfwnt_lznt1.c libfwnt_lznt1.h \
+	libfwnt_lzxpress.c libfwnt_lzxpress.h \
 	libfwnt_security_descriptor.c libfwnt_security_descriptor.h \
 	libfwnt_security_identifier.c libfwnt_security_identifier.h \
 	libfwnt_support.c libfwnt_support.h \

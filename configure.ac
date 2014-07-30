@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libfwnt],
- [20140105],
+ [20140512],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -71,6 +71,22 @@ AX_COMMON_CHECK_ENABLE_VERBOSE_OUTPUT
 
 dnl Check if libfwsi should be build with debug output
 AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
+
+dnl Check if DLL support is needed
+AS_IF(
+ [test "x$enable_shared" = xyes],
+ [AS_CASE(
+  [$host],
+  [*cygwin* | *mingw*],
+  [AC_DEFINE(
+   [HAVE_DLLMAIN],
+   [1],
+   [Define to 1 to enable the DllMain function.])
+  AC_SUBST(
+   [HAVE_DLLMAIN],
+   [1])
+  ])
+ ])
 
 dnl Set additional compiler flags
 CFLAGS="$CFLAGS -Wall";

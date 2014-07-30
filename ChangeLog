@@ -1,5 +1,12 @@
 TODO
-* add security descriptor support
+* lznt1
+  - add decompression support
+  - add compression support
+* lzxpress
+  - add compression support
+* lzxpress huffman
+  - add compression support
+* security descriptor
   - access control list
   - access control entry
 * update include header
@@ -17,6 +24,15 @@ TODO
   - use array for sub authorities
 * security descriptor:
   - implement
+
+20140512
+* woked on lzxpress support
+
+20140417
+* woked on lznt1 support
+
+20140415
+* woked on lzxpress support
 
 20140105
 * 2014 update
