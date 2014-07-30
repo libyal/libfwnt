@@ -2,8 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="libfwnt_dll"
-	ProjectGUID="{B5225323-AC67-411D-8FBA-199E9467FAB5}"
+	Name="libfwnt"
+	ProjectGUID="{A643F7B5-DCC2-4D9D-A424-DABD357F9DCA}"
 	RootNamespace="libfwnt"
 	TargetFrameworkVersion="131072"
 	>
@@ -56,11 +56,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\libfwnt.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(OutDir)\libfwnt.lib"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
+				TargetMachine="1"
+				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -129,12 +130,13 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\libfwnt.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(OutDir)&quot;"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(OutDir)\libfwnt.lib"
+				DataExecutionPrevention="1"
+				TargetMachine="1"
+				ImportLibrary="$(OutDir)\$(ProjectName).lib"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -176,6 +178,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\libfwnt\libfwnt_bit_stream.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libfwnt\libfwnt_debug.c"
 				>
 			</File>
@@ -185,6 +191,14 @@
 			</File>
 			<File
 				RelativePath="..\..\libfwnt\libfwnt_locale_identifier.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libfwnt\libfwnt_lznt1.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libfwnt\libfwnt_lzxpress.c"
 				>
 			</File>
 			<File
@@ -207,6 +221,10 @@
 			>
 			<File
 				RelativePath="..\..\libfwnt\libfwnt_access_control_list.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libfwnt\libfwnt_bit_stream.h"
 				>
 			</File>
 			<File
@@ -243,6 +261,14 @@
 			</File>
 			<File
 				RelativePath="..\..\libfwnt\libfwnt_locale_identifier.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libfwnt\libfwnt_lznt1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libfwnt\libfwnt_lzxpress.h"
 				>
 			</File>
 			<File

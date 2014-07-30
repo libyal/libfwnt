@@ -1,10 +1,12 @@
 MSVSCPP_FILES = \
+	fwnt_test_security_identifier_copy_from/fwnt_test_security_identifier_copy_from.vcproj \
+	fwnt_test_security_identifier_to_string/fwnt_test_security_identifier_to_string.vcproj \
 	libcdata/libcdata.vcproj \
 	libcerror/libcerror.vcproj \
 	libcnotify/libcnotify.vcproj \
 	libcstring/libcstring.vcproj \
 	libcthreads/libcthreads.vcproj \
-	libfwnt_dll/libfwnt_dll.vcproj \
+	libfwnt/libfwnt.vcproj \
 	libfwnt.sln
 
 SCRIPT_FILES = \
