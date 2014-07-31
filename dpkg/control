@@ -10,8 +10,16 @@ Package: libfwnt
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: libfwnt-dbg
 Description: Library to support common Windows NT specific formats.
  libfwnt is a library to support common Windows NT specific formats.
+
+Package: libfwnt-dbg
+Architecture: any
+Section: debug
+Depends: libfwnt (= ${Source-Version}), ${misc:Depends}
+Description: Debugging symbols for libfwnt
+ Debugging symbols for libfwnt.
 
 Package: libfwnt-dev
 Section: libdevel
