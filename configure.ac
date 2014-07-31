@@ -72,6 +72,16 @@ AX_COMMON_CHECK_ENABLE_VERBOSE_OUTPUT
 dnl Check if libfwsi should be build with debug output
 AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
 
+dnl Headers included in various places
+AC_CHECK_HEADERS([stdarg.h varargs.h])
+
+AS_IF(
+ [test "x$ac_cv_header_stdarg_h" != xyes && test "x$ac_cv_header_varargs_h" != xyes],
+ [AC_MSG_FAILURE(
+  [Missing headers: stdarg.h and varargs.h],
+  [1])
+ ])
+
 dnl Check if DLL support is needed
 AS_IF(
  [test "x$enable_shared" = xyes],
