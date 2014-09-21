@@ -1,4 +1,6 @@
-See:
-* http://code.google.com/p/libfwnt/wiki/Building
-* README.macosx
+libfwnt is a library for Windows NT data types.
+
+For more information see:
+* Project documentation: https://github.com/libyal/libfwnt/wiki/Home
+* How to build from source: https://github.com/libyal/libfwnt/wiki/Building
 

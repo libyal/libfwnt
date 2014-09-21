@@ -28,7 +28,7 @@ BEGIN
       VALUE "OriginalFilename",		"libfwnt.dll\0"
       VALUE "ProductName",		"libfwnt\0"
       VALUE "ProductVersion",		"@VERSION@" "\0"
-      VALUE "Comments",			"For more information visit http://code.google.com/p/libflibs/\0"
+      VALUE "Comments",			"For more information visit https://github.com/libyal/libfwnt/\0"
     END
   END
   BLOCK "VarFileInfo"
