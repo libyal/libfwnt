@@ -1,5 +1,9 @@
 libfwnt is a library for Windows NT data types.
 
+Project information:
+* Status: alpha
+* Licence: LGPLv3+
+
 For more information see:
 * Project documentation: https://github.com/libyal/libfwnt/wiki/Home
 * How to build from source: https://github.com/libyal/libfwnt/wiki/Building
