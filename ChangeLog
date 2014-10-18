@@ -1,4 +1,5 @@
 TODO
+* fix tests
 * lznt1
   - add decompression support
   - add compression support
@@ -24,6 +25,9 @@ TODO
   - use array for sub authorities
 * security descriptor:
   - implement
+
+20141018
+* changes for deployment
 
 20141012
 * worked on utility scripts
