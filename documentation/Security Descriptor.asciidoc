@@ -1,0 +1,316 @@
+## Security Descriptor
+The Windows NT security descriptor consist of:
+
+* the security descriptor header
+* an owner security identifier (SID)
+* a group security identifier (SID)
+* a discretionary access control list (DACL)
+* a system access control list (SACL)
+
+In absolute format, a Windows NT security descriptor contains pointers to its 
+information, not the information itself. In self-relative format, a security 
+descriptor stores both the security descriptor and associated information in a 
+contiguous block.
+
+*TODO Is a security descriptor in a byte stream always self-relative?*
+
+### Security descriptor header
+The security descriptor header is 20 bytes of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 1 | | Revision number
+| 1 | 1 | | Padding
+| 2 | 2 | | Control flags
+| 4 | 4 | | Reference to the owner SID +
+Contains an offset relative from the start of the security descriptor header
+| 8 | 4 | | Reference to the group SID +
+Contains an offset relative from the start of the security descriptor header
+| 12 | 4 | | Reference to the DACL +
+Contains an offset relative from the start of the security descriptor header
+| 16 | 4 | | Reference to the SACL +
+Contains an offset relative from the start of the security descriptor header
+|===
+
+The control flags determine how the reference values should be interpreted.
+
+#### Security descriptor control flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x0001 | SE_OWNER_DEFAULTED | Owner defaulted +
+Indicates that the SID of the owner of the security descriptor was provided by a default mechanism. This flag can be used by a resource manager to identify objects whose owner was set by a default mechanism.
+| 0x0002 | SE_GROUP_DEFAULTED | Group defaulted +
+Indicates that the security identifier (SID) of the security descriptor group was provided by a default mechanism. This flag can be used by a resource manager to identify objects whose security descriptor group was set by a default mechanism.
+| 0x0004 | SE_DACL_PRESENT | DACL present +
+Indicates a security descriptor that has a DACL. If this flag is not set, or if this flag is set and the DACL is NULL, the security descriptor allows full access to everyone.
+| 0x0008 | SE_DACL_DEFAULTED | DACL defaulted +
+Indicates a security descriptor with a default DACL. For example, if the creator an object does not specify a DACL, the object receives the default DACL from the access token of the creator. This flag can affect how the system treats the DACL with respect to ACE inheritance. The system ignores this flag if the SE_DACL_PRESENT flag is not set.
+| 0x0010 | SE_SACL_PRESENT | SACL present +
+Indicates a security descriptor that has a SACL.
+| 0x0020 | SE_SACL_DEFAULTED | SACL defaulted +
+A default mechanism, rather than the original provider of the security descriptor, provided the SACL. This flag can affect how the system treats the SACL, with respect to ACE inheritance. The system ignores this flag if the SE_SACL_PRESENT flag is not set.
+| | |
+| 0x0100 | SE_DACL_AUTO_INHERIT_REQ | DACL Auto Inherit Req
+| 0x0200 | SE_SACL_AUTO_INHERIT_REQ | SACL Auto Inherit Req
+| 0x0400 | SE_DACL_AUTO_INHERITED | DACL Auto Inherited +
+Indicates a security descriptor in which the DACL is set up to support automatic propagation of inheritable access control entries (ACEs) to existing child objects.
+| 0x0800 | SE_SACL_AUTO_INHERITED | SACL Auto Inherited +
+Indicates a security descriptor in which the SACL is set up to support automatic propagation of inheritable ACEs to existing child objects.
+| 0x1000 | SE_DACL_PROTECTED | DACL Protected +
+Prevents the DACL of the security descriptor from being modified by inheritable ACEs.
+| 0x2000 | SE_SACL_PROTECTED | SACL Protected +
+Prevents the SACL of the security descriptor from being modified by inheritable ACEs.
+| 0x4000 | SE_RM_CONTROL_VALID | Resource Manager (RM) control valid
+| 0x8000 | SE_SELF_RELATIVE | Self Relative +
+Indicates a self-relative security descriptor.
+|===
+
+## Security identifier
+The security identifier (SID) is used throughout Windows NT-based software. A SID is normally represented like a string e.g.:
+....
+S-1-5-21-7623811015-3361044348-030300820-1013
+....
+
+The binary representation of the security identifier is variable of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 1 | | Revision number +
+This value corresponds with first number in the SID string
+| 1 | 1 | | Number of sub authorities
+| 2 | 6 | | Authority +
+Contains a 48-bit big-endian value +
+This value corresponds with the second number in the SID string
+| 8 | 4 x number | | An array of 32-bit little-endian values containing the sub authorities +
+These values corresponds with the remaining values in the SID string
+|===
+
+The 'S' in the string representation is not stored in the binary representation.
+
+## Access control list (ACL)
+Both the DACL and the SACL are stored in the same data structure, referred to 
+as the Access Control List (ACL).
+
+The access control list header is 8 bytes of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 1 | | Revision
+| 1 | 1 | | Padding
+| 2 | 2 | | Size
+| 4 | 2 | | Count
+| 6 | 2 | | Padding
+|===
+
+The access control list header is followed by access control entries (ACE).
+
+## Access control entry (ACE)
+The access control entry header is 4 bytes of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 1 | | Type
+| 1 | 1 | | Flags
+| 2 | 2 | | Size
+|===
+
+The access control entry (ACE) header is followed by access entry data. The 
+size and format of the ACE data is dependent on the flags.
+
+### Access control entry (ACE) types
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00 | ACCESS_ALLOWED_ACE_TYPE | Access allowed +
+(Basic ACE data structure)
+| 0x01 | ACCESS_DENIED_ACE_TYPE | Access denied +
+(Basic ACE data structure)
+| 0x02 | SYSTEM_AUDIT_ACE_TYPE | System-audit +
+(Basic ACE data structure)
+| 0x03 | SYSTEM_ALARM_ACE_TYPE | Reserved (System-alarm) +
+(Basic ACE data structure) +
+Maximum number of ACE types supported in an ACL revision number 2
+| 0x04 | ACCESS_ALLOWED_COMPOUND_ACE_TYPE | Reserved +
+(Unknown data structure) +
+Maximum number of ACE types supported in an ACL revision number 3
+| 0x05 | ACCESS_ALLOWED_OBJECT_ACE_TYPE | Access allowed +
+(Object ACE data structure)
+| 0x06 | ACCESS_DENIED_OBJECT_ACE_TYPE | Access denied +
+(Object ACE data structure)
+| 0x07 | SYSTEM_AUDIT_OBJECT_ACE_TYPE | System-audit +
+(Object ACE data structure)
+| 0x08 | SYSTEM_ALARM_OBJECT_ACE_TYPE | Reserved (System-alarm) +
+(Object data structure) +
+Maximum number of ACE types supported in an ACL revision number 4
+| 0x09 | ACCESS_ALLOWED_CALLBACK_ACE_TYPE | Access allowed +
+(Basic ACE data structure)
+| 0x0a | ACCESS_DENIED_CALLBACK_ACE_TYPE | Access denied +
+(Basic ACE data structure)
+| 0x0b | ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE | Access allowed +
+(Object ACE data structure)
+| 0x0c | ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE | Access denied +
+(Object ACE data structure)
+| 0x0d | SYSTEM_AUDIT_CALLBACK_ACE_TYPE | System-audit +
+(Basic ACE data structure)
+| 0x0e | SYSTEM_ALARM_CALLBACK_ACE_TYPE | Reserved (System-alarm) +
+(Basic ACE data structure)
+| 0x0f | SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE | System-audit +
+(Object ACE data structure)
+| 0x10 | SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE | Reserved (System-alarm) +
+(Object ACE data structure) +
+Maximum number of ACE types supported in an ACL revision number 5
+| 0x11 | SYSTEM_MANDATORY_LABEL_ACE_TYPE | Mandatory label +
+(Basic ACE data structure)
+|===
+
+#### Basic ACE data structure
+The basic ACE data structure is variable of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 4 | | Access rights flags (ACCESS_MASK)
+| 4 | ... | | SID
+|===
+
+#### Object ACE data structure
+The object ACE data structure is variable of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 4 | | Access rights flags (ACCESS_MASK)
+| 4 | 4 | | Flags
+| 8 | 16 | | Object type class identifier +
+Contains a GUID
+| 24 | 16 | | Inherited object type class identifier +
+Contains a GUID
+| 40 | ... | | SID
+|===
+
+### Access control entry (ACE) flags
+
+#### Access flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x01 | OBJECT_INHERIT_ACE | Noncontainer child objects inherit the ACE as an effective ACE.
+| 0x02 | CONTAINER_INHERIT_ACE | Child objects that are containers, such as directories, inherit the ACE as an effective ACE. The inherited ACE is inheritable unless the NO_PROPAGATE_INHERIT_ACE bit flag is also set.
+| 0x04 | NO_PROPAGATE_INHERIT_ACE | If the ACE is inherited by a child object, the system clears the OBJECT_INHERIT_ACE and CONTAINER_INHERIT_ACE flags in the inherited ACE. This prevents the ACE from being inherited by subsequent generations of objects.
+| 0x08 | INHERIT_ONLY_ACE | Indicates an inherit-only ACE, which does not control access to the object to which it is attached. If this flag is not set, the ACE is an effective ACE which controls access to the object to which it is attached.
+|===
+
+#### Audit flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x40 | SUCCESSFUL_ACCESS_ACE_FLAG | Used with system-audit ACEs in a SACL to generate audit messages for successful access attempts.
+| 0x80 | FAILED_ACCESS_ACE_FLAG | Used with system-audit ACEs in a system access control list (SACL) to generate audit messages for failed access attempts.
+|===
+
+### Access rights flags (ACCESS_MASK)
+
+#### Standard access rights flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00010000 | fsdrightDelete | Delete
+| 0x00020000 | fsdrightReadControl | Read control
+| 0x00040000 | fsdrightWriteSD | Write DAC +
+DAC => discretionary access control?
+| 0x00080000 | fsdrightWriteOwner | Write owner
+| 0x00100000 | fsdrightSynchronize | Synchronize
+|===
+
+#### Non-folder item access rights flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00000001 | fsdrightReadBody +
+(FILE_READ_DATA) |
+| 0x00000002 | fsdrightWriteBody +
+(FILE_WRITE_DATA) |
+| 0x00000004 | fsdrightAppendMsg | Ignored
+| 0x00000008 | fsdrightReadProperty +
+(FILE_READ_EA) |
+| 0x00000010 | fsdrightWriteProperty +
+(FILE_WRITE_EA) |
+| 0x00000020 | fsdrightExecute +
+(FILE_EXECUTE) | Ignored
+| | |
+| 0x00000080 | fsdrightReadAttributes +
+(FILE_READ_ATTRIBUTES) |
+| 0x00000100 | fsdrightWriteAttributes +
+(FILE_WRITE_ATTRIBUTES) |
+| 0x00000200 | fsdrightWriteOwnProperty | Trustee can modify his or her own items +
+Exchange specific
+| 0x00000400 | fsdrightDeleteOwnItem | Trustee can delete his or her own items +
+Exchange specific
+| 0x00000800 | fsdrightViewItem | Trustee can view items +
+Exchange specific
+|===
+
+All non-folder access rights: 0x001f0fbf
+
+#### Folder item access rights flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00000001 | fsdrightListContents +
+(FILE_LIST_DIRECTORY) | Trustee can list file contents.
+| 0x00000002 | fsdrightCreateItem +
+(FILE_ADD_FILE) | Trustee can add a file to a folder.
+| 0x00000004 | fsdrightCreateContainer +
+(FILE_ADD_SUBDIRECTORY) | Trustee can add a subfolder
+| 0x00000008 | fsdrightReadProperty +
+(FILE_READ_EA) |
+| 0x00000010 | fsdrightWriteProperty +
+(FILE_WRITE_EA) |
+| | |
+| 0x00000080 | fsdrightReadAttributes +
+(FILE_READ_ATTRIBUTES) | Reserved for future use
+| 0x00000100 | fsdrightWriteAttributes +
+(FILE_WRITE_ATTRIBUTES)| Reserved for future use
+| 0x00000200 | fsdrightWriteOwnProperty | The trustee can modify his or her own items +
+Exchange specific
+| 0x00000400 | fsdrightDeleteOwnItem | The trustee can delete his or her own items
+| 0x00000800 | fsdrightViewItem | The trustee can view items +
+Exchange specific
+| | |
+| 0x00004000 | fsdrightOwner | The trustee is the owner of the folder +
+Exchange specific +
+This right corresponds to the frightsOwner access right in previous versions of Exchange.
+| 0x00008000 | fsdrightContact | Identifies the user as the contact for the folder +
+Exchange specific +
+This right corresponds to the frightsContact access right in previous versions of Exchange.
+|===
+
+All folder access rights: 0x00000fbf
+
+#### Mandatory label access rights flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00000001 | SYSTEM_MANDATORY_LABEL_NO_WRITE_UP | A principal with a lower mandatory level than the object cannot write to the object.
+| 0x00000002 | SYSTEM_MANDATORY_LABEL_NO_READ_UP | A principal with a lower mandatory level than the object cannot read the object.
+| 0x00000004 | SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP | A principal with a lower mandatory level than the object cannot execute the object.
+|===
+
+## External Links
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa379563(v=vs.85).aspx[MSDN: Security Descriptors]
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa379571(v=vs.85).aspx[MSDN: Security Identifiers]
+* http://msdn.microsoft.com/en-us/library/windows/desktop/aa379561(v=vs.85).aspx[SECURITY_DESCRIPTOR structure]
+
