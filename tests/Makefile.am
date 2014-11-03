@@ -10,6 +10,7 @@ TESTS = \
 	test_security_identifier_to_string.sh
 
 check_SCRIPTS = \
+	test_runner.sh \
 	test_security_identifier_copy_from.sh \
 	test_security_identifier_to_string.sh
 
