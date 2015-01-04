@@ -1,5 +1,7 @@
 TODO
-* fix tests
+* lzx
+  - add decompression support
+  - add compression support
 * lznt1
   - add decompression support
   - add compression support
@@ -12,12 +14,11 @@ TODO
   - access control entry
 * update include header
   - locale identifier functions
+  - lznt1 functions
+  - lzxpress functions
 * add tests
   - locale identifier functions
   - security identifier functions (check)
-* update man pages
-  - locale identifier functions
-  - security identifier functions
 
 * locale identifier:
   - currently debug functions only
@@ -25,6 +26,10 @@ TODO
   - use array for sub authorities
 * security descriptor:
   - implement
+
+20150104
+* 2015 update
+* worked on tests
 
 20141018
 * changes for deployment

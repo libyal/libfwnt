@@ -17,13 +17,14 @@ SUBDIRS = \
 DPKG_FILES = \
 	dpkg/changelog \
 	dpkg/changelog.in \
-       	dpkg/compat \
-       	dpkg/control \
-       	dpkg/copyright \
-       	dpkg/copyright.in \
-       	dpkg/rules \
-       	dpkg/libfwnt-dev.docs \
-       	dpkg/libfwnt.docs
+	dpkg/compat \
+	dpkg/control \
+	dpkg/copyright \
+	dpkg/copyright.in \
+	dpkg/rules \
+	dpkg/libfwnt-dev.docs \
+	dpkg/libfwnt.docs \
+	dpkg/source/format
 
 GETTEXT_FILES = \
 	config.rpath \

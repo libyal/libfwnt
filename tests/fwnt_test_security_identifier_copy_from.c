@@ -114,9 +114,9 @@ int wmain( int argc, wchar_t * const argv[] )
 int main( int argc, char * const argv[] )
 #endif
 {
-	uint8_t byte_stream[ 26 ] = \
-		{ 0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0x11, 0xc3, 0x5f, 0x73,
-		  0xf8, 0x9f, 0xb4, 0x74, 0xdb, 0xeb, 0x0c, 0x50, 0xeb, 0x03 };
+	uint8_t byte_stream[ 28 ] = {
+		0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
+		0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
 
 	libcerror_error_t *error           = NULL;
 	libfwnt_security_identifier_t *sid = NULL;
@@ -139,13 +139,13 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	/* Case 1: byte stream is NULL, byte stream size is 26 and byte order is little-endian
+	/* Case 1: byte stream is NULL, byte stream size is 28 and byte order is little-endian
 	 * Expected result: -1
 	 */
 	if( fwnt_test_security_identifier_copy_from_byte_stream(
 	     sid,
 	     NULL,
-	     26,
+	     28,
 	     LIBFWNT_ENDIAN_LITTLE,
 	     -1 ) != 1 )
 	{
@@ -155,13 +155,13 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	/* Case 2: byte stream is a buffer, byte stream size is 26 and byte order is big-endian
+	/* Case 2: byte stream is a buffer, byte stream size is 28 and byte order is big-endian
 	 * Expected result: -1
 	 */
 	if( fwnt_test_security_identifier_copy_from_byte_stream(
 	     sid,
 	     byte_stream,
-	     26,
+	     28,
 	     LIBFWNT_ENDIAN_BIG,
 	     -1 ) != 1 )
 	{
@@ -171,13 +171,13 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	/* Case 3: byte stream is a buffer, byte stream size is 26 and byte order is little-endian
+	/* Case 3: byte stream is a buffer, byte stream size is 28 and byte order is little-endian
 	 * Expected result: 1
 	 */
 	if( fwnt_test_security_identifier_copy_from_byte_stream(
 	     sid,
 	     byte_stream,
-	     26,
+	     28,
 	     LIBFWNT_ENDIAN_LITTLE,
 	     1 ) != 1 )
 	{
@@ -187,13 +187,13 @@ int main( int argc, char * const argv[] )
 
 		goto on_error;
 	}
-	/* Case 4: byte stream is a buffer, byte stream size is 26 and byte order is 'X'
+	/* Case 4: byte stream is a buffer, byte stream size is 28 and byte order is 'X'
 	 * Expected result: -1
 	 */
 	if( fwnt_test_security_identifier_copy_from_byte_stream(
 	     sid,
 	     byte_stream,
-	     26,
+	     28,
 	     (uint8_t) 'X',
 	     -1 ) != 1 )
 	{

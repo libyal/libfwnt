@@ -1,7 +1,7 @@
 /*
  * Windows NT Security Identifier (SID) functions
  *
- * Copyright (c) 2009-2014, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2015, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -147,6 +147,7 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 {
 	libfwnt_internal_security_identifier_t *internal_security_identifier = NULL;
 	static char *function                                                = "libfwnt_security_identifier_copy_from_byte_stream";
+	size_t security_identifier_size                                      = 0;
 	uint8_t sub_authority_index                                          = 0;
 
 	if( security_identifier == NULL )
@@ -209,7 +210,9 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 	internal_security_identifier->revision_number           = byte_stream[ 0 ];
 	internal_security_identifier->number_of_sub_authorities = byte_stream[ 1 ];
 
-	if( byte_stream_size < (size_t) ( 8 + ( internal_security_identifier->number_of_sub_authorities * 4 ) ) )
+	security_identifier_size = 8 + ( internal_security_identifier->number_of_sub_authorities * 4 );
+
+	if( byte_stream_size < (size_t) security_identifier_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -461,7 +464,7 @@ int libfwnt_security_identifier_copy_to_utf8_string_with_index(
 	}
 	string_index = *utf8_string_index;
 
-	if( ( string_index +  2 ) > utf8_string_size )
+	if( ( string_index + 2 ) > utf8_string_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -719,7 +722,7 @@ int libfwnt_security_identifier_copy_to_utf16_string_with_index(
 	}
 	string_index = *utf16_string_index;
 
-	if( ( string_index +  2 ) > utf16_string_size )
+	if( ( string_index + 2 ) > utf16_string_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -977,7 +980,7 @@ int libfwnt_security_identifier_copy_to_utf32_string_with_index(
 	}
 	string_index = *utf32_string_index;
 
-	if( ( string_index +  2 ) > utf32_string_size )
+	if( ( string_index + 2 ) > utf32_string_size )
 	{
 		libcerror_error_set(
 		 error,

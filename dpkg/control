@@ -1,13 +1,12 @@
 Source: libfwnt
-Section: unknown
+Section: libs
 Priority: extra
 Maintainer: Joachim Metz <joachim.metz@gmail.com>
 Build-Depends: debhelper (>= 7), autotools-dev
-Standards-Version: 3.8.3
+Standards-Version: 3.9.5
 Homepage: https://github.com/libyal/libfwnt/
 
 Package: libfwnt
-Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Suggests: libfwnt-dbg
@@ -17,14 +16,14 @@ Description: Library to support common Windows NT specific formats.
 Package: libfwnt-dbg
 Architecture: any
 Section: debug
-Depends: libfwnt (= ${Source-Version}), ${misc:Depends}
+Depends: libfwnt (= ${binary:Version}), ${misc:Depends}
 Description: Debugging symbols for libfwnt
  Debugging symbols for libfwnt.
 
 Package: libfwnt-dev
 Section: libdevel
 Architecture: any
-Depends: libfwnt (= ${Source-Version})
+Depends: libfwnt (= ${binary:Version}), ${misc:Depends}
 Description: Header files and libraries for developing applications for libfwnt
  Header files and libraries for developing applications for libfwnt.
 
