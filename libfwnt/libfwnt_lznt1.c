@@ -429,19 +429,19 @@ int libfwnt_lznt1_decompress(
 
 		return( -1 );
 	}
-	if( ( compressed_data_index + 1 ) >= compressed_data_size )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: compressed data size value too small.",
-		 function );
-
-		return( -1 );
-	}
 	while( compressed_data_index < compressed_data_size )
 	{
+		if( ( compressed_data_index + 1 ) >= compressed_data_size )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+			 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
+			 "%s: compressed data size value too small.",
+			 function );
+
+			return( -1 );
+		}
 		/* The first 2 bytes contain the compressed chunk header
 		 * 0  - 11	compressed chunk size
 		 * 12 - 14	signature value
