@@ -223,13 +223,13 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 
 		return( -1 );
 	}
-	if( internal_security_identifier->number_of_sub_authorities > 10 )
+	if( internal_security_identifier->number_of_sub_authorities > 15 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
-		 "%s: unsupported security identifier contains more than 10 sub authoritites.",
+		 "%s: unsupported security identifier contains more than 15 sub authoritites.",
 		 function );
 
 		return( -1 );

@@ -49,6 +49,8 @@ extern "C" {
  * revision - number  - authority         - sub authorities
  *
  * The second value contains the number of sub authorities in the SID
+ *
+ * The maximum number of sub authorities seems to be 15.
  */
 
 typedef struct libfwnt_internal_security_identifier libfwnt_internal_security_identifier_t;
@@ -69,7 +71,7 @@ struct libfwnt_internal_security_identifier
 
 	/* The sub autoritites
 	 */
-	uint32_t sub_authority[ 10 ];
+	uint32_t sub_authority[ 15 ];
 };
 
 LIBFWNT_EXTERN \
