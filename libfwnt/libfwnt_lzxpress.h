@@ -86,23 +86,23 @@ int libfwnt_lzxpress_decompress(
      size_t *uncompressed_data_size,
      libcerror_error_t **error );
 
-int libfwnt_lzxpress_huffmann_compare_symbols(
+int libfwnt_lzxpress_huffman_compare_symbols(
      libfwnt_lzxpress_huffman_code_symbol_t *first_symbol,
      libfwnt_lzxpress_huffman_code_symbol_t *second_symbol );
 
-int libfwnt_lzxpress_huffmann_tree_add_leaf(
+int libfwnt_lzxpress_huffman_tree_add_leaf(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      int tree_node_index,
      uint32_t bits,
      uint8_t number_of_bits );
 
-int libfwnt_lzxpress_huffmann_tree_read(
+int libfwnt_lzxpress_huffman_tree_read(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      const uint8_t *compressed_data,
      size_t compressed_data_size,
      libcerror_error_t **error );
 
-int libfwnt_lzxpress_huffmann_tree_read_symbol(
+int libfwnt_lzxpress_huffman_tree_read_symbol(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      libfwnt_bit_stream_t *compressed_data_bit_stream,
      uint16_t *symbol,

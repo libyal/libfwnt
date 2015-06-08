@@ -27,6 +27,9 @@ TODO
 * security descriptor:
   - implement
 
+20150608
+* fixed typo
+
 20150413
 * increased the maximum number of sub authorities from 10 to 15
 

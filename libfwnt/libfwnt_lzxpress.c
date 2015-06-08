@@ -460,7 +460,7 @@ int libfwnt_lzxpress_decompress(
 }
 
 /* TODO add decription */
-int libfwnt_lzxpress_huffmann_compare_symbols(
+int libfwnt_lzxpress_huffman_compare_symbols(
      libfwnt_lzxpress_huffman_code_symbol_t *first_symbol,
      libfwnt_lzxpress_huffman_code_symbol_t *second_symbol )
 {
@@ -492,7 +492,7 @@ int libfwnt_lzxpress_huffmann_compare_symbols(
 }
 
 /* TODO add decription */
-int libfwnt_lzxpress_huffmann_tree_add_leaf(
+int libfwnt_lzxpress_huffman_tree_add_leaf(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      int tree_node_index,
      uint32_t bits,
@@ -526,7 +526,7 @@ int libfwnt_lzxpress_huffmann_tree_add_leaf(
 }
 
 /* TODO add decription */
-int libfwnt_lzxpress_huffmann_tree_read(
+int libfwnt_lzxpress_huffman_tree_read(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      const uint8_t *compressed_data,
      size_t compressed_data_size,
@@ -534,7 +534,7 @@ int libfwnt_lzxpress_huffmann_tree_read(
 {
 	libfwnt_lzxpress_huffman_code_symbol_t code_symbols[ 512 ];
 
-	static char *function        = "libfwnt_lzxpress_huffmann_tree_read";
+	static char *function        = "libfwnt_lzxpress_huffmnn_tree_read";
 	size_t compressed_data_index = 0;
 	uint32_t bits                = 0;
 	uint16_t symbol_index        = 0;
@@ -613,7 +613,7 @@ int libfwnt_lzxpress_huffmann_tree_read(
 	 code_symbols,
 	 512,
 	 sizeof( libfwnt_lzxpress_huffman_code_symbol_t ),
-	 (int (*)(const void *, const void *)) &libfwnt_lzxpress_huffmann_compare_symbols );
+	 (int (*)(const void *, const void *)) &libfwnt_lzxpress_huffman_compare_symbols );
 
 	/* Find the first symbol with a code size > 0
 	 */
@@ -641,7 +641,7 @@ int libfwnt_lzxpress_huffmann_tree_read(
 		bits         <<= code_symbols[ symbol_index ].code_size - number_of_bits;
 		number_of_bits = (uint8_t) code_symbols[ symbol_index ].code_size;
 
-		tree_node_index = libfwnt_lzxpress_huffmann_tree_add_leaf(
+		tree_node_index = libfwnt_lzxpress_huffman_tree_add_leaf(
 		                   tree_nodes,
 		                   tree_node_index,
 		                   bits,
@@ -655,14 +655,14 @@ int libfwnt_lzxpress_huffmann_tree_read(
 }
 
 /* TODO add decription */
-int libfwnt_lzxpress_huffmann_tree_read_symbol(
+int libfwnt_lzxpress_huffman_tree_read_symbol(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      libfwnt_bit_stream_t *compressed_data_bit_stream,
      uint16_t *symbol,
      libcerror_error_t **error )
 {
 	libfwnt_lzxpress_huffman_tree_node_t *tree_node = NULL;
-	static char *function                           = "libfwnt_lzxpress_huffmann_tree_read_symbol";
+	static char *function                           = "libfwnt_lzxpress_huffman_tree_read_symbol";
 	uint16_t bits                                   = 0;
 	uint8_t sub_tree_node_index                     = 0;
 
@@ -806,7 +806,7 @@ int libfwnt_lzxpress_huffman_decompress(
 
 		return( -1 );
 	}
-	if( libfwnt_lzxpress_huffmann_tree_read(
+	if( libfwnt_lzxpress_huffman_tree_read(
 	     tree_nodes,
 	     compressed_data,
 	     compressed_data_size,
@@ -855,7 +855,7 @@ int libfwnt_lzxpress_huffman_decompress(
 	}
 	while( uncompressed_data_index < *uncompressed_data_size )
 	{
-		if( libfwnt_lzxpress_huffmann_tree_read_symbol(
+		if( libfwnt_lzxpress_huffman_tree_read_symbol(
 		     tree_nodes,
 		     compressed_data_bit_stream,
 		     &symbol,
