@@ -116,6 +116,16 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
          size_t *uncompressed_data_size,
          libcerror_error_t **error );
 
+LIBFWNT_EXTERN \
+ssize_t libfwnt_lzxpress_huffman_decompress_stream(
+         const uint8_t *compressed_data,
+         size_t compressed_data_size,
+         const uint8_t *previous_uncompressed_data,
+         size_t previous_uncompressed_data_size,
+         uint8_t *uncompressed_data,
+         size_t *uncompressed_data_size,
+         libcerror_error_t **error );
+
 #if defined( __cplusplus )
 }
 #endif

@@ -50,12 +50,12 @@ int libfwnt_lznt1_decompress_chunk(
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
-int libfwnt_lznt1_decompress(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     uint8_t *uncompressed_data,
-     size_t *uncompressed_data_size,
-     libcerror_error_t **error );
+ssize_t libfwnt_lznt1_decompress(
+         const uint8_t *compressed_data,
+         size_t compressed_data_size,
+         uint8_t *uncompressed_data,
+         size_t *uncompressed_data_size,
+         libcerror_error_t **error );
 
 #if defined( __cplusplus )
 }

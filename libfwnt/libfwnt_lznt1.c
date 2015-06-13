@@ -369,14 +369,14 @@ int libfwnt_lznt1_decompress_chunk(
 }
 
 /* Decompresses data using LZNT1 compression
- * Returns 1 on success or -1 on error
+ * Returns the number of bytes of compressed data decompressed on success or -1 on error
  */
-int libfwnt_lznt1_decompress(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     uint8_t *uncompressed_data,
-     size_t *uncompressed_data_size,
-     libcerror_error_t **error )
+ssize_t libfwnt_lznt1_decompress(
+         const uint8_t *compressed_data,
+         size_t compressed_data_size,
+         uint8_t *uncompressed_data,
+         size_t *uncompressed_data_size,
+         libcerror_error_t **error )
 {
 	static char *function             = "libfwnt_lznt1_decompress";
 	size_t compressed_data_index      = 0;
@@ -564,6 +564,6 @@ int libfwnt_lznt1_decompress(
 	}
 	*uncompressed_data_size = uncompressed_data_index;
 
-	return( 1 );
+	return( (ssize_t) compressed_data_index );
 }
 
