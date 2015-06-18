@@ -1252,7 +1252,8 @@ ssize_t libfwnt_lzxpress_huffman_decompress_stream(
 			}
 			compression_size += 3;
 
-			if( previous_uncompressed_data != NULL )
+			if( ( previous_uncompressed_data != NULL )
+			 && ( compression_offset > uncompressed_data_index ) )
 			{
 				if( compression_offset > previous_uncompressed_data_size )
 				{
