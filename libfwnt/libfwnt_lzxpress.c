@@ -1036,6 +1036,7 @@ ssize_t libfwnt_lzxpress_huffman_decompress_stream(
 	libfwnt_bit_stream_t *compressed_data_bit_stream = NULL;
 	static char *function                            = "libfwnt_lzxpress_huffman_decompress_stream";
 	size_t compressed_data_index                     = 0;
+	size_t previous_uncompressed_data_index          = 0;
 	size_t uncompressed_data_index                   = 0;
 	uint32_t compression_offset                      = 0;
 	uint16_t bits                                    = 0;
@@ -1266,14 +1267,21 @@ ssize_t libfwnt_lzxpress_huffman_decompress_stream(
 
 					goto on_error;
 				}
-				while( ( compression_offset > 0 )
-				    && ( compression_size > 0 ) )
-				{
-					uncompressed_data[ uncompressed_data_index ] = previous_uncompressed_data[ previous_uncompressed_data_size - compression_offset ];
+				previous_uncompressed_data_index = previous_uncompressed_data_size - ( compression_offset - uncompressed_data_index );
 
-					uncompressed_data_index += 1;
-					compression_offset      -= 1;
-					compression_size        -= 1;
+				while( compression_offset > uncompressed_data_index )
+				{
+					uncompressed_data[ uncompressed_data_index ] = previous_uncompressed_data[ previous_uncompressed_data_index ];
+
+					previous_uncompressed_data_index += 1;
+					uncompressed_data_index          += 1;
+					compression_offset               -= 1;
+					compression_size                 -= 1;
+
+					if( compression_size == 0 )
+					{
+						break;
+					}
 				}
 			}
 			if( compression_size > 0 )
