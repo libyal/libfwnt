@@ -912,24 +912,20 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 
 			goto on_error;
 		}
-		/* Check if we have an end-of-block marker (remaining bits are 0)
-		 */
-		if( ( compressed_data_bit_stream->bits == 0 )
-		 && ( uncompressed_data_index >= ( *uncompressed_data_size - 1 ) ) )
-		{
-			uncompressed_data[ uncompressed_data_index ] = (uint8_t) symbol;
-
-			uncompressed_data_index++;
-
-			break;
-		}
 		if( symbol < 256 )
 		{
 			uncompressed_data[ uncompressed_data_index ] = (uint8_t) symbol;
 
 			uncompressed_data_index++;
 		}
-		else
+		/* Check if we have an end-of-block marker (remaining bits are 0)
+		 */
+		if( ( compressed_data_bit_stream->bits == 0 )
+		 && ( uncompressed_data_index >= *uncompressed_data_size ) )
+		{
+			break;
+		}
+		if( symbol >= 256 )
 		{
 			symbol          -= 256;
 			compression_size = symbol & 0x000f;
