@@ -79,12 +79,12 @@ int libfwnt_lzxpress_compress(
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
-ssize_t libfwnt_lzxpress_decompress(
-         const uint8_t *compressed_data,
-         size_t compressed_data_size,
-         uint8_t *uncompressed_data,
-         size_t *uncompressed_data_size,
-         libcerror_error_t **error );
+int libfwnt_lzxpress_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error );
 
 int libfwnt_lzxpress_huffman_compare_symbols(
      libfwnt_lzxpress_huffman_code_symbol_t *first_symbol,
@@ -100,6 +100,7 @@ int libfwnt_lzxpress_huffman_tree_read(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      const uint8_t *compressed_data,
      size_t compressed_data_size,
+     size_t compressed_data_index,
      libcerror_error_t **error );
 
 int libfwnt_lzxpress_huffman_tree_read_symbol(
@@ -108,23 +109,30 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
      uint16_t *symbol,
      libcerror_error_t **error );
 
-LIBFWNT_EXTERN \
-ssize_t libfwnt_lzxpress_huffman_decompress(
-         const uint8_t *compressed_data,
-         size_t compressed_data_size,
-         uint8_t *uncompressed_data,
-         size_t *uncompressed_data_size,
-         libcerror_error_t **error );
+int libfwnt_lzxpress_huffman_decompress_with_index(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     size_t *compressed_data_index,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     size_t uncompressed_data_index,
+     libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
-ssize_t libfwnt_lzxpress_huffman_decompress_stream(
-         const uint8_t *compressed_data,
-         size_t compressed_data_size,
-         const uint8_t *previous_uncompressed_data,
-         size_t previous_uncompressed_data_size,
-         uint8_t *uncompressed_data,
-         size_t *uncompressed_data_size,
-         libcerror_error_t **error );
+int libfwnt_lzxpress_huffman_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
+int libfwnt_lzxpress_huffman_stream_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error );
 
 #if defined( __cplusplus )
 }

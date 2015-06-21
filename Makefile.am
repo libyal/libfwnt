@@ -11,6 +11,9 @@ SUBDIRS = \
 	libfwnt \
 	po \
 	manuals \
+	libclocale \
+	libuna \
+	libcfile \
 	tests \
 	msvscpp
 
@@ -86,5 +89,8 @@ splint:
 	(cd $(srcdir)/libcnotify && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/libfwnt && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/po && $(MAKE) splint $(AM_MAKEFLAGS))
+	(cd $(srcdir)/libclocale && $(MAKE) splint $(AM_MAKEFLAGS))
+	(cd $(srcdir)/libuna && $(MAKE) splint $(AM_MAKEFLAGS))
+	(cd $(srcdir)/libcfile && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/tests && $(MAKE) splint $(AM_MAKEFLAGS))
 

@@ -19,6 +19,7 @@ TODO
 * add tests
   - locale identifier functions
   - security identifier functions (check)
+  - compression
 
 * locale identifier:
   - currently debug functions only
@@ -26,6 +27,9 @@ TODO
   - use array for sub authorities
 * security descriptor:
   - implement
+
+20150621
+* woked on lzxpress support
 
 20150618
 * woked on lzxpress support

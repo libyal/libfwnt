@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libfwnt],
- [20150618],
+ [20150621],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -65,6 +65,15 @@ AX_LIBCDATA_CHECK_ENABLE
 
 dnl Check for enabling libcnotify for cross-platform C notification functions
 AX_LIBCNOTIFY_CHECK_ENABLE
+
+dnl Check for enabling libclocale for cross-platform C locale functions
+AX_LIBCLOCALE_CHECK_ENABLE
+
+dnl Check for enabling libuna for Unicode string support
+AX_LIBUNA_CHECK_ENABLE
+
+dnl Check for enabling libcfile for cross-platform C file functions
+AX_LIBCFILE_CHECK_ENABLE
 
 dnl Check if libfwsi should be build with verbose output
 AX_COMMON_CHECK_ENABLE_VERBOSE_OUTPUT
@@ -145,6 +154,9 @@ AC_CONFIG_FILES([libfwnt/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([po/Makevars])
 AC_CONFIG_FILES([manuals/Makefile])
+AC_CONFIG_FILES([libclocale/Makefile])
+AC_CONFIG_FILES([libuna/Makefile])
+AC_CONFIG_FILES([libcfile/Makefile])
 AC_CONFIG_FILES([tests/Makefile])
 AC_CONFIG_FILES([msvscpp/Makefile])
 dnl Have configure make the include files
@@ -171,8 +183,11 @@ Building:
    libcstring support:      $ac_cv_libcstring
    libcerror support:       $ac_cv_libcerror
    libcthreads support:     $ac_cv_libcthreads
+   libclocale support:      $ac_cv_libclocale
    libcnotify support:      $ac_cv_libcnotify
    libcdata support:        $ac_cv_libcdata
+   libuna support:          $ac_cv_libuna
+   libcfile support:        $ac_cv_libcfile
 
 Features:
    Multi-threading support: $ac_cv_libcthreads_multi_threading

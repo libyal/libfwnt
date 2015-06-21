@@ -3,6 +3,9 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/common \
 	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
+	@LIBCFILE_CPPFLAGS@ \
+	@LIBCLOCALE_CPPFLAGS@ \
+	@LIBUNA_CPPFLAGS@ \
 	@LIBFWNT_DLL_IMPORT@
 
 TESTS = \
@@ -18,8 +21,59 @@ EXTRA_DIST = \
 	$(check_SCRIPTS)
 
 check_PROGRAMS = \
+	fwnt_test_lznt1_decompress \
+	fwnt_test_lzxpress_decompress \
+	fwnt_test_lzxpress_huffman_decompress \
 	fwnt_test_security_identifier_copy_from \
 	fwnt_test_security_identifier_to_string
+
+fwnt_test_lznt1_decompress_SOURCES = \
+	fwnt_test_libcfile.h \
+	fwnt_test_libcerror.h \
+	fwnt_test_libcstring.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_lznt1_decompress.c
+
+fwnt_test_lznt1_decompress_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCFILE_LIBADD@ \
+	@LIBUNA_LIBADD@ \
+	@LIBCNOTIFY_LIBADD@ \
+	@LIBCLOCALE_LIBADD@ \
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
+
+fwnt_test_lzxpress_decompress_SOURCES = \
+	fwnt_test_libcfile.h \
+	fwnt_test_libcerror.h \
+	fwnt_test_libcstring.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_lzxpress_decompress.c
+
+fwnt_test_lzxpress_decompress_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCFILE_LIBADD@ \
+	@LIBUNA_LIBADD@ \
+	@LIBCNOTIFY_LIBADD@ \
+	@LIBCLOCALE_LIBADD@ \
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
+
+fwnt_test_lzxpress_huffman_decompress_SOURCES = \
+	fwnt_test_libcfile.h \
+	fwnt_test_libcerror.h \
+	fwnt_test_libcstring.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_lzxpress_decompress.c
+
+fwnt_test_lzxpress_huffman_decompress_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCFILE_LIBADD@ \
+	@LIBUNA_LIBADD@ \
+	@LIBCNOTIFY_LIBADD@ \
+	@LIBCLOCALE_LIBADD@ \
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
 
 fwnt_test_security_identifier_copy_from_SOURCES = \
 	fwnt_test_libcerror.h \

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fwnt_test_security_identifier_to_string"
-	ProjectGUID="{9A1EC29B-8646-497C-A680-0039BD1D5EEE}"
-	RootNamespace="fwnt_test_security_identifier_to_string"
+	Name="fwnt_test_lznt1_decompress"
+	ProjectGUID="{01B92B09-63E1-453E-B11A-BBE533E41AA9}"
+	RootNamespace="fwnt_test_lznt1_decompress"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -176,7 +176,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\tests\fwnt_test_security_identifier_to_string.c"
+				RelativePath="..\..\tests\fwnt_test_lznt1_decompress.c"
 				>
 			</File>
 		</Filter>
@@ -187,6 +187,10 @@
 			>
 			<File
 				RelativePath="..\..\tests\fwnt_test_libcerror.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_libcfile.h"
 				>
 			</File>
 			<File

@@ -155,14 +155,14 @@ int libfwnt_lzxpress_compress(
 }
 
 /* Decompresses data using LZXPRESS (LZ77 + DIRECT2) compression
- * Returns the number of bytes of compressed data decompressed on success or -1 on error
+ * Return 1 on success or -1 on error
  */
-ssize_t libfwnt_lzxpress_decompress(
-         const uint8_t *compressed_data,
-         size_t compressed_data_size,
-         uint8_t *uncompressed_data,
-         size_t *uncompressed_data_size,
-         libcerror_error_t **error )
+int libfwnt_lzxpress_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error )
 {
 	static char *function                  = "libfwnt_lzxpress_decompress";
 	size_t compressed_data_index           = 0;
@@ -262,7 +262,7 @@ ssize_t libfwnt_lzxpress_decompress(
 			 */
 			if( ( compression_indicator & compression_indicator_bitmask ) != 0 )
 			{
-				if( ( compressed_data_index + 1 ) >= compressed_data_size )
+				if( compressed_data_index >= ( compressed_data_size - 1 ) )
 				{
 					libcerror_error_set(
 					 error,
@@ -347,7 +347,7 @@ ssize_t libfwnt_lzxpress_decompress(
 				 */
 				if( compression_size == ( 0x07 + 0x0f + 0xff ) )
 				{
-					if( ( compressed_data_index + 1 ) >= compressed_data_size )
+					if( compressed_data_index >= ( compressed_data_size - 1 ) )
 					{
 						libcerror_error_set(
 						 error,
@@ -457,7 +457,7 @@ ssize_t libfwnt_lzxpress_decompress(
 	}
 	*uncompressed_data_size = uncompressed_data_index;
 
-	return( (ssize_t) compressed_data_index );
+	return( 1 );
 }
 
 /* Copmares two Huffman code symbols
@@ -512,7 +512,7 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
 
 	while( number_of_bits > 1 )
 	{
-		number_of_bits -= 1;
+		number_of_bits--;
 
 		sub_tree_node_index = (uint8_t) ( bits >> number_of_bits ) & 0x00000001UL;
 
@@ -521,7 +521,7 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
 			tree_node->sub_tree_nodes[ sub_tree_node_index ] = &( tree_nodes[ next_tree_node_index ] );
 			tree_nodes[ next_tree_node_index ].is_leaf       = 0;
 
-			next_tree_node_index += 1;
+			next_tree_node_index++;
 		}
 		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
 	}
@@ -537,17 +537,18 @@ int libfwnt_lzxpress_huffman_tree_read(
      libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
      const uint8_t *compressed_data,
      size_t compressed_data_size,
+     size_t compressed_data_index,
      libcerror_error_t **error )
 {
 	libfwnt_lzxpress_huffman_code_symbol_t code_symbols[ 512 ];
 
-	static char *function        = "libfwnt_lzxpress_huffman_tree_read";
-	size_t compressed_data_index = 0;
-	uint32_t bits                = 0;
-	uint16_t symbol_index        = 0;
-	uint8_t byte_value           = 0;
-	uint8_t number_of_bits       = 0;
-	int tree_node_index          = 0;
+	static char *function  = "libfwnt_lzxpress_huffman_tree_read";
+	size_t byte_index      = 0;
+	uint32_t bits          = 0;
+	uint16_t symbol_index  = 0;
+	uint8_t byte_value     = 0;
+	uint8_t number_of_bits = 0;
+	int tree_node_index    = 0;
 
 	if( compressed_data == NULL )
 	{
@@ -560,17 +561,6 @@ int libfwnt_lzxpress_huffman_tree_read(
 
 		return( -1 );
 	}
-	if( compressed_data_size < 256 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: compressed data size value too small.",
-		 function );
-
-		return( -1 );
-	}
 	if( compressed_data_size > (size_t) SSIZE_MAX )
 	{
 		libcerror_error_set(
@@ -578,6 +568,18 @@ int libfwnt_lzxpress_huffman_tree_read(
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
 		 "%s: invalid compressed data size value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( ( compressed_data_index >= compressed_data_size )
+	 || ( ( compressed_data_size - compressed_data_index ) < 256 ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: compressed data index value out of bounds.",
 		 function );
 
 		return( -1 );
@@ -596,11 +598,13 @@ int libfwnt_lzxpress_huffman_tree_read(
 
 		return( -1 );
 	}
-	for( compressed_data_index = 0;
-	     compressed_data_index < 256;
-	     compressed_data_index++ )
+	for( byte_index = 0;
+	     byte_index < 256;
+	     byte_index++ )
 	{
 		byte_value = compressed_data[ compressed_data_index ];
+
+		compressed_data_index++;
 
 		code_symbols[ symbol_index ].symbol    = symbol_index;
 		code_symbols[ symbol_index ].code_size = (uint16_t) ( byte_value & 0x0f );
@@ -654,7 +658,7 @@ int libfwnt_lzxpress_huffman_tree_read(
 		                   bits,
 		                   number_of_bits );
 
-		bits += 1;
+		bits++;
 
 		symbol_index++;
 	}
@@ -707,9 +711,9 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
 		compressed_data_bit_stream->bits          <<= 1;
 		compressed_data_bit_stream->number_of_bits -= 1;
 
-		if( compressed_data_bit_stream->number_of_bits < 16 )
+		if( ( compressed_data_bit_stream->number_of_bits < 16 )
+		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
 		{
-/* TODO bounds check */
 			byte_stream_copy_to_uint16_little_endian(
 			 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
 			 bits );
@@ -741,23 +745,24 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
 }
 
 /* Decompresses data using LZXPRESS Huffman compression
- * Returns the number of bytes of compressed data decompressed on success or -1 on error
+ * Return 1 on success or -1 on error
  */
-ssize_t libfwnt_lzxpress_huffman_decompress(
-         const uint8_t *compressed_data,
-         size_t compressed_data_size,
-         uint8_t *uncompressed_data,
-         size_t *uncompressed_data_size,
-         libcerror_error_t **error )
+int libfwnt_lzxpress_huffman_decompress_with_index(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     size_t *compressed_data_index,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     size_t uncompressed_data_index,
+     libcerror_error_t **error )
 {
 	libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ];
 
 	libfwnt_bit_stream_t *compressed_data_bit_stream = NULL;
-	static char *function                            = "libfwnt_lzxpress_huffman_decompress";
-	size_t compressed_data_index                     = 0;
-	size_t uncompressed_data_index                   = 0;
+	static char *function                            = "libfwnt_lzxpress_huffman_decompress_with_index";
+	size_t compression_uncompressed_data_index       = 0;
+	size_t initial_uncompressed_data_index           = 0;
 	uint32_t compression_offset                      = 0;
-	uint16_t bits                                    = 0;
 	uint16_t compression_size                        = 0;
 	uint16_t symbol                                  = 0;
 
@@ -772,17 +777,6 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 		return( -1 );
 	}
-	if( compressed_data_size < 260 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: compressed data size value too small.",
-		 function );
-
-		return( -1 );
-	}
 	if( compressed_data_size > (size_t) SSIZE_MAX )
 	{
 		libcerror_error_set(
@@ -790,6 +784,29 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
 		 "%s: invalid compressed data size value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( compressed_data_index == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid compressed data index.",
+		 function );
+
+		return( -1 );
+	}
+	if( ( *compressed_data_index >= compressed_data_size )
+	 || ( ( compressed_data_size - *compressed_data_index ) < 260 ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: compressed data index value out of bounds.",
 		 function );
 
 		return( -1 );
@@ -816,10 +833,22 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 		return( -1 );
 	}
+	if( uncompressed_data_index > *uncompressed_data_size )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: uncompressed data index value out of bounds.",
+		 function );
+
+		return( -1 );
+	}
 	if( libfwnt_lzxpress_huffman_tree_read(
 	     tree_nodes,
 	     compressed_data,
 	     compressed_data_size,
+	     *compressed_data_index,
 	     error ) != 1 )
 	{
 		libcerror_error_set(
@@ -833,7 +862,7 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 	}
 	if( libfwnt_bit_stream_initialize(
 	     &compressed_data_bit_stream,
-	     compressed_data,
+	     &( compressed_data[ *compressed_data_index ] ),
 	     compressed_data_size,
 	     error ) != 1 )
 	{
@@ -863,7 +892,10 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 		goto on_error;
 	}
-	while( uncompressed_data_index < *uncompressed_data_size )
+	initial_uncompressed_data_index = uncompressed_data_index;
+
+        while( ( compressed_data_bit_stream->byte_stream_offset < compressed_data_bit_stream->byte_stream_size )
+            || ( compressed_data_bit_stream->number_of_bits > 0 ) )
 	{
 		if( libfwnt_lzxpress_huffman_tree_read_symbol(
 		     tree_nodes,
@@ -880,11 +912,22 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 			goto on_error;
 		}
+		/* Check if we have an end-of-block marker (remaining bits are 0)
+		 */
+		if( ( compressed_data_bit_stream->bits == 0 )
+		 && ( uncompressed_data_index >= ( *uncompressed_data_size - 1 ) ) )
+		{
+			uncompressed_data[ uncompressed_data_index ] = (uint8_t) symbol;
+
+			uncompressed_data_index++;
+
+			break;
+		}
 		if( symbol < 256 )
 		{
 			uncompressed_data[ uncompressed_data_index ] = (uint8_t) symbol;
 
-			uncompressed_data_index += 1;
+			uncompressed_data_index++;
 		}
 		else
 		{
@@ -903,15 +946,17 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 			}
 			compression_offset = (uint32_t) ( ( 1 << symbol ) + compression_offset );
 
+			/* Ignore any data beyond the uncompressed block size
+			 */
 			if( compression_size == 15 )
 			{
-				if( ( compressed_data_bit_stream->byte_stream_offset + 1 ) > compressed_data_bit_stream->byte_stream_size )
+				if( compressed_data_bit_stream->byte_stream_offset > ( compressed_data_bit_stream->byte_stream_size - 1 ) )
 				{
 					libcerror_error_set(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: bit stream offset value out of bounds.",
+					 "%s: compressed data size value too small.",
 					 function );
 
 					goto on_error;
@@ -922,13 +967,13 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 				if( compression_size == 270 )
 				{
-					if( ( compressed_data_bit_stream->byte_stream_offset + 2 ) > compressed_data_bit_stream->byte_stream_size )
+					if( compressed_data_bit_stream->byte_stream_offset > ( compressed_data_bit_stream->byte_stream_size - 2 ) )
 					{
 						libcerror_error_set(
 						 error,
 						 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 						 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-						 "%s: bit stream offset value out of bounds.",
+						 "%s: compressed data size value too small.",
 						 function );
 
 						goto on_error;
@@ -943,18 +988,6 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 			compressed_data_bit_stream->bits          <<= symbol;
 			compressed_data_bit_stream->number_of_bits -= (uint8_t) symbol;
 
-			if( compressed_data_bit_stream->number_of_bits < 16 )
-			{
-/* TODO bounds check */
-				byte_stream_copy_to_uint16_little_endian(
-				 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-				 bits );
-
-/* TODO bits read infront of the bit stream ? */
-				compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
-				compressed_data_bit_stream->byte_stream_offset += 2;
-				compressed_data_bit_stream->number_of_bits     += 16;
-			}
 			compression_size += 3;
 
 			if( compression_offset > uncompressed_data_index )
@@ -968,7 +1001,7 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 				goto on_error;
 			}
-			if( ( uncompressed_data_index + compression_size ) > *uncompressed_data_size )
+			if( compression_size > ( *uncompressed_data_size - uncompressed_data_index ) )
 			{
 				libcerror_error_set(
 				 error,
@@ -979,16 +1012,19 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 				goto on_error;
 			}
+			compression_uncompressed_data_index = uncompressed_data_index - compression_offset;
+
 			while( compression_size > 0 )
 			{
-				uncompressed_data[ uncompressed_data_index ] = uncompressed_data[ uncompressed_data_index - compression_offset ];
+				uncompressed_data[ uncompressed_data_index ] = uncompressed_data[ compression_uncompressed_data_index ];
 
-				uncompressed_data_index += 1;
-				compression_size        -= 1;
+				compression_uncompressed_data_index++;
+				uncompressed_data_index++;
+				compression_size--;
 			}
 		}
 	}
-	compressed_data_index = compressed_data_bit_stream->byte_stream_offset;
+	*compressed_data_index += compressed_data_bit_stream->byte_stream_offset;
 
 	if( libfwnt_bit_stream_free(
 	     &compressed_data_bit_stream,
@@ -1003,9 +1039,9 @@ ssize_t libfwnt_lzxpress_huffman_decompress(
 
 		goto on_error;
 	}
-	*uncompressed_data_size = uncompressed_data_index;
+	*uncompressed_data_size = uncompressed_data_index - initial_uncompressed_data_index;
 
-	return( (ssize_t) compressed_data_index );
+	return( 1 );
 
 on_error:
 	if( compressed_data_bit_stream != NULL )
@@ -1018,89 +1054,54 @@ on_error:
 }
 
 /* Decompresses data using LZXPRESS Huffman compression
- * The previous uncompressed data is used by the streamed variant where
- * the compressed data refers to uncompressed data in the previous uncompressed data
- * Returns the number of bytes of compressed data decompressed on success or -1 on error
+ * Return 1 on success or -1 on error
  */
-ssize_t libfwnt_lzxpress_huffman_decompress_stream(
-         const uint8_t *compressed_data,
-         size_t compressed_data_size,
-         const uint8_t *previous_uncompressed_data,
-         size_t previous_uncompressed_data_size,
-         uint8_t *uncompressed_data,
-         size_t *uncompressed_data_size,
-         libcerror_error_t **error )
+int libfwnt_lzxpress_huffman_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error )
 {
-	libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ];
+	static char *function        = "libfwnt_lzxpress_huffman_decompress";
+	size_t compressed_data_index = 0;
 
-	libfwnt_bit_stream_t *compressed_data_bit_stream = NULL;
-	static char *function                            = "libfwnt_lzxpress_huffman_decompress_stream";
-	size_t compressed_data_index                     = 0;
-	size_t previous_uncompressed_data_index          = 0;
-	size_t uncompressed_data_index                   = 0;
-	uint32_t compression_offset                      = 0;
-	uint16_t bits                                    = 0;
-	uint16_t compression_size                        = 0;
-	uint16_t symbol                                  = 0;
-
-	if( compressed_data == NULL )
+	if( libfwnt_lzxpress_huffman_decompress_with_index(
+	     compressed_data,
+	     compressed_data_size,
+	     &compressed_data_index,
+	     uncompressed_data,
+	     uncompressed_data_size,
+	     0,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data.",
+		 LIBCERROR_ERROR_DOMAIN_COMPRESSION,
+		 LIBCERROR_COMPRESSION_ERROR_DECOMPRESS_FAILED,
+		 "%s: unable to decompress compressed data.",
 		 function );
 
 		return( -1 );
 	}
-	if( compressed_data_size < 260 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: compressed data size value too small.",
-		 function );
+	return( 1 );
+}
 
-		return( -1 );
-	}
-	if( compressed_data_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid compressed data size value exceeds maximum.",
-		 function );
+/* Decompresses data using LZXPRESS Huffman stream compression
+ * Return 1 on success or -1 on error
+ */
+int libfwnt_lzxpress_huffman_stream_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libcerror_error_t **error )
+{
+	static char *function          = "libfwnt_lzxpress_huffman_stream_decompress";
+	size_t compressed_data_index   = 0;
+	size_t uncompressed_block_size = 0;
+	size_t uncompressed_data_index = 0;
 
-		return( -1 );
-	}
-	if( previous_uncompressed_data != NULL )
-	{
-		if( previous_uncompressed_data_size > (size_t) SSIZE_MAX )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-			 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-			 "%s: invalid previous uncompressed data size value exceeds maximum.",
-			 function );
-
-			return( -1 );
-		}
-	}
-	if( uncompressed_data == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid uncompressed data.",
-		 function );
-
-		return( -1 );
-	}
 	if( uncompressed_data_size == NULL )
 	{
 		libcerror_error_set(
@@ -1112,237 +1113,35 @@ ssize_t libfwnt_lzxpress_huffman_decompress_stream(
 
 		return( -1 );
 	}
-	if( libfwnt_lzxpress_huffman_tree_read(
-	     tree_nodes,
-	     compressed_data,
-	     compressed_data_size,
-	     error ) != 1 )
+	while( compressed_data_index < compressed_data_size )
 	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-		 "%s: unable to read Huffman tree.",
-		 function );
+		uncompressed_block_size = uncompressed_data_index + 65536;
 
-		goto on_error;
-	}
-	if( libfwnt_bit_stream_initialize(
-	     &compressed_data_bit_stream,
-	     compressed_data,
-	     compressed_data_size,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-		 "%s: unable to create compressed data bit stream.",
-		 function );
-
-		goto on_error;
-	}
-/* TODO add a bit stream seek function ? */
-	compressed_data_bit_stream->byte_stream_offset = 256;
-
-	if( libfwnt_bit_stream_read(
-	     compressed_data_bit_stream,
-	     4,
-	     error ) != 4 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_READ_FAILED,
-		 "%s: unable to read 32-bit from bit stream.",
-		 function );
-
-		goto on_error;
-	}
-	while( uncompressed_data_index < *uncompressed_data_size )
-	{
-		if( libfwnt_lzxpress_huffman_tree_read_symbol(
-		     tree_nodes,
-		     compressed_data_bit_stream,
-		     &symbol,
+		if( uncompressed_block_size > *uncompressed_data_size )
+		{
+			uncompressed_block_size = *uncompressed_data_size;
+		}
+		if( libfwnt_lzxpress_huffman_decompress_with_index(
+		     compressed_data,
+		     compressed_data_size,
+		     &compressed_data_index,
+		     uncompressed_data,
+		     &uncompressed_block_size,
+		     uncompressed_data_index,
 		     error ) != 1 )
 		{
 			libcerror_error_set(
 			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-			 "%s: unable to read symbol.",
+			 LIBCERROR_ERROR_DOMAIN_COMPRESSION,
+			 LIBCERROR_COMPRESSION_ERROR_DECOMPRESS_FAILED,
+			 "%s: unable to decompress compressed data.",
 			 function );
 
-			goto on_error;
+			return( -1 );
 		}
-		if( symbol < 256 )
-		{
-			uncompressed_data[ uncompressed_data_index ] = (uint8_t) symbol;
-
-			uncompressed_data_index += 1;
-		}
-		else
-		{
-			symbol          -= 256;
-			compression_size = symbol & 0x000f;
-			symbol         >>= 4;
-
-			if( symbol == 0 )
-			{
-				compression_offset = 0;
-			}
-			else
-			{
-/* TODO add a read number of bits function ? */
-				compression_offset = (uint32_t) ( compressed_data_bit_stream->bits >> ( 32 - symbol ) );
-			}
-			compression_offset = (uint32_t) ( ( 1 << symbol ) + compression_offset );
-
-			if( compression_size == 15 )
-			{
-				if( ( compressed_data_bit_stream->byte_stream_offset + 1 ) > compressed_data_bit_stream->byte_stream_size )
-				{
-					libcerror_error_set(
-					 error,
-					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: bit stream offset value out of bounds.",
-					 function );
-
-					goto on_error;
-				}
-				compression_size = compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] + 15;
-
-				compressed_data_bit_stream->byte_stream_offset += 1;
-
-				if( compression_size == 270 )
-				{
-					if( ( compressed_data_bit_stream->byte_stream_offset + 2 ) > compressed_data_bit_stream->byte_stream_size )
-					{
-						libcerror_error_set(
-						 error,
-						 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-						 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-						 "%s: bit stream offset value out of bounds.",
-						 function );
-
-						goto on_error;
-					}
-					byte_stream_copy_to_uint16_little_endian(
-					 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-					 compression_size );
-
-					compressed_data_bit_stream->byte_stream_offset += 2;
-				}
-			}
-			compressed_data_bit_stream->bits          <<= symbol;
-			compressed_data_bit_stream->number_of_bits -= (uint8_t) symbol;
-
-			if( compressed_data_bit_stream->number_of_bits < 16 )
-			{
-/* TODO bounds check */
-				byte_stream_copy_to_uint16_little_endian(
-				 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-				 bits );
-
-/* TODO bits read infront of the bit stream ? */
-				compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
-				compressed_data_bit_stream->byte_stream_offset += 2;
-				compressed_data_bit_stream->number_of_bits     += 16;
-			}
-			compression_size += 3;
-
-			if( ( previous_uncompressed_data != NULL )
-			 && ( compression_offset > uncompressed_data_index ) )
-			{
-				if( compression_offset > previous_uncompressed_data_size )
-				{
-					libcerror_error_set(
-					 error,
-					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compression offset value out of bounds.",
-					 function );
-
-					goto on_error;
-				}
-				previous_uncompressed_data_index = previous_uncompressed_data_size - ( compression_offset - uncompressed_data_index );
-
-				while( compression_offset > uncompressed_data_index )
-				{
-					uncompressed_data[ uncompressed_data_index ] = previous_uncompressed_data[ previous_uncompressed_data_index ];
-
-					previous_uncompressed_data_index += 1;
-					uncompressed_data_index          += 1;
-					compression_offset               -= 1;
-					compression_size                 -= 1;
-
-					if( compression_size == 0 )
-					{
-						break;
-					}
-				}
-			}
-			if( compression_size > 0 )
-			{
-				if( compression_offset > uncompressed_data_index )
-				{
-					libcerror_error_set(
-					 error,
-					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compression offset value out of bounds.",
-					 function );
-
-					goto on_error;
-				}
-				if( ( uncompressed_data_index + compression_size ) > *uncompressed_data_size )
-				{
-					libcerror_error_set(
-					 error,
-					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compression size value out of bounds.",
-					 function );
-
-					goto on_error;
-				}
-				while( compression_size > 0 )
-				{
-					uncompressed_data[ uncompressed_data_index ] = uncompressed_data[ uncompressed_data_index - compression_offset ];
-
-					uncompressed_data_index += 1;
-					compression_size        -= 1;
-				}
-			}
-		}
-	}
-	compressed_data_index = compressed_data_bit_stream->byte_stream_offset;
-
-	if( libfwnt_bit_stream_free(
-	     &compressed_data_bit_stream,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-		 "%s: unable to free compressed data bit stream.",
-		 function );
-
-		goto on_error;
+		uncompressed_data_index += uncompressed_block_size;
 	}
 	*uncompressed_data_size = uncompressed_data_index;
 
-	return( (ssize_t) compressed_data_index );
-
-on_error:
-	if( compressed_data_bit_stream != NULL )
-	{
-		libfwnt_bit_stream_free(
-		 &compressed_data_bit_stream,
-		 NULL );
-	}
-	return( -1 );
+	return( 1 );
 }

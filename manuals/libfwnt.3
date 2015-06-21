@@ -1,4 +1,4 @@
-.Dd January  4, 2015
+.Dd June 21, 2015
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
@@ -50,8 +50,16 @@ Security identifier (SID) functions
 .Fn libfwnt_security_identifier_copy_to_utf32_string_with_index "libfwnt_security_identifier_t *security_identifier, uint32_t *utf32_string, size_t utf32_string_size, size_t *utf32_string_index, uint32_t string_format_flags, libfwnt_error_t **error"
 .Pp
 LZNT1 functions
+.Ft int
+.Fn libfwnt_lznt1_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
 .Pp
 LZXPRESS functions
+.Ft int
+.Fn libfwnt_lzxpress_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_lzxpress_huffman_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_lzxpress_huffman_stream_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
 .Sh DESCRIPTION
 The
 .Fn libfwnt_get_version

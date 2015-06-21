@@ -121,7 +121,7 @@ int libfwnt_security_identifier_free(
 LIBFWNT_EXTERN \
 int libfwnt_security_identifier_copy_from_byte_stream(
      libfwnt_security_identifier_t *security_identifier,
-     uint8_t *byte_stream,
+     const uint8_t *byte_stream,
      size_t byte_stream_size,
      int byte_order,
      libfwnt_error_t **error );
@@ -216,9 +216,53 @@ int libfwnt_security_identifier_copy_to_utf32_string_with_index(
  * LZNT1 functions
  * ------------------------------------------------------------------------- */
 
+/* Decompresses data using LZNT1 compression
+ * Returns 1 on success or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_lznt1_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libfwnt_error_t **error );
+
 /* -------------------------------------------------------------------------
  * LZXPRESS functions
  * ------------------------------------------------------------------------- */
+
+/* Decompresses data using LZXPRESS (LZ77 + DIRECT2) compression
+ * Return 1 on success or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_lzxpress_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libfwnt_error_t **error );
+
+/* Decompresses data using LZXPRESS Huffman compression
+ * Return 1 on success or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_lzxpress_huffman_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libfwnt_error_t **error );
+
+/* Decompresses data using LZXPRESS Huffman stream compression
+ * Return 1 on success or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_lzxpress_huffman_stream_decompress(
+     const uint8_t *compressed_data,
+     size_t compressed_data_size,
+     uint8_t *uncompressed_data,
+     size_t *uncompressed_data_size,
+     libfwnt_error_t **error );
 
 #if defined( __cplusplus )
 }
