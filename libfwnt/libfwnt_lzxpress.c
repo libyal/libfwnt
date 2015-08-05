@@ -676,7 +676,6 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
 {
 	libfwnt_lzxpress_huffman_tree_node_t *tree_node = NULL;
 	static char *function                           = "libfwnt_lzxpress_huffman_tree_read_symbol";
-	uint16_t bits                                   = 0;
 	uint8_t sub_tree_node_index                     = 0;
 
 	if( compressed_data_bit_stream == NULL )
@@ -711,18 +710,6 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
 		compressed_data_bit_stream->bits          <<= 1;
 		compressed_data_bit_stream->number_of_bits -= 1;
 
-		if( ( compressed_data_bit_stream->number_of_bits < 16 )
-		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
-		{
-			byte_stream_copy_to_uint16_little_endian(
-			 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-			 bits );
-
-/* TODO bits read infront of the bit stream ? */
-			compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
-			compressed_data_bit_stream->byte_stream_offset += 2;
-			compressed_data_bit_stream->number_of_bits     += 16;
-		}
 		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
 
 		if( tree_node == NULL )
@@ -763,8 +750,10 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 	size_t compression_uncompressed_data_index       = 0;
 	size_t initial_uncompressed_data_index           = 0;
 	uint32_t compression_offset                      = 0;
+	uint16_t bits                                    = 0;
 	uint16_t compression_size                        = 0;
 	uint16_t symbol                                  = 0;
+	uint8_t end_of_input                             = 0;
 
 	if( compressed_data == NULL )
 	{
@@ -912,6 +901,22 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 
 			goto on_error;
 		}
+		if( ( compressed_data_bit_stream->number_of_bits < 16 )
+		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
+		{
+			byte_stream_copy_to_uint16_little_endian(
+			 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
+			 bits );
+
+			if( bits == 0 )
+			{
+				end_of_input = 1;
+			}
+/* TODO bits read infront of the bit stream ? */
+			compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
+			compressed_data_bit_stream->byte_stream_offset += 2;
+			compressed_data_bit_stream->number_of_bits     += 16;
+		}
 		if( symbol < 256 )
 		{
 			uncompressed_data[ uncompressed_data_index ] = (uint8_t) symbol;
@@ -941,6 +946,9 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 				compression_offset = (uint32_t) ( compressed_data_bit_stream->bits >> ( 32 - symbol ) );
 			}
 			compression_offset = (uint32_t) ( ( 1 << symbol ) + compression_offset );
+
+			compressed_data_bit_stream->bits          <<= symbol;
+			compressed_data_bit_stream->number_of_bits -= (uint8_t) symbol;
 
 			/* Ignore any data beyond the uncompressed block size
 			 */
@@ -981,9 +989,6 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 					compressed_data_bit_stream->byte_stream_offset += 2;
 				}
 			}
-			compressed_data_bit_stream->bits          <<= symbol;
-			compressed_data_bit_stream->number_of_bits -= (uint8_t) symbol;
-
 			compression_size += 3;
 
 			if( compression_offset > uncompressed_data_index )
@@ -1017,6 +1022,22 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 				compression_uncompressed_data_index++;
 				uncompressed_data_index++;
 				compression_size--;
+			}
+			if( ( compressed_data_bit_stream->number_of_bits < 16 )
+			 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
+			{
+				byte_stream_copy_to_uint16_little_endian(
+				 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
+				 bits );
+
+				if( bits == 0 )
+				{
+					end_of_input = 1;
+				}
+/* TODO bits read infront of the bit stream ? */
+				compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
+				compressed_data_bit_stream->byte_stream_offset += 2;
+				compressed_data_bit_stream->number_of_bits     += 16;
 			}
 		}
 	}
