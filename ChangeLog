@@ -28,6 +28,10 @@ TODO
 * security descriptor:
   - implement
 
+20151206
+* changes in copying security identifier to string
+  to work around issues with VS 2008 compilation
+
 20150621
 * woked on lzxpress support
 

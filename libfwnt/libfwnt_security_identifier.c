@@ -269,6 +269,7 @@ int libfwnt_security_identifier_get_string_size(
 {
 	libfwnt_internal_security_identifier_t *internal_security_identifier = NULL;
 	static char *function                                                = "libfwnt_security_identifier_get_string_size";
+	size_t value_string_index                                            = 0;
 	uint64_t value_64bit                                                 = 0;
 	uint8_t sub_authority_index                                          = 0;
 
@@ -307,25 +308,25 @@ int libfwnt_security_identifier_get_string_size(
 
 		return( -1 );
 	}
-	*string_size = 3;
+	value_string_index = 2;
 
 	value_64bit = internal_security_identifier->revision_number;
 
 	do
 	{
-		*string_size += 1;
+		value_string_index++;
 
 		value_64bit /= 10;
 	}
 	while( value_64bit > 0 );
 
-	*string_size += 1;
+	value_string_index++;
 
 	value_64bit = internal_security_identifier->authority;
 
 	do
 	{
-		*string_size += 1;
+		value_string_index++;
 
 		value_64bit /= 10;
 	}
@@ -335,19 +336,22 @@ int libfwnt_security_identifier_get_string_size(
 	     sub_authority_index < internal_security_identifier->number_of_sub_authorities;
 	     sub_authority_index++ )
 	{
-		*string_size += 1;
+		value_string_index++;
 
 		value_64bit = internal_security_identifier->sub_authority[ sub_authority_index ];
 
 		do
 		{
-			*string_size += 1;
+			value_string_index++;
 
 			value_64bit /= 10;
 		}
 		while( value_64bit > 0 );
-
 	}
+	value_string_index++;
+
+	*string_size = value_string_index;
+
 	return( 1 );
 }
 
@@ -464,7 +468,7 @@ int libfwnt_security_identifier_copy_to_utf8_string_with_index(
 	}
 	string_index = *utf8_string_index;
 
-	if( ( string_index + 2 ) > utf8_string_size )
+	if( ( string_index + 2 ) >= utf8_string_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -483,9 +487,9 @@ int libfwnt_security_identifier_copy_to_utf8_string_with_index(
 
 	do
 	{
-		value_64bit /= 10;
-
 		value_string_length++;
+
+		value_64bit /= 10;
 	}
 	while( value_64bit > 0 );
 
@@ -520,9 +524,9 @@ int libfwnt_security_identifier_copy_to_utf8_string_with_index(
 
 	do
 	{
-		value_64bit /= 10;
-
 		value_string_length++;
+
+		value_64bit /= 10;
 	}
 	while( value_64bit > 0 );
 
@@ -559,9 +563,9 @@ int libfwnt_security_identifier_copy_to_utf8_string_with_index(
 
 		do
 		{
-			value_64bit /= 10;
-
 			value_string_length++;
+
+			value_64bit /= 10;
 		}
 		while( value_64bit > 0 );
 
@@ -722,7 +726,7 @@ int libfwnt_security_identifier_copy_to_utf16_string_with_index(
 	}
 	string_index = *utf16_string_index;
 
-	if( ( string_index + 2 ) > utf16_string_size )
+	if( ( string_index + 2 ) >= utf16_string_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -741,9 +745,9 @@ int libfwnt_security_identifier_copy_to_utf16_string_with_index(
 
 	do
 	{
-		value_64bit /= 10;
-
 		value_string_length++;
+
+		value_64bit /= 10;
 	}
 	while( value_64bit > 0 );
 
@@ -778,9 +782,9 @@ int libfwnt_security_identifier_copy_to_utf16_string_with_index(
 
 	do
 	{
-		value_64bit /= 10;
-
 		value_string_length++;
+
+		value_64bit /= 10;
 	}
 	while( value_64bit > 0 );
 
@@ -1036,9 +1040,9 @@ int libfwnt_security_identifier_copy_to_utf32_string_with_index(
 
 	do
 	{
-		value_64bit /= 10;
-
 		value_string_length++;
+
+		value_64bit /= 10;
 	}
 	while( value_64bit > 0 );
 
@@ -1075,9 +1079,9 @@ int libfwnt_security_identifier_copy_to_utf32_string_with_index(
 
 		do
 		{
-			value_64bit /= 10;
-
 			value_string_length++;
+
+			value_64bit /= 10;
 		}
 		while( value_64bit > 0 );
 
