@@ -1,5 +1,6 @@
-= Windows NT compression methods =
-Windows NT comes with multiple built-in compression methods which are provided by the RtlCompressBuffer and RtlDecompressBuffer functions.
+== Windows NT compression methods
+Windows NT comes with multiple built-in compression methods which are provided 
+by the RtlCompressBuffer and RtlDecompressBuffer functions.
 
 [options="header"]
 |===
@@ -9,7 +10,8 @@ Windows NT comes with multiple built-in compression methods which are provided b
 | COMPRESSION_FORMAT_XPRESS_HUFF | LZXPRESS with Huffman compression.
 |===
 
-= External Links =
+== External Links
+
 * http://msdn.microsoft.com/en-us/Library/ff552127(v=vs.85).aspx[MSDN: RtlCompressBuffer function]
 * http://msdn.microsoft.com/en-us/Library/ff552191(v=VS.85).aspx[MSDN: RtlDecompressBuffer function]
 * http://msdn.microsoft.com/en-us/library/jj711990.aspx[MSDN: LZNT1]

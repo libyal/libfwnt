@@ -1,4 +1,9 @@
-## Security Descriptor
+= Security Descriptor
+
+:toc:
+:toclevels: 4
+
+== Security Descriptor structure
 The Windows NT security descriptor consist of:
 
 * the security descriptor header
@@ -14,7 +19,7 @@ contiguous block.
 
 *TODO Is a security descriptor in a byte stream always self-relative?*
 
-### Security descriptor header
+=== Security descriptor header
 The security descriptor header is 20 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -35,7 +40,7 @@ Contains an offset relative from the start of the security descriptor header
 
 The control flags determine how the reference values should be interpreted.
 
-#### Security descriptor control flags
+==== Security descriptor control flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -68,7 +73,7 @@ Prevents the SACL of the security descriptor from being modified by inheritable 
 Indicates a self-relative security descriptor.
 |===
 
-## Security identifier
+== Security identifier
 The security identifier (SID) is used throughout Windows NT-based software. A SID is normally represented like a string e.g.:
 ....
 S-1-5-21-7623811015-3361044348-030300820-1013
@@ -91,7 +96,7 @@ These values corresponds with the remaining values in the SID string
 
 The 'S' in the string representation is not stored in the binary representation.
 
-## Access control list (ACL)
+== Access control list (ACL)
 Both the DACL and the SACL are stored in the same data structure, referred to 
 as the Access Control List (ACL).
 
@@ -109,7 +114,7 @@ The access control list header is 8 bytes of size and consists of:
 
 The access control list header is followed by access control entries (ACE).
 
-## Access control entry (ACE)
+== Access control entry (ACE)
 The access control entry header is 4 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -123,7 +128,7 @@ The access control entry header is 4 bytes of size and consists of:
 The access control entry (ACE) header is followed by access entry data. The 
 size and format of the ACE data is dependent on the flags.
 
-### Access control entry (ACE) types
+=== Access control entry (ACE) types
 
 [cols="1,1,5",options="header"]
 |===
@@ -170,7 +175,7 @@ Maximum number of ACE types supported in an ACL revision number 5
 (Basic ACE data structure)
 |===
 
-#### Basic ACE data structure
+==== Basic ACE data structure
 The basic ACE data structure is variable of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -180,7 +185,7 @@ The basic ACE data structure is variable of size and consists of:
 | 4 | ... | | SID
 |===
 
-#### Object ACE data structure
+==== Object ACE data structure
 The object ACE data structure is variable of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -195,9 +200,9 @@ Contains a GUID
 | 40 | ... | | SID
 |===
 
-### Access control entry (ACE) flags
+=== Access control entry (ACE) flags
 
-#### Access flags
+==== Access flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -208,7 +213,7 @@ Contains a GUID
 | 0x08 | INHERIT_ONLY_ACE | Indicates an inherit-only ACE, which does not control access to the object to which it is attached. If this flag is not set, the ACE is an effective ACE which controls access to the object to which it is attached.
 |===
 
-#### Audit flags
+==== Audit flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -217,9 +222,9 @@ Contains a GUID
 | 0x80 | FAILED_ACCESS_ACE_FLAG | Used with system-audit ACEs in a system access control list (SACL) to generate audit messages for failed access attempts.
 |===
 
-### Access rights flags (ACCESS_MASK)
+=== Access rights flags (ACCESS_MASK)
 
-#### Standard access rights flags
+==== Standard access rights flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -232,7 +237,7 @@ DAC => discretionary access control?
 | 0x00100000 | fsdrightSynchronize | Synchronize
 |===
 
-#### Non-folder item access rights flags
+==== Non-folder item access rights flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -263,7 +268,7 @@ Exchange specific
 
 All non-folder access rights: 0x001f0fbf
 
-#### Folder item access rights flags
+==== Folder item access rights flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -299,7 +304,7 @@ This right corresponds to the frightsContact access right in previous versions o
 
 All folder access rights: 0x00000fbf
 
-#### Mandatory label access rights flags
+==== Mandatory label access rights flags
 
 [cols="1,1,5",options="header"]
 |===
@@ -309,7 +314,8 @@ All folder access rights: 0x00000fbf
 | 0x00000004 | SYSTEM_MANDATORY_LABEL_NO_EXECUTE_UP | A principal with a lower mandatory level than the object cannot execute the object.
 |===
 
-## External Links
+== External Links
+
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379563(v=vs.85).aspx[MSDN: Security Descriptors]
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379571(v=vs.85).aspx[MSDN: Security Identifiers]
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379561(v=vs.85).aspx[SECURITY_DESCRIPTOR structure]
