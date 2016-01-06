@@ -28,6 +28,9 @@ TODO
 * security descriptor:
   - implement
 
+20160106
+* 2016 update
+
 20151206
 * changes in copying security identifier to string
   to work around issues with VS 2008 compilation
