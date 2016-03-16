@@ -1,12 +1,12 @@
 include_HEADERS = \
-        libfwnt.h
+	libfwnt.h
 
 pkginclude_HEADERS = \
-        libfwnt/definitions.h \
-        libfwnt/error.h \
-        libfwnt/extern.h \
-        libfwnt/features.h \
-        libfwnt/types.h
+	libfwnt/definitions.h \
+	libfwnt/error.h \
+	libfwnt/extern.h \
+	libfwnt/features.h \
+	libfwnt/types.h
 
 EXTRA_DIST = \
 	libfwnt.h.in \
