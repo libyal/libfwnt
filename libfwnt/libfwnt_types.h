@@ -34,10 +34,10 @@
 /* The following type definitions hide internal data structures
  */
 #if defined( HAVE_DEBUG_OUTPUT ) && !defined( WINAPI )
-typedef struct libfwnt_access_control_entry_t {}	libfwnt_access_control_entry_t;
-typedef struct libfwnt_access_control_list_t {}		libfwnt_access_control_list_t;
-typedef struct libfwnt_security_descriptor {}		libfwnt_security_descriptor_t;
-typedef struct libfwnt_security_identifier {}		libfwnt_security_identifier_t;
+typedef struct libfwnt_access_control_entry {}	libfwnt_access_control_entry_t;
+typedef struct libfwnt_access_control_list {}	libfwnt_access_control_list_t;
+typedef struct libfwnt_security_descriptor {}	libfwnt_security_descriptor_t;
+typedef struct libfwnt_security_identifier {}	libfwnt_security_identifier_t;
 
 #else
 typedef intptr_t libfwnt_access_control_entry_t;
@@ -45,9 +45,9 @@ typedef intptr_t libfwnt_access_control_list_t;
 typedef intptr_t libfwnt_security_descriptor_t;
 typedef intptr_t libfwnt_security_identifier_t;
 
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) && !defined( WINAPI ) */
 
-#endif
+#endif /* defined( HAVE_LOCAL_LIBFWNT ) */
 
-#endif
+#endif /* !defined( _LIBFWNT_INTERNAL_TYPES_H ) */
 

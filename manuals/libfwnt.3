@@ -1,4 +1,4 @@
-.Dd June 21, 2015
+.Dd January  6, 2016
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
@@ -25,15 +25,13 @@ Error functions
 .Ft int
 .Fn libfwnt_error_backtrace_sprint "libfwnt_error_t *error, char *string, size_t size"
 .Pp
-Locale identifier (LCID) functions
-.Pp
 Security identifier (SID) functions
 .Ft int
 .Fn libfwnt_security_identifier_initialize "libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
 .Ft int
 .Fn libfwnt_security_identifier_free "libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_from_byte_stream "libfwnt_security_identifier_t *security_identifier, uint8_t *byte_stream, size_t byte_stream_size, int byte_order, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_from_byte_stream "libfwnt_security_identifier_t *security_identifier, const uint8_t *byte_stream, size_t byte_stream_size, int byte_order, libfwnt_error_t **error"
 .Ft int
 .Fn libfwnt_security_identifier_get_string_size "libfwnt_security_identifier_t *security_identifier, size_t *string_size, uint32_t string_format_flags, libfwnt_error_t **error"
 .Ft int
