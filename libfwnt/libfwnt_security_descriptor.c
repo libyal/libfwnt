@@ -323,17 +323,17 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 	if( libcnotify_verbose != 0 )
 	{
 		libcnotify_printf(
-		 "%s: revision number:\t\t%" PRIu8 "\n",
+		 "%s: revision number\t\t\t: %" PRIu8 "\n",
 		 function,
 		 internal_security_descriptor->revision_number );
 
 		libcnotify_printf(
-		 "%s: padding:\t\t\t0x%02" PRIx8 "\n",
+		 "%s: padding\t\t\t\t: 0x%02" PRIx8 "\n",
 		 function,
 		 byte_stream[ 1 ] );
 
 		libcnotify_printf(
-		 "%s: control flags:\t\t\t0x%04" PRIx16 "\n",
+		 "%s: control flags\t\t\t: 0x%04" PRIx16 "\n",
 		 function,
 		 control_flags );
 		libfwnt_debug_print_security_descriptor_control_flags(
@@ -342,22 +342,22 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 "\n" );
 
 		libcnotify_printf(
-		 "%s: owner SID offset:\t\t\t0x%08" PRIx32 "\n",
+		 "%s: owner SID offset\t\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 owner_sid_offset );
 
 		libcnotify_printf(
-		 "%s: group SID offset:\t\t\t0x%08" PRIx32 "\n",
+		 "%s: group SID offset\t\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 group_sid_offset );
 
 		libcnotify_printf(
-		 "%s: discretionary ACL offset:\t\t0x%08" PRIx32 "\n",
+		 "%s: discretionary ACL offset\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 discretionary_acl_offset );
 
 		libcnotify_printf(
-		 "%s: system ACL offset:\t\t\t0x%08" PRIx32 "\n",
+		 "%s: system ACL offset\t\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 system_acl_offset );
 
@@ -427,7 +427,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: owner SID:\t\t\t",
+			 "%s: owner SID\t\t\t\t: ",
 			 function );
 
 			if( sid_string_size > 0 )
@@ -548,7 +548,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: group SID:\t\t\t",
+			 "%s: group SID\t\t\t\t: ",
 			 function );
 
 			if( sid_string_size > 0 )
@@ -650,7 +650,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				 value_32bit );
 
 				libcnotify_printf(
-				 "\tDACL reference:\t\t\t%" PRIu32 "\n",
+				 "\tDACL reference\t\t\t: %" PRIu32 "\n",
 				 value_32bit );
 
 				value_data_pointer = &( value_data[ 24 ] );
@@ -660,7 +660,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				 value_32bit );
 
 				libcnotify_printf(
-				 "\tSACL reference:\t\t\t%" PRIu32 "\n",
+				 "\tSACL reference\t\t\t: %" PRIu32 "\n",
 				 value_32bit );
 
 				value_data_iterator = value_32bit + 8;
@@ -671,10 +671,10 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					libcnotify_printf(
 					 "\t\tAccess control list (ACL):\n" );
 					libcnotify_printf(
-					 "\t\tRevision number:\t%" PRIu8 "\n",
+					 "\t\tRevision number\t: %" PRIu8 "\n",
 					 value_data[ value_data_iterator ] );
 					libcnotify_printf(
-					 "\t\tPadding1:\t\t%" PRIu8 "\n",
+					 "\t\tPadding1\t\t: %" PRIu8 "\n",
 					 value_data[ value_data_iterator + 1 ] );
 
 					value_data_pointer = &( value_data[ value_data_iterator + 2 ] );
@@ -684,7 +684,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 value_16bit );
 
 					libcnotify_printf(
-					 "\t\tSize:\t\t\t%" PRIu16 "\n",
+					 "\t\tSize\t\t\t: %" PRIu16 "\n",
 					 value_16bit );
 
 					value_data_pointer = &( value_data[ value_data_iterator + 4 ] );
@@ -694,7 +694,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 value_16bit );
 
 					libcnotify_printf(
-					 "\t\tCount:\t\t\t%" PRIu16 "\n",
+					 "\t\tCount\t\t\t: %" PRIu16 "\n",
 					 value_16bit );
 
 					number_of_values = (uint32_t) value_16bit;
@@ -706,7 +706,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 value_16bit );
 
 					libcnotify_printf(
-					 "\t\tPadding2:\t\t0x%04" PRIx16 "\n",
+					 "\t\tPadding2\t\t: 0x%04" PRIx16 "\n",
 					 value_16bit );
 
 					value_data_iterator += 8;
@@ -718,10 +718,10 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 						libcnotify_printf(
 						 "\t\tAccess control entry (ACE):\n" );
 						libcnotify_printf(
-						 "\t\tType:\t\t\t%" PRIu8 "\n",
+						 "\t\tType\t\t\t: %" PRIu8 "\n",
 						 value_data[ value_data_iterator ] );
 						libcnotify_printf(
-						 "\t\tFlags:\t\t\t%" PRIu8 "\n",
+						 "\t\tFlags\t\t\t: %" PRIu8 "\n",
 						 value_data[ value_data_iterator + 1 ] );
 
 						value_data_pointer = &( value_data[ value_data_iterator + 2 ] );
@@ -731,7 +731,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 						 value_16bit );
 
 						libcnotify_printf(
-						 "\t\tSize:\t\t\t%" PRIu16 "\n",
+						 "\t\tSize\t\t\t: %" PRIu16 "\n",
 						 value_16bit );
 
 						libcnotify_printf(
@@ -751,7 +751,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 							 value_32bit );
 
 							libcnotify_printf(
-							 "\t\tAccess rights flags:\t0x%08" PRIx32 "\n",
+							 "\t\tAccess rights flags\t: 0x%08" PRIx32 "\n",
 							 value_32bit );
 
 							if( libfwnt_security_identifier_copy_from_byte_stream(
@@ -844,7 +844,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 								return( -1 );
 							}
 							libcnotify_printf(
-							 "\t\tSID:\t\t\t%" PRIs_LIBCSTRING_SYSTEM "\n",
+							 "\t\tSID\t\t\t: %" PRIs_LIBCSTRING_SYSTEM "\n",
 							 sid_string );
 
 							libcnotify_printf(

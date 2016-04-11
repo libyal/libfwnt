@@ -59,7 +59,21 @@ void libfwnt_debug_print_security_descriptor_control_flags(
 		libcnotify_printf(
 		 "\t(SE_SACL_PRESENT)\n" );
 	}
-
+	if( ( control_flags & 0x0020 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(Unknown 0x0020)\n" );
+	}
+	if( ( control_flags & 0x0040 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(Unknown 0x0040)\n" );
+	}
+	if( ( control_flags & 0x0080 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(Unknown 0x0080)\n" );
+	}
 	if( ( control_flags & 0x0100 ) != 0 )
 	{
 		libcnotify_printf(
