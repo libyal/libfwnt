@@ -333,7 +333,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 byte_stream[ 1 ] );
 
 		libcnotify_printf(
-		 "%: control flags:\t\t\t0x%04" PRIx16 "\n",
+		 "%s: control flags:\t\t\t0x%04" PRIx16 "\n",
 		 function,
 		 control_flags );
 		libfwnt_debug_print_security_descriptor_control_flags(
@@ -342,22 +342,22 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 "\n" );
 
 		libcnotify_printf(
-		 "%: owner SID offset:\t\t\t0x%08" PRIx32 "\n",
+		 "%s: owner SID offset:\t\t\t0x%08" PRIx32 "\n",
 		 function,
 		 owner_sid_offset );
 
 		libcnotify_printf(
-		 "%: group SID offset:\t\t\t0x%08" PRIx32 "\n",
+		 "%s: group SID offset:\t\t\t0x%08" PRIx32 "\n",
 		 function,
 		 group_sid_offset );
 
 		libcnotify_printf(
-		 "%: discretionary ACL offset:\t\t0x%08" PRIx32 "\n",
+		 "%s: discretionary ACL offset:\t\t0x%08" PRIx32 "\n",
 		 function,
 		 discretionary_acl_offset );
 
 		libcnotify_printf(
-		 "%: system ACL offset:\t\t\t0x%08" PRIx32 "\n",
+		 "%s: system ACL offset:\t\t\t0x%08" PRIx32 "\n",
 		 function,
 		 system_acl_offset );
 
