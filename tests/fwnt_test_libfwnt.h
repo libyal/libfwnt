@@ -1,7 +1,7 @@
 /*
- * The libfwnt header wrapper
+ * The internal libfwnt header
  *
- * Copyright (c) 2009-2012, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2016, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -24,14 +24,14 @@
 
 #include <common.h>
 
-/* If libtool DLL support is enabled set LIBFWNT_DLL_IMPORT
- * before including libfwnt.h
+/* If Cygwin libtool DLL support is enabled and do not want to create static
+ * executables set LIBFWNT_DLL_IMPORT before including libfwnt.h
  */
-#if defined( _WIN32 ) && defined( DLL_IMPORT )
+#if defined( _WIN32 ) && defined( DLL_EXPORT ) && !defined( HAVE_STATIC_EXECUTABLES )
 #define LIBFWNT_DLL_IMPORT
 #endif
 
 #include <libfwnt.h>
 
-#endif
+#endif /* !defined( _FWNT_TEST_LIBFWNT_H ) */
 
