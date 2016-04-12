@@ -119,9 +119,9 @@ void libfwnt_debug_print_security_descriptor_control_flags(
 /* Prints the access control entry type
  */
 void libfwnt_debug_print_access_control_entry_type(
-      uint8_t type )
+      uint8_t entry_type )
 {
-	switch( type )
+	switch( entry_type )
 	{
 		case 0x00:
 			libcnotify_printf(
@@ -220,5 +220,5 @@ void libfwnt_debug_print_access_control_entry_type(
 	}
 }
 
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
 

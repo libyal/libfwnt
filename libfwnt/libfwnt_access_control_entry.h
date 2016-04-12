@@ -1,5 +1,5 @@
 /*
- * Windows NT Access Contol List (ACL) functions
+ * Windows NT Access Contol Entry (ACE) functions
  *
  * Copyright (C) 2009-2016, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,14 +19,13 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFWNT_INTERNAL_ACCESS_CONTROL_LIST_H )
-#define _LIBFWNT_INTERNAL_ACCESS_CONTROL_LIST_H
+#if !defined( _LIBFWNT_INTERNAL_ACCESS_CONTROL_ENTRY_H )
+#define _LIBFWNT_INTERNAL_ACCESS_CONTROL_ENTRY_H
 
 #include <common.h>
 #include <types.h>
 
 #include "libfwnt_extern.h"
-#include "libfwnt_libcdata.h"
 #include "libfwnt_libcerror.h"
 #include "libfwnt_types.h"
 
@@ -34,33 +33,37 @@
 extern "C" {
 #endif
 
-/* The Windows NT Access Control List is formatted as following:
- * header: revision number, padding, size, count, padding
- * access control entries (ACE)
+/* The Windows NT Access Control Entry is formatted as following:
+ * header: type, flags, size
+ * data
  */
 
-typedef struct libfwnt_internal_access_control_list libfwnt_internal_access_control_list_t;
+typedef struct libfwnt_internal_access_control_entry libfwnt_internal_access_control_entry_t;
 
-struct libfwnt_internal_access_control_list
+struct libfwnt_internal_access_control_entry
 {
-	/* The revision number
+	/* The type
 	 */
-	uint8_t revision_number;
+	uint8_t type;
+
+	/* The flags
+	 */
+	uint8_t flags;
 };
 
 LIBFWNT_EXTERN \
-int libfwnt_access_control_list_initialize(
-     libfwnt_access_control_list_t **access_control_list,
+int libfwnt_access_control_entry_initialize(
+     libfwnt_access_control_entry_t **access_control_entry,
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
-int libfwnt_access_control_list_free(
-     libfwnt_access_control_list_t **access_control_list,
+int libfwnt_access_control_entry_free(
+     libfwnt_access_control_entry_t **access_control_entry,
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
-int libfwnt_access_control_list_copy_from_byte_stream(
-     libfwnt_access_control_list_t *access_control_list,
+int libfwnt_access_control_entry_copy_from_byte_stream(
+     libfwnt_access_control_entry_t *access_control_entry,
      const uint8_t *byte_stream,
      size_t byte_stream_size,
      int byte_order,
@@ -70,5 +73,5 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 }
 #endif
 
-#endif /* !defined( _LIBFWNT_INTERNAL_ACCESS_CONTROL_LIST_H ) */
+#endif /* !defined( _LIBFWNT_INTERNAL_ACCESS_CONTROL_ENTRY_H ) */
 

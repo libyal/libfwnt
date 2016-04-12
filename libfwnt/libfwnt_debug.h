@@ -34,11 +34,14 @@ extern "C" {
 void libfwnt_debug_print_security_descriptor_control_flags(
       uint32_t control_flags );
 
-#endif
+void libfwnt_debug_print_access_control_entry_type(
+      uint8_t entry_type );
+
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_DEBUG_H ) */
 

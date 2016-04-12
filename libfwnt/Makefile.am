@@ -12,6 +12,7 @@ lib_LTLIBRARIES = libfwnt.la
 
 libfwnt_la_SOURCES = \
 	libfwnt.c \
+	libfwnt_access_control_entry.c libfwnt_access_control_entry.h \
 	libfwnt_access_control_list.c libfwnt_access_control_list.h \
 	libfwnt_bit_stream.c libfwnt_bit_stream.h \
 	libfwnt_debug.c libfwnt_debug.h \

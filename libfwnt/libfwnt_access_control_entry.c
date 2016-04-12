@@ -1,5 +1,5 @@
 /*
- * Windows NT Access Control List (ACL) functions
+ * Windows NT Access Control Entry (ACE) functions
  *
  * Copyright (C) 2009-2016, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -24,150 +24,145 @@
 #include <memory.h>
 #include <types.h>
 
-#include "libfwnt_access_control_list.h"
+#include "libfwnt_access_control_entry.h"
 #include "libfwnt_definitions.h"
 #include "libfwnt_libcerror.h"
 #include "libfwnt_libcnotify.h"
 #include "libfwnt_types.h"
 
-/* Creates an access control list
- * Make sure the value access_control_list is referencing, is set to NULL
+/* Creates an access control entry
+ * Make sure the value access_control_entry is referencing, is set to NULL
  * Returns 1 if successful or -1 on error
  */
-int libfwnt_access_control_list_initialize(
-     libfwnt_access_control_list_t **access_control_list,
+int libfwnt_access_control_entry_initialize(
+     libfwnt_access_control_entry_t **access_control_entry,
      libcerror_error_t **error )
 {
-	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
-	static char *function                                                = "libfwnt_access_control_list_initialize";
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_initialize";
 
-	if( access_control_list == NULL )
+	if( access_control_entry == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid access control list.",
+		 "%s: invalid access control entry.",
 		 function );
 
 		return( -1 );
 	}
-	if( *access_control_list != NULL )
+	if( *access_control_entry != NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid access control list value already set.",
+		 "%s: invalid access control entry value already set.",
 		 function );
 
 		return( -1 );
 	}
-	internal_access_control_list = memory_allocate_structure(
-	                                libfwnt_internal_access_control_list_t );
+	internal_access_control_entry = memory_allocate_structure(
+	                                 libfwnt_internal_access_control_entry_t );
 
-	if( internal_access_control_list == NULL )
+	if( internal_access_control_entry == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_MEMORY,
 		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create access control list.",
+		 "%s: unable to create access control entry.",
 		 function );
 
 		goto on_error;
 	}
 	if( memory_set(
-	     internal_access_control_list,
+	     internal_access_control_entry,
 	     0,
-	     sizeof( libfwnt_internal_access_control_list_t ) ) == NULL )
+	     sizeof( libfwnt_internal_access_control_entry_t ) ) == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_MEMORY,
 		 LIBCERROR_MEMORY_ERROR_SET_FAILED,
-		 "%s: unable to clear access control list.",
+		 "%s: unable to clear access control entry.",
 		 function );
 
 		goto on_error;
 	}
-	*access_control_list = (libfwnt_access_control_list_t *) internal_access_control_list;
+	*access_control_entry = (libfwnt_access_control_entry_t *) internal_access_control_entry;
 
 	return( 1 );
 
 on_error:
-	if( internal_access_control_list != NULL )
+	if( internal_access_control_entry != NULL )
 	{
 		memory_free(
-		 internal_access_control_list );
+		 internal_access_control_entry );
 	}
 	return( -1 );
 }
 
-/* Frees an access control list
+/* Frees an access control entry
  * Returns 1 if successful or -1 on error
  */
-int libfwnt_access_control_list_free(
-     libfwnt_access_control_list_t **access_control_list,
+int libfwnt_access_control_entry_free(
+     libfwnt_access_control_entry_t **access_control_entry,
      libcerror_error_t **error )
 {
-	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
-	static char *function                                                = "libfwnt_access_control_list_free";
-	int result                                                           = 1;
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_free";
+	int result                                                             = 1;
 
-	if( access_control_list == NULL )
+	if( access_control_entry == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid access control list.",
+		 "%s: invalid access control entry.",
 		 function );
 
 		return( -1 );
 	}
-	if( *access_control_list != NULL )
+	if( *access_control_entry != NULL )
 	{
-		internal_access_control_list = (libfwnt_internal_access_control_list_t *) *access_control_list;
-		*access_control_list         = NULL;
+		internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) *access_control_entry;
+		*access_control_entry         = NULL;
 
 		memory_free(
-		 internal_access_control_list );
+		 internal_access_control_entry );
 	}
 	return( result );
 }
 
-/* Converts an access control list stored in a byte stream into a runtime version
+/* Converts an access control entry stored in a byte stream into a runtime version
  * Returns 1 if successful or -1 on error
  */
-int libfwnt_access_control_list_copy_from_byte_stream(
-     libfwnt_access_control_list_t *access_control_list,
+int libfwnt_access_control_entry_copy_from_byte_stream(
+     libfwnt_access_control_entry_t *access_control_entry,
      const uint8_t *byte_stream,
      size_t byte_stream_size,
      int byte_order,
      libcerror_error_t **error )
 {
-	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
-	static char *function                                                = "libfwnt_access_control_list_copy_from_byte_stream";
-	uint16_t count                                                       = 0;
-	uint16_t size                                                        = 0;
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_copy_from_byte_stream";
+	uint16_t size                                                          = 0;
 
-#if defined( HAVE_DEBUG_OUTPUT )
-	uint16_t value_16bit                                                 = 0;
-#endif
-
-	if( access_control_list == NULL )
+	if( access_control_entry == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid access control list.",
+		 "%s: invalid access control entry.",
 		 function );
 
 		return( -1 );
 	}
-	internal_access_control_list = (libfwnt_internal_access_control_list_t *) access_control_list;
+	internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) access_control_entry;
 
 	if( byte_stream == NULL )
 	{
@@ -225,28 +220,25 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 		 0 );
 	}
 #endif
-	internal_access_control_list->revision_number = byte_stream[ 0 ];
+	internal_access_control_entry->type  = byte_stream[ 0 ];
+	internal_access_control_entry->flags = byte_stream[ 1 ];
 
 	byte_stream_copy_to_uint16_little_endian(
 	 &( byte_stream[ 2 ] ),
 	 size );
 
-	byte_stream_copy_to_uint16_little_endian(
-	 &( byte_stream[ 4 ] ),
-	 count );
-
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
 	{
 		libcnotify_printf(
-		 "%s: revision number\t\t: %" PRIu8 "\n",
+		 "%s: type\t\t\t\t: %" PRIu8 "\n",
 		 function,
-		 internal_access_control_list->revision_number );
+		 internal_access_control_entry->type );
 
 		libcnotify_printf(
-		 "%s: padding1\t\t\t: 0x%02" PRIx8 "\n",
+		 "%s: flags\t\t\t\t: 0x%02" PRIx8 "\n",
 		 function,
-		 byte_stream[ 1 ] );
+		 internal_access_control_entry->flags );
 
 		libcnotify_printf(
 		 "%s: size\t\t\t\t: %" PRIu16 "\n",
@@ -254,28 +246,12 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 		 size );
 
 		libcnotify_printf(
-		 "%s: count\t\t\t: %" PRIu16 "\n",
-		 function,
-		 count );
-
-		byte_stream_copy_to_uint16_little_endian(
-		 &( byte_stream[ 6 ] ),
-		 value_16bit );
-		libcnotify_printf(
-		 "%s: padding2\t\t\t: 0x%04" PRIx16 "\n",
-		 function,
-		 value_16bit );
-
-		libcnotify_printf(
 		 "\n" );
 	}
 #endif
 
-/* TODO read ACEs */
+/* TODO read ACE data */
 
 	return( 1 );
-
-on_error:
-	return( -1 );
 }
 

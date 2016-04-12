@@ -323,17 +323,17 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 	if( libcnotify_verbose != 0 )
 	{
 		libcnotify_printf(
-		 "%s: revision number\t\t\t: %" PRIu8 "\n",
+		 "%s: revision number\t\t: %" PRIu8 "\n",
 		 function,
 		 internal_security_descriptor->revision_number );
 
 		libcnotify_printf(
-		 "%s: padding\t\t\t\t: 0x%02" PRIx8 "\n",
+		 "%s: padding\t\t\t: 0x%02" PRIx8 "\n",
 		 function,
 		 byte_stream[ 1 ] );
 
 		libcnotify_printf(
-		 "%s: control flags\t\t\t: 0x%04" PRIx16 "\n",
+		 "%s: control flags\t\t: 0x%04" PRIx16 "\n",
 		 function,
 		 control_flags );
 		libfwnt_debug_print_security_descriptor_control_flags(
@@ -342,22 +342,22 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 "\n" );
 
 		libcnotify_printf(
-		 "%s: owner SID offset\t\t\t: 0x%08" PRIx32 "\n",
+		 "%s: owner SID offset\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 owner_sid_offset );
 
 		libcnotify_printf(
-		 "%s: group SID offset\t\t\t: 0x%08" PRIx32 "\n",
+		 "%s: group SID offset\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 group_sid_offset );
 
 		libcnotify_printf(
-		 "%s: discretionary ACL offset\t\t: 0x%08" PRIx32 "\n",
+		 "%s: discretionary ACL offset\t: 0x%08" PRIx32 "\n",
 		 function,
 		 discretionary_acl_offset );
 
 		libcnotify_printf(
-		 "%s: system ACL offset\t\t\t: 0x%08" PRIx32 "\n",
+		 "%s: system ACL offset\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 system_acl_offset );
 
@@ -427,7 +427,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: owner SID\t\t\t\t: ",
+			 "%s: owner SID\t\t\t: ",
 			 function );
 
 			if( sid_string_size > 0 )
@@ -548,7 +548,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				goto on_error;
 			}
 			libcnotify_printf(
-			 "%s: group SID\t\t\t\t: ",
+			 "%s: group SID\t\t\t: ",
 			 function );
 
 			if( sid_string_size > 0 )
@@ -621,7 +621,35 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 			goto on_error;
 		}
-/* TODO */
+		if( libfwnt_access_control_list_initialize(
+		     &( internal_security_descriptor->discretionary_acl ),
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unable to create discretionary ACL.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfwnt_access_control_list_copy_from_byte_stream(
+		     internal_security_descriptor->discretionary_acl,
+		     &( byte_stream[ discretionary_acl_offset ] ),
+		     byte_stream_size - discretionary_acl_offset,
+		     LIBFWNT_ENDIAN_LITTLE,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+			 "%s: unable to copy discretionary ACL from byte stream.",
+			 function );
+
+			goto on_error;
+		}
 	}
 	if( system_acl_offset != 0 )
 	{
@@ -637,246 +665,36 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 			goto on_error;
 		}
-/* TODO */
+		if( libfwnt_access_control_list_initialize(
+		     &( internal_security_descriptor->system_acl ),
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unable to create system ACL.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfwnt_access_control_list_copy_from_byte_stream(
+		     internal_security_descriptor->system_acl,
+		     &( byte_stream[ system_acl_offset ] ),
+		     byte_stream_size - system_acl_offset,
+		     LIBFWNT_ENDIAN_LITTLE,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+			 "%s: unable to copy system ACL from byte stream.",
+			 function );
+
+			goto on_error;
+		}
 	}
-
-#ifdef TODO
-/* TODO from libfmapi rewrite note that there 8 unknown bytes in front of data */
-/* TODO */
-				value_data_pointer = &( value_data[ 20 ] );
-
-				byte_stream_copy_to_uint32_little_endian(
-				 value_data_pointer,
-				 value_32bit );
-
-				libcnotify_printf(
-				 "\tDACL reference\t\t\t: %" PRIu32 "\n",
-				 value_32bit );
-
-				value_data_pointer = &( value_data[ 24 ] );
-
-				byte_stream_copy_to_uint32_little_endian(
-				 value_data_pointer,
-				 value_32bit );
-
-				libcnotify_printf(
-				 "\tSACL reference\t\t\t: %" PRIu32 "\n",
-				 value_32bit );
-
-				value_data_iterator = value_32bit + 8;
-
-				if( ( value_data_iterator > 0 )
-				 && ( value_data_iterator < value_data_size ) )
-				{
-					libcnotify_printf(
-					 "\t\tAccess control list (ACL):\n" );
-					libcnotify_printf(
-					 "\t\tRevision number\t: %" PRIu8 "\n",
-					 value_data[ value_data_iterator ] );
-					libcnotify_printf(
-					 "\t\tPadding1\t\t: %" PRIu8 "\n",
-					 value_data[ value_data_iterator + 1 ] );
-
-					value_data_pointer = &( value_data[ value_data_iterator + 2 ] );
-
-					byte_stream_copy_to_uint16_little_endian(
-					 value_data_pointer,
-					 value_16bit );
-
-					libcnotify_printf(
-					 "\t\tSize\t\t\t: %" PRIu16 "\n",
-					 value_16bit );
-
-					value_data_pointer = &( value_data[ value_data_iterator + 4 ] );
-
-					byte_stream_copy_to_uint16_little_endian(
-					 value_data_pointer,
-					 value_16bit );
-
-					libcnotify_printf(
-					 "\t\tCount\t\t\t: %" PRIu16 "\n",
-					 value_16bit );
-
-					number_of_values = (uint32_t) value_16bit;
-
-					value_data_pointer = &( value_data[ value_data_iterator + 6 ] );
-
-					byte_stream_copy_to_uint16_little_endian(
-					 value_data_pointer,
-					 value_16bit );
-
-					libcnotify_printf(
-					 "\t\tPadding2\t\t: 0x%04" PRIx16 "\n",
-					 value_16bit );
-
-					value_data_iterator += 8;
-
-					for( value_iterator = 0;
-					     value_iterator < number_of_values;
-					     value_iterator++ )
-					{
-						libcnotify_printf(
-						 "\t\tAccess control entry (ACE):\n" );
-						libcnotify_printf(
-						 "\t\tType\t\t\t: %" PRIu8 "\n",
-						 value_data[ value_data_iterator ] );
-						libcnotify_printf(
-						 "\t\tFlags\t\t\t: %" PRIu8 "\n",
-						 value_data[ value_data_iterator + 1 ] );
-
-						value_data_pointer = &( value_data[ value_data_iterator + 2 ] );
-
-						byte_stream_copy_to_uint16_little_endian(
-						 value_data_pointer,
-						 value_16bit );
-
-						libcnotify_printf(
-						 "\t\tSize\t\t\t: %" PRIu16 "\n",
-						 value_16bit );
-
-						libcnotify_printf(
-						 "\t\tACE data:\n" );
-
-						if( ( value_data[ value_data_iterator ] <= 0x03 )
-						 || ( value_data[ value_data_iterator ] == 0x09 )
-						 || ( value_data[ value_data_iterator ] == 0x0a )
-						 || ( value_data[ value_data_iterator ] == 0x0d )
-						 || ( value_data[ value_data_iterator ] == 0x0e )
-						 || ( value_data[ value_data_iterator ] == 0x11 ) )
-						{
-							value_data_pointer = &( value_data[ value_data_iterator + 4 ] );
-
-							byte_stream_copy_to_uint16_little_endian(
-							 value_data_pointer,
-							 value_32bit );
-
-							libcnotify_printf(
-							 "\t\tAccess rights flags\t: 0x%08" PRIx32 "\n",
-							 value_32bit );
-
-							if( libfwnt_security_identifier_copy_from_byte_stream(
-							     sid,
-							     &( value_data[ value_data_iterator + 8 ] ),
-							     value_data_size - value_data_iterator,
-							     0,
-							     error ) != 1 )
-							{
-								libcerror_error_set(
-								 error,
-								 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-								 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-								 "%s: unable to copy byte stream to SID.",
-								 function );
-
-								libfwnt_security_identifier_free(
-								 &sid,
-								 NULL );
-
-								return( -1 );
-							}
-							result = libfwnt_security_identifier_get_string_size(
-								  sid,
-								  &sid_string_size,
-								  0,
-								  error );
-
-							if( result != 1 )
-							{
-								libcerror_error_set(
-								 error,
-								 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-								 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-								 "%s: unable to retrieve SID string size.",
-								 function );
-
-								libfwnt_security_identifier_free(
-								 &sid,
-								 NULL );
-
-								return( -1 );
-							}
-							/* It is assumed that the SID string cannot be larger than 127 characters
-							 * otherwise using dynamic allocation is more appropriate
-							 */
-							if( sid_string_size > 128 )
-							{
-								libcerror_error_set(
-								 error,
-								 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-								 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-								 "%s: SID string size value exceeds maximum.",
-								 function );
-
-								libfwnt_security_identifier_free(
-								 &sid,
-								 NULL );
-
-								return( -1 );
-							}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-							result = libfwnt_security_identifier_copy_to_utf16_string(
-								  sid,
-								  (uint16_t *) sid_string,
-								  128,
-								  0,
-								  error );
-#else
-							result = libfwnt_security_identifier_copy_to_utf8_string(
-								  sid,
-								  (uint8_t *) sid_string,
-								  128,
-								  0,
-								  error );
-#endif
-							if( result != 1 )
-							{
-								libcerror_error_set(
-								 error,
-								 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-								 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-								 "%s: unable to copy SID to string.",
-								 function );
-
-								libfwnt_security_identifier_free(
-								 &sid,
-								 NULL );
-
-								return( -1 );
-							}
-							libcnotify_printf(
-							 "\t\tSID\t\t\t: %" PRIs_LIBCSTRING_SYSTEM "\n",
-							 sid_string );
-
-							libcnotify_printf(
-							 "\n" );
-						}
-						else
-						{
-							libcnotify_print_data(
-							 &( value_data[ value_32bit + 4 ] ),
-							 value_16bit - 4,
-							 0 );
-						}
-					}
-				}
-				libcnotify_printf(
-				 "\n" );
-
-				if( libfwnt_security_identifier_free(
-				     &sid,
-				     error ) != 1 )
-				{
-					libcerror_error_set(
-					 error,
-					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-					 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-					 "%s: unable to free SID.",
-					 function );
-
-					return( -1 );
-				}
-	}
-#endif
 	return( 1 );
 
 on_error:

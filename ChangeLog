@@ -1,4 +1,9 @@
 TODO
+* Add python bindings
+  - security identifier
+  - security descriptor
+* remove libcthreads
+
 * lzx
   - add decompression support
   - add compression support
@@ -18,6 +23,7 @@ TODO
   - lzxpress functions
 * add tests
   - locale identifier functions
+  - security descriptor functions (check)
   - security identifier functions (check)
   - compression
 
@@ -26,7 +32,10 @@ TODO
 * security identifier:
   - use array for sub authorities
 * security descriptor:
-  - implement
+  - implement ACL and ACE
+
+20160412
+* worked on security descriptor support
 
 20160411
 * worked on tests

@@ -154,5 +154,5 @@ int libfwnt_security_identifier_copy_to_utf32_string_with_index(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_INTERNAL_SECURITY_IDENTIFIER_H ) */
 
