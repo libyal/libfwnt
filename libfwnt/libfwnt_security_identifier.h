@@ -72,6 +72,10 @@ struct libfwnt_internal_security_identifier
 	/* The sub autoritites
 	 */
 	uint32_t sub_authority[ 15 ];
+
+	/* Value to indicate if the identifier is managed by the descriptor
+	 */
+	uint8_t is_managed;
 };
 
 LIBFWNT_EXTERN \
@@ -82,6 +86,10 @@ int libfwnt_security_identifier_initialize(
 LIBFWNT_EXTERN \
 int libfwnt_security_identifier_free(
      libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error );
+
+int libfwnt_internal_security_identifier_free(
+     libfwnt_internal_security_identifier_t **internal_security_identifier,
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \

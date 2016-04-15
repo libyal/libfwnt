@@ -136,8 +136,8 @@ int libfwnt_security_descriptor_free(
 
 		if( internal_security_descriptor->owner_sid != NULL )
 		{
-			if( libfwnt_security_identifier_free(
-			     &( internal_security_descriptor->owner_sid ),
+			if( libfwnt_internal_security_identifier_free(
+			     (libfwnt_internal_security_identifier_t **) &( internal_security_descriptor->owner_sid ),
 			     error ) != 1 )
 			{
 				libcerror_error_set(
@@ -152,8 +152,8 @@ int libfwnt_security_descriptor_free(
 		}
 		if( internal_security_descriptor->group_sid != NULL )
 		{
-			if( libfwnt_security_identifier_free(
-			     &( internal_security_descriptor->group_sid ),
+			if( libfwnt_internal_security_identifier_free(
+			     (libfwnt_internal_security_identifier_t **) &( internal_security_descriptor->group_sid ),
 			     error ) != 1 )
 			{
 				libcerror_error_set(
@@ -392,6 +392,19 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 			goto on_error;
 		}
+		if( internal_security_descriptor->owner_sid == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
+			 "%s: invalid security descriptor - missing owner SID.",
+			 function );
+
+			goto on_error;
+		}
+		( (libfwnt_internal_security_identifier_t *) internal_security_descriptor->owner_sid )->is_managed = 1;
+
 		if( libfwnt_security_identifier_copy_from_byte_stream(
 		     internal_security_descriptor->owner_sid,
 		     &( byte_stream[ owner_sid_offset ] ),
@@ -513,6 +526,19 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 			goto on_error;
 		}
+		if( internal_security_descriptor->group_sid == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
+			 "%s: invalid security descriptor - missing group SID.",
+			 function );
+
+			goto on_error;
+		}
+		( (libfwnt_internal_security_identifier_t *) internal_security_descriptor->group_sid )->is_managed = 1;
+
 		if( libfwnt_security_identifier_copy_from_byte_stream(
 		     internal_security_descriptor->group_sid,
 		     &( byte_stream[ group_sid_offset ] ),
@@ -719,16 +745,126 @@ on_error:
 	}
 	if( internal_security_descriptor->group_sid != NULL )
 	{
-		libfwnt_security_identifier_free(
-		 &( internal_security_descriptor->group_sid ),
+		libfwnt_internal_security_identifier_free(
+		 (libfwnt_internal_security_identifier_t **) &( internal_security_descriptor->group_sid ),
 		 NULL );
 	}
 	if( internal_security_descriptor->owner_sid != NULL )
 	{
-		libfwnt_security_identifier_free(
-		 &( internal_security_descriptor->owner_sid ),
+		libfwnt_internal_security_identifier_free(
+		 (libfwnt_internal_security_identifier_t **) &( internal_security_descriptor->owner_sid ),
 		 NULL );
 	}
 	return( -1 );
+}
+
+/* Retrieves the owner security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+int libfwnt_security_descriptor_get_owner(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_security_descriptor_t *internal_security_descriptor = NULL;
+	static char *function                                                = "libfwnt_security_descriptor_get_owner";
+
+	if( security_descriptor == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security descriptor.",
+		 function );
+
+		return( -1 );
+	}
+	internal_security_descriptor = (libfwnt_internal_security_descriptor_t *) security_descriptor;
+
+	if( security_identifier == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security identifier.",
+		 function );
+
+		return( -1 );
+	}
+	if( *security_identifier != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security identifier value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->owner_sid == NULL )
+	{
+		return( 0 );
+	}
+	*security_identifier = internal_security_descriptor->owner_sid;
+
+	return( 1 );
+}
+
+/* Retrieves the group security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+int libfwnt_security_descriptor_get_group(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_security_descriptor_t *internal_security_descriptor = NULL;
+	static char *function                                                = "libfwnt_security_descriptor_get_group";
+
+	if( security_descriptor == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security descriptor.",
+		 function );
+
+		return( -1 );
+	}
+	internal_security_descriptor = (libfwnt_internal_security_descriptor_t *) security_descriptor;
+
+	if( security_identifier == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security identifier.",
+		 function );
+
+		return( -1 );
+	}
+	if( *security_identifier != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security identifier value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->group_sid == NULL )
+	{
+		return( 0 );
+	}
+	*security_identifier = internal_security_descriptor->group_sid;
+
+	return( 1 );
 }
 

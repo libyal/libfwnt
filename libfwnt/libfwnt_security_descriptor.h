@@ -84,9 +84,21 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
      int byte_order,
      libcerror_error_t **error );
 
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_owner(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_group(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error );
+
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_INTERNAL_SECURITY_DESCRIPTOR_H ) */
 

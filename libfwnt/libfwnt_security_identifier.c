@@ -112,6 +112,7 @@ int libfwnt_security_identifier_free(
 {
 	libfwnt_internal_security_identifier_t *internal_security_identifier = NULL;
 	static char *function                                                = "libfwnt_security_identifier_free";
+	int result                                                           = 1;
 
 	if( security_identifier == NULL )
 	{
@@ -127,10 +128,54 @@ int libfwnt_security_identifier_free(
 	if( *security_identifier != NULL )
 	{
 		internal_security_identifier = (libfwnt_internal_security_identifier_t *) *security_identifier;
-		*security_identifier         = NULL;
 
+		if( internal_security_identifier->is_managed == 0 )
+		{
+			if( libfwnt_internal_security_identifier_free(
+			     &internal_security_identifier,
+			     error ) != 1 )
+			{
+				libcerror_error_set(
+				 error,
+				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+				 "%s: unable to free security identifier.",
+				 function );
+
+				result = -1;
+			}
+		}
+		*security_identifier = NULL;
+	}
+	return( result );
+}
+
+/* Frees a security identifier
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_internal_security_identifier_free(
+     libfwnt_internal_security_identifier_t **internal_security_identifier,
+     libcerror_error_t **error )
+{
+	static char *function = "libfwnt_internal_security_identifier_free";
+
+	if( internal_security_identifier == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security identifier.",
+		 function );
+
+		return( -1 );
+	}
+	if( *internal_security_identifier != NULL )
+	{
 		memory_free(
-		 internal_security_identifier );
+		 *internal_security_identifier );
+
+		*internal_security_identifier = NULL;
 	}
 	return( 1 );
 }

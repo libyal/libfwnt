@@ -95,6 +95,56 @@ int libfwnt_error_backtrace_sprint(
  * ------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------
+ * Security descriptor functions
+ * ------------------------------------------------------------------------- */
+
+/* Creates a security descriptor
+ * Make sure the value security_descriptor is referencing, is set to NULL
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_initialize(
+     libfwnt_security_descriptor_t **security_descriptor,
+     libfwnt_error_t **error );
+
+/* Frees a security descriptor
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_free(
+     libfwnt_security_descriptor_t **security_descriptor,
+     libfwnt_error_t **error );
+
+/* Converts a security descriptor stored in a byte stream into a runtime version
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_copy_from_byte_stream(
+     libfwnt_security_descriptor_t *security_descriptor,
+     const uint8_t *byte_stream,
+     size_t byte_stream_size,
+     int byte_order,
+     libfwnt_error_t **error );
+
+/* Retrieves the owner security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_owner(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_security_identifier_t **security_identifier,
+     libfwnt_error_t **error );
+
+/* Retrieves the group security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_group(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_security_identifier_t **security_identifier,
+     libfwnt_error_t **error );
+
+/* -------------------------------------------------------------------------
  * Security identifier (SID) functions
  * ------------------------------------------------------------------------- */
 
