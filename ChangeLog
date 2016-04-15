@@ -34,6 +34,9 @@ TODO
 * security descriptor:
   - implement ACL and ACE
 
+20160415
+* worked on security descriptor support
+
 20160412
 * worked on security descriptor support
 
