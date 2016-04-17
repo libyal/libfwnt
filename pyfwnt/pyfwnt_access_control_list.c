@@ -26,6 +26,8 @@
 #include <stdlib.h>
 #endif
 
+#include "pyfwnt_access_control_entries.h"
+#include "pyfwnt_access_control_entry.h"
 #include "pyfwnt_access_control_list.h"
 #include "pyfwnt_error.h"
 #include "pyfwnt_libcerror.h"
@@ -45,6 +47,13 @@ PyMethodDef pyfwnt_access_control_list_object_methods[] = {
 	  "\n"
 	  "Retrieves the number of access control entries." },
 
+	{ "get_entry",
+	  (PyCFunction) pyfwnt_access_control_list_get_entry,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "get_entry(entry_index) -> Object or None\n"
+	  "\n"
+	  "Retrieves a specific access control entry." },
+
 	/* Sentinel */
 	{ NULL, NULL, 0, NULL }
 };
@@ -55,6 +64,12 @@ PyGetSetDef pyfwnt_access_control_list_object_get_set_definitions[] = {
 	  (getter) pyfwnt_access_control_list_get_number_of_entries,
 	  (setter) 0,
 	  "The number of access control entries.",
+	  NULL },
+
+	{ "entries",
+	  (getter) pyfwnt_access_control_list_get_entries,
+	  (setter) 0,
+	  "The access control entries",
 	  NULL },
 
 	/* Sentinel */
@@ -372,5 +387,168 @@ PyObject *pyfwnt_access_control_list_get_number_of_entries(
 	                  (long) number_of_entries );
 #endif
 	return( integer_object );
+}
+
+/* Retrieves a specific access control entry by index
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyfwnt_access_control_list_get_entry_by_index(
+           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           int entry_index )
+{
+	libcerror_error_t *error              = NULL;
+	libfwnt_access_control_entry_t *entry = NULL;
+	PyObject *entry_object                = NULL;
+	static char *function                 = "pyfwnt_access_control_list_get_entry_by_index";
+	int result                            = 0;
+
+	if( pyfwnt_access_control_list == NULL )
+	{
+		PyErr_Format(
+		 PyExc_TypeError,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( NULL );
+	}
+	Py_BEGIN_ALLOW_THREADS
+
+	result = libfwnt_access_control_list_get_entry_by_index(
+	          pyfwnt_access_control_list->access_control_list,
+	          entry_index,
+	          &entry,
+	          &error );
+
+	Py_END_ALLOW_THREADS
+
+	if( result != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_IOError,
+		 "%s: unable to retrieve access control entry: %d.",
+		 function,
+		 entry_index );
+
+		libcerror_error_free(
+		 &error );
+
+		goto on_error;
+	}
+	entry_object = pyfwnt_access_control_entry_new(
+	                entry,
+	                (PyObject *) pyfwnt_access_control_list );
+
+	if( entry_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_MemoryError,
+		 "%s: unable to create entry object.",
+		 function );
+
+		goto on_error;
+	}
+	return( entry_object );
+
+on_error:
+	if( entry != NULL )
+	{
+		libfwnt_access_control_entry_free(
+		 &entry,
+		 NULL );
+	}
+	return( NULL );
+}
+
+/* Retrieves a specific access control entry
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyfwnt_access_control_list_get_entry(
+           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           PyObject *arguments,
+           PyObject *keywords )
+{
+	PyObject *entry_object      = NULL;
+	static char *keyword_list[] = { "entry_index", NULL };
+	int entry_index             = 0;
+
+	if( PyArg_ParseTupleAndKeywords(
+	     arguments,
+	     keywords,
+	     "i",
+	     keyword_list,
+	     &entry_index ) == 0 )
+	{
+		return( NULL );
+	}
+	entry_object = pyfwnt_access_control_list_get_entry_by_index(
+	                pyfwnt_access_control_list,
+	                entry_index );
+
+	return( entry_object );
+}
+
+/* Retrieves a entries sequence and iterator object for the entries
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyfwnt_access_control_list_get_entries(
+           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
+{
+	libcerror_error_t *error = NULL;
+	PyObject *entries_object = NULL;
+	static char *function    = "pyfwnt_access_control_list_get_entries";
+	int number_of_entries    = 0;
+	int result               = 0;
+
+	PYFWNT_UNREFERENCED_PARAMETER( arguments )
+
+	if( pyfwnt_access_control_list == NULL )
+	{
+		PyErr_Format(
+		 PyExc_TypeError,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( NULL );
+	}
+	Py_BEGIN_ALLOW_THREADS
+
+	result = libfwnt_access_control_list_get_number_of_entries(
+	          pyfwnt_access_control_list->access_control_list,
+	          &number_of_entries,
+	          &error );
+
+	Py_END_ALLOW_THREADS
+
+	if( result != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_IOError,
+		 "%s: unable to retrieve number of entries.",
+		 function );
+
+		libcerror_error_free(
+		 &error );
+
+		return( NULL );
+	}
+	entries_object = pyfwnt_access_control_entries_new(
+	                  pyfwnt_access_control_list,
+	                  &pyfwnt_access_control_list_get_entry_by_index,
+	                  number_of_entries );
+
+	if( entries_object == NULL )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_MemoryError,
+		 "%s: unable to create entries object.",
+		 function );
+
+		return( NULL );
+	}
+	return( entries_object );
 }
 

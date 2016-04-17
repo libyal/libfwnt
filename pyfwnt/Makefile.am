@@ -12,6 +12,7 @@ pyexec_LTLIBRARIES = pyfwnt.la
 pyfwnt_la_SOURCES = \
 	pyfwnt.c pyfwnt.h \
 	pyfwnt_access_control_entry.c pyfwnt_access_control_entry.h \
+	pyfwnt_access_control_entries.c pyfwnt_access_control_entries.h \
 	pyfwnt_access_control_list.c pyfwnt_access_control_list.h \
 	pyfwnt_error.c pyfwnt_error.h \
 	pyfwnt_integer.c pyfwnt_integer.h \

@@ -27,6 +27,7 @@
 #endif
 
 #include "pyfwnt.h"
+#include "pyfwnt_access_control_entries.h"
 #include "pyfwnt_access_control_entry.h"
 #include "pyfwnt_access_control_list.h"
 #include "pyfwnt_error.h"
@@ -125,12 +126,13 @@ PyMODINIT_FUNC initpyfwnt(
                 void )
 #endif
 {
-	PyObject *module                               = NULL;
-	PyTypeObject *access_control_entry_type_object = NULL;
-	PyTypeObject *access_control_list_type_object  = NULL;
-	PyTypeObject *security_descriptor_type_object  = NULL;
-	PyTypeObject *security_identifier_type_object  = NULL;
-	PyGILState_STATE gil_state                     = 0;
+	PyObject *module                                 = NULL;
+	PyTypeObject *access_control_entries_type_object = NULL;
+	PyTypeObject *access_control_entry_type_object   = NULL;
+	PyTypeObject *access_control_list_type_object    = NULL;
+	PyTypeObject *security_descriptor_type_object    = NULL;
+	PyTypeObject *security_identifier_type_object    = NULL;
+	PyGILState_STATE gil_state                       = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	libfwnt_notify_set_stream(
@@ -164,44 +166,6 @@ PyMODINIT_FUNC initpyfwnt(
 	PyEval_InitThreads();
 
 	gil_state = PyGILState_Ensure();
-
-	/* Setup the access control entry type object
-	 */
-	pyfwnt_access_control_entry_type_object.tp_new = PyType_GenericNew;
-
-	if( PyType_Ready(
-	     &pyfwnt_access_control_entry_type_object ) < 0 )
-	{
-		goto on_error;
-	}
-	Py_IncRef(
-	 (PyObject *) &pyfwnt_access_control_entry_type_object );
-
-	access_control_entry_type_object = &pyfwnt_access_control_entry_type_object;
-
-	PyModule_AddObject(
-	 module,
-	 "access_control_entry",
-	 (PyObject *) access_control_entry_type_object );
-
-	/* Setup the access control list type object
-	 */
-	pyfwnt_access_control_list_type_object.tp_new = PyType_GenericNew;
-
-	if( PyType_Ready(
-	     &pyfwnt_access_control_list_type_object ) < 0 )
-	{
-		goto on_error;
-	}
-	Py_IncRef(
-	 (PyObject *) &pyfwnt_access_control_list_type_object );
-
-	access_control_list_type_object = &pyfwnt_access_control_list_type_object;
-
-	PyModule_AddObject(
-	 module,
-	 "access_control_list",
-	 (PyObject *) access_control_list_type_object );
 
 	/* Setup the security descriptor type object
 	 */
@@ -243,6 +207,63 @@ PyMODINIT_FUNC initpyfwnt(
 
 	PyGILState_Release(
 	 gil_state );
+
+	/* Setup the access control list type object
+	 */
+	pyfwnt_access_control_list_type_object.tp_new = PyType_GenericNew;
+
+	if( PyType_Ready(
+	     &pyfwnt_access_control_list_type_object ) < 0 )
+	{
+		goto on_error;
+	}
+	Py_IncRef(
+	 (PyObject *) &pyfwnt_access_control_list_type_object );
+
+	access_control_list_type_object = &pyfwnt_access_control_list_type_object;
+
+	PyModule_AddObject(
+	 module,
+	 "access_control_list",
+	 (PyObject *) access_control_list_type_object );
+
+	/* Setup the access control entries type object
+	 */
+	pyfwnt_access_control_entries_type_object.tp_new = PyType_GenericNew;
+
+	if( PyType_Ready(
+	     &pyfwnt_access_control_entries_type_object ) < 0 )
+	{
+		goto on_error;
+	}
+	Py_IncRef(
+	 (PyObject *) &pyfwnt_access_control_entries_type_object );
+
+	access_control_entries_type_object = &pyfwnt_access_control_entries_type_object;
+
+	PyModule_AddObject(
+	 module,
+	 "_access_control_entries",
+	 (PyObject *) access_control_entries_type_object );
+
+	/* Setup the access control entry type object
+	 */
+	pyfwnt_access_control_entry_type_object.tp_new = PyType_GenericNew;
+
+	if( PyType_Ready(
+	     &pyfwnt_access_control_entry_type_object ) < 0 )
+	{
+		goto on_error;
+	}
+	Py_IncRef(
+	 (PyObject *) &pyfwnt_access_control_entry_type_object );
+
+	access_control_entry_type_object = &pyfwnt_access_control_entry_type_object;
+
+	PyModule_AddObject(
+	 module,
+	 "access_control_entry",
+	 (PyObject *) access_control_entry_type_object );
 
 #if PY_MAJOR_VERSION >= 3
 	return( module );

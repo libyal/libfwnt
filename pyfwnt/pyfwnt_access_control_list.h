@@ -68,6 +68,19 @@ PyObject *pyfwnt_access_control_list_get_number_of_entries(
            pyfwnt_access_control_list_t *pyfwnt_access_control_list,
            PyObject *arguments );
 
+PyObject *pyfwnt_access_control_list_get_entry_by_index(
+           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           int entry_index );
+
+PyObject *pyfwnt_access_control_list_get_entry(
+           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           PyObject *arguments,
+           PyObject *keywords );
+
+PyObject *pyfwnt_access_control_list_get_entries(
+           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           PyObject *arguments );
+
 #if defined( __cplusplus )
 }
 #endif

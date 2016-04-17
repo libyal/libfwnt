@@ -264,7 +264,8 @@ on_error:
 int pyfwnt_security_descriptor_init(
      pyfwnt_security_descriptor_t *pyfwnt_security_descriptor )
 {
-	static char *function = "pyfwnt_security_descriptor_init";
+	libcerror_error_t *error = NULL;
+	static char *function    = "pyfwnt_security_descriptor_init";
 
 	if( pyfwnt_security_descriptor == NULL )
 	{
@@ -279,6 +280,21 @@ int pyfwnt_security_descriptor_init(
 	 */
 	pyfwnt_security_descriptor->security_descriptor = NULL;
 
+	if( libfwnt_security_descriptor_initialize(
+	     &( pyfwnt_security_descriptor->security_descriptor ),
+	     &error ) != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_MemoryError,
+		 "%s: unable to initialize security descriptor.",
+		 function );
+
+		libcerror_error_free(
+		 &error );
+
+		return( -1 );
+	}
 	return( 0 );
 }
 
