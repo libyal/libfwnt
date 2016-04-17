@@ -32,7 +32,7 @@
 /* Prints the security descriptor control flags
  */
 void libfwnt_debug_print_security_descriptor_control_flags(
-      uint32_t control_flags )
+      uint16_t control_flags )
 {
 	if( ( control_flags & 0x0001 ) != 0 )
 	{
@@ -178,6 +178,145 @@ const char *libfwnt_debug_print_access_control_entry_type(
 			return( "Mandatory label (SYSTEM_MANDATORY_LABEL_ACE_TYPE)" );
 	}
 	return( "UNKNOWN" );
+}
+
+/* Prints the access control entry flags
+ */
+void libfwnt_debug_print_access_control_entry_flags(
+      uint8_t flags )
+{
+	if( ( flags & 0x01 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(OBJECT_INHERIT_ACE)\n" );
+	}
+	if( ( flags & 0x02 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(CONTAINER_INHERIT_ACE)\n" );
+	}
+	if( ( flags & 0x04 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(NO_PROPAGATE_INHERIT_ACE)\n" );
+	}
+	if( ( flags & 0x08 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(INHERIT_ONLY_ACE)\n" );
+	}
+
+	if( ( flags & 0x40 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(SUCCESSFUL_ACCESS_ACE_FLAG)\n" );
+	}
+	if( ( flags & 0x80 ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(FAILED_ACCESS_ACE_FLAG)\n" );
+	}
+}
+
+/* Prints the access control entry access mask
+ */
+void libfwnt_debug_print_access_control_entry_access_mask(
+      uint32_t access_mask )
+{
+	if( ( access_mask & 0x00000001UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightReadBody or fsdrightListContents)\n" );
+	}
+	if( ( access_mask & 0x00000002UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightWriteBody or fsdrightCreateItem)\n" );
+	}
+	if( ( access_mask & 0x00000004UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightAppendMsg or fsdrightCreateContainer)\n" );
+	}
+	if( ( access_mask & 0x00000008UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightReadProperty or fsdrightReadProperty)\n" );
+	}
+	if( ( access_mask & 0x00000010UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightWriteProperty or fsdrightWriteProperty)\n" );
+	}
+	if( ( access_mask & 0x00000020UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightExecute)\n" );
+	}
+
+	if( ( access_mask & 0x00000080UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightReadAttributes or fsdrightReadAttributes)\n" );
+	}
+	if( ( access_mask & 0x00000100UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightWriteAttributes or fsdrightWriteAttributes)\n" );
+	}
+	if( ( access_mask & 0x00000200UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightWriteOwnProperty or fsdrightWriteOwnProperty)\n" );
+	}
+	if( ( access_mask & 0x00000400UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightDeleteOwnItem or fsdrightDeleteOwnItem)\n" );
+	}
+	if( ( access_mask & 0x00000800UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightViewItem or fsdrightViewItem)\n" );
+	}
+
+	if( ( access_mask & 0x00004000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightOwner)\n" );
+	}
+	if( ( access_mask & 0x00008000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightContact)\n" );
+	}
+
+	/* Standard access rights flags */
+	if( ( access_mask & 0x00010000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightDelete)\n" );
+	}
+	if( ( access_mask & 0x00020000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightReadControl)\n" );
+	}
+	if( ( access_mask & 0x00040000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightWriteSD)\n" );
+	}
+	if( ( access_mask & 0x00080000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightWriteOwner)\n" );
+	}
+	if( ( access_mask & 0x00100000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(fsdrightSynchronize)\n" );
+	}
 }
 
 #endif /* defined( HAVE_DEBUG_OUTPUT ) */

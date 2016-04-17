@@ -274,6 +274,25 @@ int libfwnt_access_control_list_free(
      libfwnt_access_control_list_t **access_control_list,
      libfwnt_error_t **error );
 
+/* Retrieves the number of access control entries (ACE)
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_list_get_number_of_entries(
+     libfwnt_access_control_list_t *access_control_list,
+     int *number_of_entries,
+     libfwnt_error_t **error );
+
+/* Retrieves a specific access control entries (ACE)
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_list_get_entry_by_index(
+     libfwnt_access_control_list_t *access_control_list,
+     int entry_index,
+     libfwnt_access_control_entry_t **access_control_entry,
+     libfwnt_error_t **error );
+
 /* -------------------------------------------------------------------------
  * Access control entry (ACE) functions
  * ------------------------------------------------------------------------- */
@@ -284,6 +303,24 @@ int libfwnt_access_control_list_free(
 LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_free(
      libfwnt_access_control_entry_t **access_control_entry,
+     libfwnt_error_t **error );
+
+/* Retrieves the owner security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_access_mask(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint32_t *access_mask,
+     libfwnt_error_t **error );
+
+/* Retrieves the security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_security_identifier(
+     libfwnt_access_control_entry_t *access_control_entry,
+     libfwnt_security_identifier_t **security_identifier,
      libfwnt_error_t **error );
 
 /* -------------------------------------------------------------------------

@@ -85,6 +85,18 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
      int byte_order,
      libcerror_error_t **error );
 
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_access_mask(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint32_t *access_mask,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_security_identifier(
+     libfwnt_access_control_entry_t *access_control_entry,
+     libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error );
+
 #if defined( __cplusplus )
 }
 #endif

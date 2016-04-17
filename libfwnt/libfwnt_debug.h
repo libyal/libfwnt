@@ -32,10 +32,16 @@ extern "C" {
 #if defined( HAVE_DEBUG_OUTPUT )
 
 void libfwnt_debug_print_security_descriptor_control_flags(
-      uint32_t control_flags );
+      uint16_t control_flags );
 
 const char *libfwnt_debug_print_access_control_entry_type(
              uint8_t entry_type );
+
+void libfwnt_debug_print_access_control_entry_flags(
+      uint8_t flags );
+
+void libfwnt_debug_print_access_control_entry_access_mask(
+      uint32_t access_mask );
 
 #endif /* defined( HAVE_DEBUG_OUTPUT ) */
 

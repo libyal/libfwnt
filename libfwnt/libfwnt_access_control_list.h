@@ -69,6 +69,19 @@ int libfwnt_access_control_list_copy_from_byte_stream(
      int byte_order,
      libcerror_error_t **error );
 
+LIBFWNT_EXTERN \
+int libfwnt_access_control_list_get_number_of_entries(
+     libfwnt_access_control_list_t *access_control_list,
+     int *number_of_entries,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
+int libfwnt_access_control_list_get_entry_by_index(
+     libfwnt_access_control_list_t *access_control_list,
+     int entry_index,
+     libfwnt_access_control_entry_t **access_control_entry,
+     libcerror_error_t **error );
+
 #if defined( __cplusplus )
 }
 #endif

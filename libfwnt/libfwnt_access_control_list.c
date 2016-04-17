@@ -406,3 +406,88 @@ on_error:
 	return( -1 );
 }
 
+/* Retrieves the number of access control entries (ACE)
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_access_control_list_get_number_of_entries(
+     libfwnt_access_control_list_t *access_control_list,
+     int *number_of_entries,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
+	static char *function                                                = "libfwnt_access_control_list_get_number_of_entries";
+
+	if( access_control_list == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( -1 );
+	}
+	internal_access_control_list = (libfwnt_internal_access_control_list_t *) access_control_list;
+
+	if( libcdata_array_get_number_of_entries(
+	     internal_access_control_list->entries_array,
+	     number_of_entries,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+		 "%s: unable to retrieve number of access control entries in array.",
+		 function );
+
+		return( -1 );
+	}
+	return( 1 );
+}
+
+/* Retrieves a specific access control entries (ACE)
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_access_control_list_get_entry_by_index(
+     libfwnt_access_control_list_t *access_control_list,
+     int entry_index,
+     libfwnt_access_control_entry_t **access_control_entry,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
+	static char *function                                                = "libfwnt_access_control_list_get_entry_by_index";
+
+	if( access_control_list == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( -1 );
+	}
+	internal_access_control_list = (libfwnt_internal_access_control_list_t *) access_control_list;
+
+	if( libcdata_array_get_entry_by_index(
+	     internal_access_control_list->entries_array,
+	     entry_index,
+	     (intptr_t **) access_control_entry,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+		 "%s: unable to retrieve access control entry: %d from array.",
+		 function,
+		 entry_index );
+
+		return( -1 );
+	}
+	return( 1 );
+}
+

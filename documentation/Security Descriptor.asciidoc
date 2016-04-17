@@ -185,7 +185,8 @@ The basic ACE data structure is variable of size and consists of:
 [cols="1,1,1,5",options="header"]
 |===
 | Offset | Size | Value | Description
-| 0 | 4 | | Access rights flags (ACCESS_MASK)
+| 0 | 4 | | Access rights flags (ACCESS_MASK) +
+See section: <<access_rights_flags,Access rights flags (ACCESS_MASK)>>
 | 4 | ... | | SID
 |===
 
@@ -195,7 +196,8 @@ The object ACE data structure is variable of size and consists of:
 [cols="1,1,1,5",options="header"]
 |===
 | Offset | Size | Value | Description
-| 0 | 4 | | Access rights flags (ACCESS_MASK)
+| 0 | 4 | | Access rights flags (ACCESS_MASK) +
+See section: <<access_rights_flags,Access rights flags (ACCESS_MASK)>>
 | 4 | 4 | | Flags
 | 8 | 16 | | Object type class identifier +
 Contains a GUID
@@ -226,7 +228,7 @@ Contains a GUID
 | 0x80 | FAILED_ACCESS_ACE_FLAG | Used with system-audit ACEs in a system access control list (SACL) to generate audit messages for failed access attempts.
 |===
 
-=== Access rights flags (ACCESS_MASK)
+=== [[access_rights_flags]]Access rights flags (ACCESS_MASK)
 
 ==== Standard access rights flags
 

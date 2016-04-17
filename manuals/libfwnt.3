@@ -1,4 +1,4 @@
-.Dd April 15, 2016
+.Dd April 17, 2016
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
@@ -58,6 +58,22 @@ Security identifier (SID) functions
 .Fn libfwnt_security_identifier_copy_to_utf32_string "libfwnt_security_identifier_t *security_identifier, uint32_t *utf32_string, size_t utf32_string_size, uint32_t string_format_flags, libfwnt_error_t **error"
 .Ft int
 .Fn libfwnt_security_identifier_copy_to_utf32_string_with_index "libfwnt_security_identifier_t *security_identifier, uint32_t *utf32_string, size_t utf32_string_size, size_t *utf32_string_index, uint32_t string_format_flags, libfwnt_error_t **error"
+.Pp
+Access control list (ACL) functions
+.Ft int
+.Fn libfwnt_access_control_list_free "libfwnt_access_control_list_t **access_control_list, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_access_control_list_get_number_of_entries "libfwnt_access_control_list_t *access_control_list, int *number_of_entries, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_access_control_list_get_entry_by_index "libfwnt_access_control_list_t *access_control_list, int entry_index, libfwnt_access_control_entry_t **access_control_entry, libfwnt_error_t **error"
+.Pp
+Access control entry (ACE) functions
+.Ft int
+.Fn libfwnt_access_control_entry_free "libfwnt_access_control_entry_t **access_control_entry, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_access_control_entry_get_access_mask "libfwnt_access_control_entry_t *access_control_entry, uint32_t *access_mask, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_access_control_entry_get_security_identifier "libfwnt_access_control_entry_t *access_control_entry, libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
 .Pp
 LZNT1 functions
 .Ft int

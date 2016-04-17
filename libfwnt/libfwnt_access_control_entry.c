@@ -225,7 +225,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 
 		return( -1 );
 	}
-	if( byte_stream_size < 8 )
+	if( byte_stream_size < 4 )
 	{
 		libcerror_error_set(
 		 error,
@@ -266,7 +266,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		 function );
 		libcnotify_print_data(
 		 byte_stream,
-		 8,
+		 4,
 		 0 );
 	}
 #endif
@@ -291,6 +291,10 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		 "%s: flags\t\t: 0x%02" PRIx8 "\n",
 		 function,
 		 internal_access_control_entry->flags );
+		libfwnt_debug_print_access_control_entry_flags(
+		 internal_access_control_entry->flags );
+		libcnotify_printf(
+		 "\n" );
 
 		libcnotify_printf(
 		 "%s: size\t\t: %" PRIu16 "\n",
@@ -301,7 +305,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		 "\n" );
 	}
 #endif
-	if( ( internal_access_control_entry->size < 8 )
+	if( ( internal_access_control_entry->size < 4 )
 	 || ( (size_t) internal_access_control_entry->size > byte_stream_size ) )
 
 	{
@@ -321,8 +325,8 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		 "%s: access control entry data:\n",
 		 function );
 		libcnotify_print_data(
-		 &( byte_stream[ 8 ] ),
-		 internal_access_control_entry->size - 8,
+		 &( byte_stream[ 4 ] ),
+		 internal_access_control_entry->size - 4,
 		 0 );
 	}
 #endif
@@ -338,7 +342,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		case LIBFWNT_SYSTEM_AUDIT_CALLBACK:
 		case LIBFWNT_SYSTEM_ALARM_CALLBACK:
 		case LIBFWNT_SYSTEM_MANDATORY_LABEL:
-			access_mask_offset = 8;
+			access_mask_offset = 4;
 			sid_offset         = 12;
 			break;
 
@@ -351,7 +355,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		case LIBFWNT_ACCESS_DENIED_CALLBACK_OBJECT:
 		case LIBFWNT_SYSTEM_AUDIT_CALLBACK_OBJECT:
 		case LIBFWNT_SYSTEM_ALARM_CALLBACK_OBJECT:
-			access_mask_offset = 8;
+			access_mask_offset = 4;
 			sid_offset         = 40;
 			break;
 
@@ -373,6 +377,10 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 			 "%s: access mask\t\t: 0x%08" PRIx32 "\n",
 			 function,
 			 internal_access_control_entry->access_mask );
+			libfwnt_debug_print_access_control_entry_access_mask(
+			 internal_access_control_entry->access_mask );
+			libcnotify_printf(
+			 "\n" );
 		}
 #endif
 	}
@@ -521,5 +529,128 @@ on_error:
 		 NULL );
 	}
 	return( -1 );
+}
+
+/* Retrieves the access mask
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+int libfwnt_access_control_entry_get_access_mask(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint32_t *access_mask,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_get_access_mask";
+
+	if( access_control_entry == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( -1 );
+	}
+	internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) access_control_entry;
+
+	if( access_mask == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access mask.",
+		 function );
+
+		return( -1 );
+	}
+	switch( internal_access_control_entry->type )
+	{
+		/* Basic types */
+		case LIBFWNT_ACCESS_ALLOWED:
+		case LIBFWNT_ACCESS_DENIED:
+		case LIBFWNT_SYSTEM_AUDIT:
+		case LIBFWNT_SYSTEM_ALARM:
+		case LIBFWNT_ACCESS_ALLOWED_CALLBACK:
+		case LIBFWNT_ACCESS_DENIED_CALLBACK:
+		case LIBFWNT_SYSTEM_AUDIT_CALLBACK:
+		case LIBFWNT_SYSTEM_ALARM_CALLBACK:
+		case LIBFWNT_SYSTEM_MANDATORY_LABEL:
+		/* Object types */
+		case LIBFWNT_ACCESS_ALLOWED_OBJECT:
+		case LIBFWNT_ACCESS_DENIED_OBJECT:
+		case LIBFWNT_SYSTEM_AUDIT_OBJECT:
+		case LIBFWNT_SYSTEM_ALARM_OBJECT:
+		case LIBFWNT_ACCESS_ALLOWED_CALLBACK_OBJECT:
+		case LIBFWNT_ACCESS_DENIED_CALLBACK_OBJECT:
+		case LIBFWNT_SYSTEM_AUDIT_CALLBACK_OBJECT:
+		case LIBFWNT_SYSTEM_ALARM_CALLBACK_OBJECT:
+			break;
+
+		/* Unknown types */
+		case LIBFWNT_ACCESS_ALLOWED_COMPOUND:
+		default:
+			return( 0 );
+	}
+	*access_mask = internal_access_control_entry->access_mask;
+
+	return( 1 );
+}
+
+/* Retrieves the security identifier
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+int libfwnt_access_control_entry_get_security_identifier(
+     libfwnt_access_control_entry_t *access_control_entry,
+     libfwnt_security_identifier_t **security_identifier,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_get_security_identifier";
+
+	if( access_control_entry == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( -1 );
+	}
+	internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) access_control_entry;
+
+	if( security_identifier == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security identifier.",
+		 function );
+
+		return( -1 );
+	}
+	if( *security_identifier != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security identifier value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_access_control_entry->security_identifier == NULL )
+	{
+		return( 0 );
+	}
+	*security_identifier = internal_access_control_entry->security_identifier;
+
+	return( 1 );
 }
 
