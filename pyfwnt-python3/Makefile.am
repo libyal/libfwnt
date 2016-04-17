@@ -1,0 +1,57 @@
+# Note that we cannot use: AUTOMAKE_OPTIONS = subdir-objects
+# subdir-objects will compile the source files to a single version of Python.
+# Since subdir-objects is being deprecated we copy the source files instead.
+am__installdirs = "$(DESTDIR)$(pyexecdir3)"
+pyexecdir = $(pyexecdir3)
+
+if HAVE_PYTHON3
+AM_CFLAGS = \
+	-I$(top_srcdir)/include \
+	-I$(top_srcdir)/common \
+	@LIBCSTRING_CPPFLAGS@ \
+	@LIBCERROR_CPPFLAGS@ \
+	@LIBCDATA_CPPFLAGS@
+
+am_pyfwnt_la_rpath = -rpath $(pyexecdir3)
+
+BUILT_SOURCES = \
+	pyfwnt.c pyfwnt.h \
+	pyfwnt_access_control_entry.c pyfwnt_access_control_entry.h \
+	pyfwnt_access_control_list.c pyfwnt_access_control_list.h \
+	pyfwnt_error.c pyfwnt_error.h \
+	pyfwnt_integer.c pyfwnt_integer.h \
+	pyfwnt_libcerror.h \
+	pyfwnt_libcstring.h \
+	pyfwnt_libfwnt.h \
+	pyfwnt_python.h \
+	pyfwnt_security_descriptor.c pyfwnt_security_descriptor.h \
+	pyfwnt_security_identifier.c pyfwnt_security_identifier.h \
+	pyfwnt_unused.h
+
+pyexec_LTLIBRARIES = pyfwnt.la
+
+nodist_pyfwnt_la_SOURCES = $(BUILT_SOURCES)
+
+pyfwnt_la_LIBADD = \
+	@LIBCSTRING_LIBADD@ \
+	@LIBCERROR_LIBADD@ \
+	../libfwnt/libfwnt.la \
+	@LIBCDATA_LIBADD@
+
+pyfwnt_la_CPPFLAGS = $(PYTHON3_CPPFLAGS)
+pyfwnt_la_LDFLAGS  = -module -avoid-version $(PYTHON3_LDFLAGS)
+
+$(BUILT_SOURCES):
+	/bin/cp -f $(top_srcdir)/pyfwnt/$@ $@
+
+endif
+
+MAINTAINERCLEANFILES = \
+	Makefile.in
+
+clean-local:
+	/bin/rm -f pyfwnt*.[ch]
+
+distclean: clean
+	/bin/rm -f Makefile
+

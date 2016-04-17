@@ -9,6 +9,9 @@ SUBDIRS = \
 	libcdata \
 	libcnotify \
 	libfwnt \
+	pyfwnt \
+	pyfwnt-python2 \
+	pyfwnt-python3 \
 	po \
 	manuals \
 	libclocale \
@@ -25,8 +28,10 @@ DPKG_FILES = \
 	dpkg/copyright \
 	dpkg/copyright.in \
 	dpkg/rules \
-	dpkg/libfwnt-dev.docs \
 	dpkg/libfwnt.docs \
+	dpkg/libfwnt-dev.docs \
+	dpkg/libfwnt-python.docs \
+	dpkg/libfwnt-python3.docs \
 	dpkg/source/format
 
 GETTEXT_FILES = \
@@ -36,6 +41,9 @@ GETTEXT_FILES = \
 PKGCONFIG_FILES = \
 	libfwnt.pc.in
 
+SETUP_PY_FILES = \
+	setup.py
+
 SPEC_FILES = \
 	libfwnt.spec \
 	libfwnt.spec.in
@@ -44,6 +52,7 @@ EXTRA_DIST = \
 	$(DPKG_FILES) \
 	$(GETTEXT_FILES) \
 	$(PKGCONFIG_FILES) \
+	$(SETUP_PY_FILES) \
 	$(SPEC_FILES)
 
 MAINTAINERCLEANFILES = \
@@ -88,6 +97,7 @@ splint:
 	(cd $(srcdir)/libcdata && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/libcnotify && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/libfwnt && $(MAKE) splint $(AM_MAKEFLAGS))
+	(cd $(srcdir)/pyfwnt && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/po && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/libclocale && $(MAKE) splint $(AM_MAKEFLAGS))
 	(cd $(srcdir)/libuna && $(MAKE) splint $(AM_MAKEFLAGS))

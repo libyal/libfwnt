@@ -2,7 +2,7 @@ Source: libfwnt
 Section: libs
 Priority: extra
 Maintainer: Joachim Metz <joachim.metz@gmail.com>
-Build-Depends: debhelper (>= 7), autotools-dev
+Build-Depends: debhelper (>= 7), autotools-dev, python-dev, python3-dev
 Standards-Version: 3.9.5
 Homepage: https://github.com/libyal/libfwnt/
 
@@ -26,4 +26,34 @@ Architecture: any
 Depends: libfwnt (= ${binary:Version}), ${misc:Depends}
 Description: Header files and libraries for developing applications for libfwnt
  Header files and libraries for developing applications for libfwnt.
+
+Package: libfwnt-python
+Section: python
+Architecture: any
+Depends: libfwnt (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Suggests: libfwnt-python-dbg
+Description: Python 2 bindings for libfwnt
+ Python 2 bindings for libfwnt.
+
+Package: libfwnt-python-dbg
+Section: debug
+Architecture: any
+Depends: libfwnt-python (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libfwnt-python
+ Debugging symbols for libfwnt-python.
+
+Package: libfwnt-python3
+Section: python
+Architecture: any
+Depends: libfwnt (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Suggests: libfwnt-python3-dbg
+Description: Python 3 bindings for libfwnt
+ Python 3 bindings for libfwnt.
+
+Package: libfwnt-python3-dbg
+Section: debug
+Architecture: any
+Depends: libfwnt-python3 (= ${binary:Version}), ${misc:Depends}
+Description: Debugging symbols for libfwnt-python3
+ Debugging symbols for libfwnt-python3.
 

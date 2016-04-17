@@ -14,6 +14,7 @@ MSVSCPP_FILES = \
 	libcthreads/libcthreads.vcproj \
 	libfwnt/libfwnt.vcproj \
 	libuna/libuna.vcproj \
+	pyfwnt/pyfwnt.vcproj \
 	libfwnt.sln
 
 SCRIPT_FILES = \

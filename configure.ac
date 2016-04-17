@@ -75,11 +75,21 @@ AX_LIBUNA_CHECK_ENABLE
 dnl Check for enabling libcfile for cross-platform C file functions
 AX_LIBCFILE_CHECK_ENABLE
 
-dnl Check if libfwsi should be build with verbose output
+dnl Check if libfwnt should be build with verbose output
 AX_COMMON_CHECK_ENABLE_VERBOSE_OUTPUT
 
-dnl Check if libfwsi should be build with debug output
+dnl Check if libfwnt should be build with debug output
 AX_COMMON_CHECK_ENABLE_DEBUG_OUTPUT
+
+dnl Check if libfwnt python bindings (pyfwnt) should be build
+AX_PYTHON_CHECK_PYPREFIX
+AX_PYTHON_CHECK_ENABLE
+AX_PYTHON2_CHECK_ENABLE
+AX_PYTHON3_CHECK_ENABLE
+
+AM_CONDITIONAL(
+ HAVE_PYTHON_TESTS,
+ [test "x${ac_cv_enable_python}" != xno || test "x${ac_cv_enable_python2}" != xno || test "x${ac_cv_enable_python3}" != xno])
 
 dnl Headers included in various places
 AC_CHECK_HEADERS([stdarg.h varargs.h])
@@ -151,6 +161,9 @@ AC_CONFIG_FILES([libcthreads/Makefile])
 AC_CONFIG_FILES([libcdata/Makefile])
 AC_CONFIG_FILES([libcnotify/Makefile])
 AC_CONFIG_FILES([libfwnt/Makefile])
+AC_CONFIG_FILES([pyfwnt/Makefile])
+AC_CONFIG_FILES([pyfwnt-python2/Makefile])
+AC_CONFIG_FILES([pyfwnt-python3/Makefile])
 AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([po/Makevars])
 AC_CONFIG_FILES([manuals/Makefile])
@@ -180,18 +193,21 @@ AC_OUTPUT
 dnl Print a summary
 AC_MSG_NOTICE([
 Building:
-   libcstring support:      $ac_cv_libcstring
-   libcerror support:       $ac_cv_libcerror
-   libcthreads support:     $ac_cv_libcthreads
-   libclocale support:      $ac_cv_libclocale
-   libcnotify support:      $ac_cv_libcnotify
-   libcdata support:        $ac_cv_libcdata
-   libuna support:          $ac_cv_libuna
-   libcfile support:        $ac_cv_libcfile
+   libcstring support:                $ac_cv_libcstring
+   libcerror support:                 $ac_cv_libcerror
+   libcthreads support:               $ac_cv_libcthreads
+   libclocale support:                $ac_cv_libclocale
+   libcnotify support:                $ac_cv_libcnotify
+   libcdata support:                  $ac_cv_libcdata
+   libuna support:                    $ac_cv_libuna
+   libcfile support:                  $ac_cv_libcfile
 
 Features:
-   Multi-threading support: $ac_cv_libcthreads_multi_threading
-   Verbose output:          $ac_cv_enable_verbose_output
-   Debug output:            $ac_cv_enable_debug_output
+   Multi-threading support:           $ac_cv_libcthreads_multi_threading
+   Python (pyfwnt) support:           $ac_cv_enable_python
+   Python version 2 (pyfwnt) support: $ac_cv_enable_python2
+   Python version 3 (pyfwnt) support: $ac_cv_enable_python3
+   Verbose output:                    $ac_cv_enable_verbose_output
+   Debug output:                      $ac_cv_enable_debug_output
 ]);
 
