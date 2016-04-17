@@ -144,7 +144,7 @@ int libfwnt_security_descriptor_free(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free the owner SID.",
+				 "%s: unable to free owner security identifier.",
 				 function );
 
 				result = -1;
@@ -160,7 +160,7 @@ int libfwnt_security_descriptor_free(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free the group SID.",
+				 "%s: unable to free group security identifier.",
 				 function );
 
 				result = -1;
@@ -176,7 +176,7 @@ int libfwnt_security_descriptor_free(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free the discretionary ACL.",
+				 "%s: unable to free discretionary ACL.",
 				 function );
 
 				result = -1;
@@ -192,7 +192,7 @@ int libfwnt_security_descriptor_free(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free the system ACL.",
+				 "%s: unable to free system ACL.",
 				 function );
 
 				result = -1;
@@ -387,7 +387,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-			 "%s: unable to create owner SID.",
+			 "%s: unable to create owner security identifier.",
 			 function );
 
 			goto on_error;
@@ -398,7 +398,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-			 "%s: invalid security descriptor - missing owner SID.",
+			 "%s: invalid security descriptor - missing owner security identifier.",
 			 function );
 
 			goto on_error;
@@ -416,7 +416,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-			 "%s: unable to copy owner SID from byte stream.",
+			 "%s: unable to copy owner security identifier from byte stream.",
 			 function );
 
 			goto on_error;
@@ -434,7 +434,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-				 "%s: unable to retrieve owner SID string size.",
+				 "%s: unable to retrieve owner security identifier string size.",
 				 function );
 
 				goto on_error;
@@ -454,7 +454,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_MEMORY,
 					 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-					 "%s: unable to create SID string.",
+					 "%s: unable to create owner security identifier string.",
 					 function );
 
 					goto on_error;
@@ -480,7 +480,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-					 "%s: unable to copy SID to string.",
+					 "%s: unable to copy owner security identifier to string.",
 					 function );
 
 					goto on_error;
@@ -508,7 +508,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-			 "%s: group SID offset value out of bounds.",
+			 "%s: group security identifier offset value out of bounds.",
 			 function );
 
 			goto on_error;
@@ -521,7 +521,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-			 "%s: unable to create group SID.",
+			 "%s: unable to create group security identifier.",
 			 function );
 
 			goto on_error;
@@ -532,7 +532,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-			 "%s: invalid security descriptor - missing group SID.",
+			 "%s: invalid security descriptor - missing group security identifier.",
 			 function );
 
 			goto on_error;
@@ -550,7 +550,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-			 "%s: unable to copy group SID from byte stream.",
+			 "%s: unable to copy group security identifier from byte stream.",
 			 function );
 
 			goto on_error;
@@ -568,7 +568,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 				 error,
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-				 "%s: unable to retrieve group SID string size.",
+				 "%s: unable to retrieve group security identifier string size.",
 				 function );
 
 				goto on_error;
@@ -588,7 +588,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_MEMORY,
 					 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-					 "%s: unable to create SID string.",
+					 "%s: unable to create group security identifier string.",
 					 function );
 
 					goto on_error;
@@ -614,7 +614,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-					 "%s: unable to copy SID to string.",
+					 "%s: unable to copy group security identifier to string.",
 					 function );
 
 					goto on_error;

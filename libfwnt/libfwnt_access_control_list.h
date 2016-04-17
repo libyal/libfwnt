@@ -46,9 +46,12 @@ struct libfwnt_internal_access_control_list
 	/* The revision number
 	 */
 	uint8_t revision_number;
+
+	/* The (access control) entries array
+	 */
+	libcdata_array_t *entries_array;
 };
 
-LIBFWNT_EXTERN \
 int libfwnt_access_control_list_initialize(
      libfwnt_access_control_list_t **access_control_list,
      libcerror_error_t **error );

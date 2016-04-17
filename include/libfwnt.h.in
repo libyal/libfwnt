@@ -263,6 +263,30 @@ int libfwnt_security_identifier_copy_to_utf32_string_with_index(
      libfwnt_error_t **error );
 
 /* -------------------------------------------------------------------------
+ * Access control list (ACL) functions
+ * ------------------------------------------------------------------------- */
+
+/* Frees an access control list
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_list_free(
+     libfwnt_access_control_list_t **access_control_list,
+     libfwnt_error_t **error );
+
+/* -------------------------------------------------------------------------
+ * Access control entry (ACE) functions
+ * ------------------------------------------------------------------------- */
+
+/* Frees an access control entry
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_free(
+     libfwnt_access_control_entry_t **access_control_entry,
+     libfwnt_error_t **error );
+
+/* -------------------------------------------------------------------------
  * LZNT1 functions
  * ------------------------------------------------------------------------- */
 
@@ -318,5 +342,5 @@ int libfwnt_lzxpress_huffman_stream_decompress(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_H ) */
 

@@ -27,6 +27,7 @@
 
 #include "libfwnt_extern.h"
 #include "libfwnt_libcerror.h"
+#include "libfwnt_security_identifier.h"
 #include "libfwnt_types.h"
 
 #if defined( __cplusplus )
@@ -42,6 +43,10 @@ typedef struct libfwnt_internal_access_control_entry libfwnt_internal_access_con
 
 struct libfwnt_internal_access_control_entry
 {
+	/* The size
+	 */
+	uint16_t size;
+
 	/* The type
 	 */
 	uint8_t type;
@@ -49,9 +54,16 @@ struct libfwnt_internal_access_control_entry
 	/* The flags
 	 */
 	uint8_t flags;
+
+	/* The access mask
+	 */
+	uint32_t access_mask;
+
+	/* The security identifier
+	 */
+	libfwnt_security_identifier_t *security_identifier;
 };
 
-LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_initialize(
      libfwnt_access_control_entry_t **access_control_entry,
      libcerror_error_t **error );
@@ -59,6 +71,10 @@ int libfwnt_access_control_entry_initialize(
 LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_free(
      libfwnt_access_control_entry_t **access_control_entry,
+     libcerror_error_t **error );
+
+int libfwnt_internal_access_control_entry_free(
+     libfwnt_internal_access_control_entry_t **internal_access_control_entry,
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \

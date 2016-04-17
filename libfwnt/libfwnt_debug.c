@@ -116,108 +116,68 @@ void libfwnt_debug_print_security_descriptor_control_flags(
 	}
 }
 
-/* Prints the access control entry type
+/* Retrieves a string containing the access control entry type
  */
-void libfwnt_debug_print_access_control_entry_type(
-      uint8_t entry_type )
+const char *libfwnt_debug_print_access_control_entry_type(
+             uint8_t entry_type )
 {
 	switch( entry_type )
 	{
 		case 0x00:
-			libcnotify_printf(
-			 "Access allowed (ACCESS_ALLOWED_ACE_TYPE)" );
-			break;
+			return( "Access allowed (ACCESS_ALLOWED_ACE_TYPE)" );
 
 		case 0x01:
-			libcnotify_printf(
-			 "Access denied (ACCESS_DENIED_ACE_TYPE)" );
-			break;
+			return( "Access denied (ACCESS_DENIED_ACE_TYPE)" );
 
 		case 0x02:
-			libcnotify_printf(
-			 "System-audit (SYSTEM_AUDIT_ACE_TYPE)" );
-			break;
+			return( "System-audit (SYSTEM_AUDIT_ACE_TYPE)" );
 
 		case 0x03:
-			libcnotify_printf(
-			 "System-alarm (SYSTEM_ALARM_ACE_TYPE)" );
-			break;
+			return( "System-alarm (SYSTEM_ALARM_ACE_TYPE)" );
 
 		case 0x04:
-			libcnotify_printf(
-			 "Access allowed (ACCESS_ALLOWED_COMPOUND_ACE_TYPE)" );
-			break;
+			return( "Access allowed (ACCESS_ALLOWED_COMPOUND_ACE_TYPE)" );
 
 		case 0x05:
-			libcnotify_printf(
-			 "Access allowed (ACCESS_ALLOWED_OBJECT_ACE_TYPE)" );
-			break;
+			return( "Access allowed (ACCESS_ALLOWED_OBJECT_ACE_TYPE)" );
 
 		case 0x06:
-			libcnotify_printf(
-			 "Access denied (ACCESS_DENIED_OBJECT_ACE_TYPE)" );
-			break;
+			return( "Access denied (ACCESS_DENIED_OBJECT_ACE_TYPE)" );
 
 		case 0x07:
-			libcnotify_printf(
-			 "System-audit (SYSTEM_AUDIT_OBJECT_ACE_TYPE)" );
-			break;
+			return( "System-audit (SYSTEM_AUDIT_OBJECT_ACE_TYPE)" );
 
 		case 0x08:
-			libcnotify_printf(
-			 "System-alarm (SYSTEM_ALARM_OBJECT_ACE_TYPE)" );
-			break;
+			return( "System-alarm (SYSTEM_ALARM_OBJECT_ACE_TYPE)" );
 
 		case 0x09:
-			libcnotify_printf(
-			 "Access allowed (ACCESS_ALLOWED_CALLBACK_ACE_TYPE)" );
-			break;
+			return( "Access allowed (ACCESS_ALLOWED_CALLBACK_ACE_TYPE)" );
 
 		case 0x0a:
-			libcnotify_printf(
-			 "Access denied (ACCESS_DENIED_CALLBACK_ACE_TYPE)" );
-			break;
+			return( "Access denied (ACCESS_DENIED_CALLBACK_ACE_TYPE)" );
 
 		case 0x0b:
-			libcnotify_printf(
-			 "Access allowed (ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE)" );
-			break;
+			return( "Access allowed (ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE)" );
 
 		case 0x0c:
-			libcnotify_printf(
-			 "Access denied (ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE)" );
-			break;
+			return( "Access denied (ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE)" );
 
 		case 0x0d:
-			libcnotify_printf(
-			 "System-audit (SYSTEM_AUDIT_CALLBACK_ACE_TYPE)" );
-			break;
+			return( "System-audit (SYSTEM_AUDIT_CALLBACK_ACE_TYPE)" );
 
 		case 0x0e:
-			libcnotify_printf(
-			 "System-alarm (SYSTEM_ALARM_CALLBACK_ACE_TYPE)" );
-			break;
+			return( "System-alarm (SYSTEM_ALARM_CALLBACK_ACE_TYPE)" );
 
 		case 0x0f:
-			libcnotify_printf(
-			 "System-audit (SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE)" );
-			break;
+			return( "System-audit (SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE)" );
 
 		case 0x10:
-			libcnotify_printf(
-			 "System-alarm (SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE)" );
-			break;
+			return( "System-alarm (SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE)" );
 
 		case 0x11:
-			libcnotify_printf(
-			 "Mandatory label (SYSTEM_MANDATORY_LABEL_ACE_TYPE)" );
-			break;
-
-		default:
-			libcnotify_printf(
-			 "UNKNOWN" );
-			break;
+			return( "Mandatory label (SYSTEM_MANDATORY_LABEL_ACE_TYPE)" );
 	}
+	return( "UNKNOWN" );
 }
 
 #endif /* defined( HAVE_DEBUG_OUTPUT ) */

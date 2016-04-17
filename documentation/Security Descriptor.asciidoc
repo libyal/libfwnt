@@ -107,7 +107,8 @@ The access control list header is 8 bytes of size and consists of:
 | Offset | Size | Value | Description
 | 0 | 1 | | Revision
 | 1 | 1 | | Padding
-| 2 | 2 | | Size
+| 2 | 2 | | Size +
+The value includes the size of the access control list header.
 | 4 | 2 | | Count
 | 6 | 2 | | Padding
 |===
@@ -120,15 +121,18 @@ The access control entry header is 4 bytes of size and consists of:
 [cols="1,1,1,5",options="header"]
 |===
 | Offset | Size | Value | Description
-| 0 | 1 | | Type
-| 1 | 1 | | Flags
-| 2 | 2 | | Size
+| 0 | 1 | | Type +
+See section: <<access_control_entry_types,Access control entry (ACE) types>>
+| 1 | 1 | | Flags +
+See section: <<access_control_entry_flags,Access control entry (ACE) flags>>
+| 2 | 2 | | Size +
+The value includes the size of the access control entry header.
 |===
 
 The access control entry (ACE) header is followed by access entry data. The 
 size and format of the ACE data is dependent on the flags.
 
-=== Access control entry (ACE) types
+=== [[access_control_entry_types]]Access control entry (ACE) types
 
 [cols="1,1,5",options="header"]
 |===
@@ -200,7 +204,7 @@ Contains a GUID
 | 40 | ... | | SID
 |===
 
-=== Access control entry (ACE) flags
+=== [[access_control_entry_flags]]Access control entry (ACE) flags
 
 ==== Access flags
 

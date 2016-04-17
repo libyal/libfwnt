@@ -25,9 +25,11 @@
 #include <types.h>
 
 #include "libfwnt_access_control_entry.h"
+#include "libfwnt_debug.h"
 #include "libfwnt_definitions.h"
 #include "libfwnt_libcerror.h"
 #include "libfwnt_libcnotify.h"
+#include "libfwnt_security_identifier.h"
 #include "libfwnt_types.h"
 
 /* Creates an access control entry
@@ -111,9 +113,7 @@ int libfwnt_access_control_entry_free(
      libfwnt_access_control_entry_t **access_control_entry,
      libcerror_error_t **error )
 {
-	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
-	static char *function                                                  = "libfwnt_access_control_entry_free";
-	int result                                                             = 1;
+	static char *function = "libfwnt_access_control_entry_free";
 
 	if( access_control_entry == NULL )
 	{
@@ -128,11 +128,54 @@ int libfwnt_access_control_entry_free(
 	}
 	if( *access_control_entry != NULL )
 	{
-		internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) *access_control_entry;
-		*access_control_entry         = NULL;
+		*access_control_entry = NULL;
+	}
+	return( 1 );
+}
 
+/* Frees an access control entry
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_internal_access_control_entry_free(
+     libfwnt_internal_access_control_entry_t **internal_access_control_entry,
+     libcerror_error_t **error )
+{
+	static char *function = "libfwnt_internal_access_control_entry_free";
+	int result            = 1;
+
+	if( internal_access_control_entry == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( -1 );
+	}
+	if( *internal_access_control_entry != NULL )
+	{
+		if( ( *internal_access_control_entry )->security_identifier != NULL )
+		{
+			if( libfwnt_internal_security_identifier_free(
+			     (libfwnt_internal_security_identifier_t **) &( ( *internal_access_control_entry )->security_identifier ),
+			     error ) != 1 )
+			{
+				libcerror_error_set(
+				 error,
+				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+				 "%s: unable to free security identifier.",
+				 function );
+
+				result = -1;
+			}
+		}
 		memory_free(
-		 internal_access_control_entry );
+		 *internal_access_control_entry );
+
+		*internal_access_control_entry = NULL;
 	}
 	return( result );
 }
@@ -149,7 +192,14 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 {
 	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
 	static char *function                                                  = "libfwnt_access_control_entry_copy_from_byte_stream";
-	uint16_t size                                                          = 0;
+	size_t access_mask_offset                                              = 0;
+	size_t sid_offset                                                      = 0;
+
+#if defined( HAVE_DEBUG_OUTPUT )
+	libcstring_system_character_t *sid_string                              = NULL;
+	size_t sid_string_size                                                 = 0;
+	int result                                                             = 0;
+#endif
 
 	if( access_control_entry == NULL )
 	{
@@ -225,33 +275,251 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 
 	byte_stream_copy_to_uint16_little_endian(
 	 &( byte_stream[ 2 ] ),
-	 size );
+	 internal_access_control_entry->size );
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
 	{
 		libcnotify_printf(
-		 "%s: type\t\t\t\t: %" PRIu8 "\n",
+		 "%s: type\t\t: %" PRIu8 " (%s)\n",
 		 function,
-		 internal_access_control_entry->type );
+		 internal_access_control_entry->type,
+		 libfwnt_debug_print_access_control_entry_type(
+		  internal_access_control_entry->type ) );
 
 		libcnotify_printf(
-		 "%s: flags\t\t\t\t: 0x%02" PRIx8 "\n",
+		 "%s: flags\t\t: 0x%02" PRIx8 "\n",
 		 function,
 		 internal_access_control_entry->flags );
 
 		libcnotify_printf(
-		 "%s: size\t\t\t\t: %" PRIu16 "\n",
+		 "%s: size\t\t: %" PRIu16 "\n",
 		 function,
-		 size );
+		 internal_access_control_entry->size );
 
 		libcnotify_printf(
 		 "\n" );
 	}
 #endif
+	if( ( internal_access_control_entry->size < 8 )
+	 || ( (size_t) internal_access_control_entry->size > byte_stream_size ) )
 
-/* TODO read ACE data */
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: access control entry size value out of bounds.",
+		 function );
 
+		goto on_error;
+	}
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( libcnotify_verbose != 0 )
+	{
+		libcnotify_printf(
+		 "%s: access control entry data:\n",
+		 function );
+		libcnotify_print_data(
+		 &( byte_stream[ 8 ] ),
+		 internal_access_control_entry->size - 8,
+		 0 );
+	}
+#endif
+	switch( internal_access_control_entry->type )
+	{
+		/* Basic types */
+		case LIBFWNT_ACCESS_ALLOWED:
+		case LIBFWNT_ACCESS_DENIED:
+		case LIBFWNT_SYSTEM_AUDIT:
+		case LIBFWNT_SYSTEM_ALARM:
+		case LIBFWNT_ACCESS_ALLOWED_CALLBACK:
+		case LIBFWNT_ACCESS_DENIED_CALLBACK:
+		case LIBFWNT_SYSTEM_AUDIT_CALLBACK:
+		case LIBFWNT_SYSTEM_ALARM_CALLBACK:
+		case LIBFWNT_SYSTEM_MANDATORY_LABEL:
+			access_mask_offset = 8;
+			sid_offset         = 12;
+			break;
+
+		/* Object types */
+		case LIBFWNT_ACCESS_ALLOWED_OBJECT:
+		case LIBFWNT_ACCESS_DENIED_OBJECT:
+		case LIBFWNT_SYSTEM_AUDIT_OBJECT:
+		case LIBFWNT_SYSTEM_ALARM_OBJECT:
+		case LIBFWNT_ACCESS_ALLOWED_CALLBACK_OBJECT:
+		case LIBFWNT_ACCESS_DENIED_CALLBACK_OBJECT:
+		case LIBFWNT_SYSTEM_AUDIT_CALLBACK_OBJECT:
+		case LIBFWNT_SYSTEM_ALARM_CALLBACK_OBJECT:
+			access_mask_offset = 8;
+			sid_offset         = 40;
+			break;
+
+		/* Unknown types */
+		case LIBFWNT_ACCESS_ALLOWED_COMPOUND:
+		default:
+			break;
+	}
+	if( access_mask_offset > 0 )
+	{
+		byte_stream_copy_to_uint32_little_endian(
+		 &( byte_stream[ access_mask_offset ] ),
+		 internal_access_control_entry->access_mask );
+
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: access mask\t\t: 0x%08" PRIx32 "\n",
+			 function,
+			 internal_access_control_entry->access_mask );
+		}
+#endif
+	}
+	if( sid_offset > 0 )
+	{
+		if( sid_offset > byte_stream_size )
+
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+			 "%s: security identifier offset value out of bounds.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfwnt_security_identifier_initialize(
+		     &( internal_access_control_entry->security_identifier ),
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unable to create security identifier.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfwnt_security_identifier_copy_from_byte_stream(
+		     internal_access_control_entry->security_identifier,
+		     &( byte_stream[ sid_offset ] ),
+		     byte_stream_size - sid_offset,
+		     byte_order,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+			 "%s: unable to copy security identifier from byte stream.",
+			 function );
+
+			goto on_error;
+		}
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			if( libfwnt_security_identifier_get_string_size(
+			     internal_access_control_entry->security_identifier,
+			     &sid_string_size,
+			     0,
+			     error ) != 1 )
+			{
+				libcerror_error_set(
+				 error,
+				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+				 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+				 "%s: unable to retrieve security identifier string size.",
+				 function );
+
+				goto on_error;
+			}
+			libcnotify_printf(
+			 "%s: SID\t\t\t: ",
+			 function );
+
+			if( sid_string_size > 0 )
+			{
+				sid_string = libcstring_system_string_allocate(
+					      sid_string_size );
+
+				if( sid_string == NULL )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_MEMORY,
+					 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+					 "%s: unable to create security identifier string.",
+					 function );
+
+					goto on_error;
+				}
+#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+				result = libfwnt_security_identifier_copy_to_utf16_string(
+					  internal_access_control_entry->security_identifier,
+					  (uint16_t *) sid_string,
+					  sid_string_size,
+					  0,
+					  error );
+#else
+				result = libfwnt_security_identifier_copy_to_utf8_string(
+					  internal_access_control_entry->security_identifier,
+					  (uint8_t *) sid_string,
+					  sid_string_size,
+					  0,
+					  error );
+#endif
+				if( result != 1 )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+					 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+					 "%s: unable to copy security identifier to string.",
+					 function );
+
+					goto on_error;
+				}
+				libcnotify_printf(
+				 "%" PRIs_LIBCSTRING_SYSTEM "",
+				 sid_string );
+
+				memory_free(
+				 sid_string );
+
+				sid_string = NULL;
+			}
+			libcnotify_printf(
+			 "\n" );
+		}
+#endif
+	}
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( libcnotify_verbose != 0 )
+	{
+		libcnotify_printf(
+		 "\n" );
+	}
+#endif
 	return( 1 );
+
+on_error:
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( sid_string != NULL )
+	{
+		memory_free(
+		 sid_string );
+	}
+#endif
+	if( internal_access_control_entry->security_identifier != NULL )
+	{
+		libfwnt_internal_security_identifier_free(
+		 (libfwnt_internal_security_identifier_t **) &( internal_access_control_entry->security_identifier ),
+		 NULL );
+	}
+	return( -1 );
 }
 

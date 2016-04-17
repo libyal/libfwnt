@@ -24,6 +24,7 @@
 #include <memory.h>
 #include <types.h>
 
+#include "libfwnt_access_control_entry.h"
 #include "libfwnt_access_control_list.h"
 #include "libfwnt_definitions.h"
 #include "libfwnt_libcerror.h"
@@ -131,6 +132,23 @@ int libfwnt_access_control_list_free(
 		internal_access_control_list = (libfwnt_internal_access_control_list_t *) *access_control_list;
 		*access_control_list         = NULL;
 
+		if( internal_access_control_list->entries_array != NULL )
+		{
+			if( libcdata_array_free(
+			     &( internal_access_control_list->entries_array ),
+			     (int (*)(intptr_t **, libcerror_error_t **)) &libfwnt_internal_access_control_entry_free,
+			     error ) != 1 )
+			{
+				libcerror_error_set(
+				 error,
+				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+				 "%s: unable to free entries array.",
+				 function );
+
+				result = -1;
+			}
+		}
 		memory_free(
 		 internal_access_control_list );
 	}
@@ -147,13 +165,16 @@ int libfwnt_access_control_list_copy_from_byte_stream(
      int byte_order,
      libcerror_error_t **error )
 {
-	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
-	static char *function                                                = "libfwnt_access_control_list_copy_from_byte_stream";
-	uint16_t count                                                       = 0;
-	uint16_t size                                                        = 0;
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	libfwnt_internal_access_control_list_t *internal_access_control_list   = NULL;
+	static char *function                                                  = "libfwnt_access_control_list_copy_from_byte_stream";
+	size_t byte_stream_offset                                              = 0;
+	uint16_t entry_index                                                   = 0;
+	uint16_t number_of_entries                                             = 0;
+	uint16_t size                                                          = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
-	uint16_t value_16bit                                                 = 0;
+	uint16_t value_16bit                                                   = 0;
 #endif
 
 	if( access_control_list == NULL )
@@ -169,6 +190,17 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 	}
 	internal_access_control_list = (libfwnt_internal_access_control_list_t *) access_control_list;
 
+	if( internal_access_control_list->entries_array != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid access control list - entries array value already set.",
+		 function );
+
+		return( -1 );
+	}
 	if( byte_stream == NULL )
 	{
 		libcerror_error_set(
@@ -233,36 +265,36 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 
 	byte_stream_copy_to_uint16_little_endian(
 	 &( byte_stream[ 4 ] ),
-	 count );
+	 number_of_entries );
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
 	{
 		libcnotify_printf(
-		 "%s: revision number\t\t: %" PRIu8 "\n",
+		 "%s: revision number\t: %" PRIu8 "\n",
 		 function,
 		 internal_access_control_list->revision_number );
 
 		libcnotify_printf(
-		 "%s: padding1\t\t\t: 0x%02" PRIx8 "\n",
+		 "%s: padding1\t\t: 0x%02" PRIx8 "\n",
 		 function,
 		 byte_stream[ 1 ] );
 
 		libcnotify_printf(
-		 "%s: size\t\t\t\t: %" PRIu16 "\n",
+		 "%s: size\t\t\t: %" PRIu16 "\n",
 		 function,
 		 size );
 
 		libcnotify_printf(
-		 "%s: count\t\t\t: %" PRIu16 "\n",
+		 "%s: number of entries\t: %" PRIu16 "\n",
 		 function,
-		 count );
+		 number_of_entries );
 
 		byte_stream_copy_to_uint16_little_endian(
 		 &( byte_stream[ 6 ] ),
 		 value_16bit );
 		libcnotify_printf(
-		 "%s: padding2\t\t\t: 0x%04" PRIx16 "\n",
+		 "%s: padding2\t\t: 0x%04" PRIx16 "\n",
 		 function,
 		 value_16bit );
 
@@ -270,12 +302,107 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 		 "\n" );
 	}
 #endif
+	byte_stream_offset = 8;
 
-/* TODO read ACEs */
+/* TODO check bounds of number_of_entries */
+	if( libcdata_array_initialize(
+	     &( internal_access_control_list->entries_array ),
+	     (int) number_of_entries,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+		 "%s: unable to create entries array.",
+		 function );
 
+		goto on_error;
+	}
+	for( entry_index = 0;
+	     entry_index < number_of_entries;
+	     entry_index++ )
+	{
+		if( libfwnt_access_control_entry_initialize(
+		     (libfwnt_access_control_entry_t **) &internal_access_control_entry,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unable to create access control entry: %" PRIu16 ".",
+			 function,
+			 entry_index );
+
+			goto on_error;
+		}
+		if( libfwnt_access_control_entry_copy_from_byte_stream(
+		     (libfwnt_access_control_entry_t *) internal_access_control_entry,
+		     &( byte_stream[ byte_stream_offset ] ),
+		     byte_stream_size - byte_stream_offset,
+		     byte_order,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+			 "%s: unable to access control entry: %" PRIu16 " from byte stream.",
+			 function,
+			 entry_index );
+
+			goto on_error;
+		}
+		if( (size_t) internal_access_control_entry->size > byte_stream_size )
+
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+			 "%s: access control entry: %" PRIu16 " size value out of bounds.",
+			 function,
+			 entry_index );
+
+			goto on_error;
+		}
+		byte_stream_offset += internal_access_control_entry->size;
+
+		if( libcdata_array_set_entry_by_index(
+		     internal_access_control_list->entries_array,
+		     (int) entry_index,
+		     (intptr_t *) internal_access_control_entry,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+			 "%s: unable to set access control entry: %" PRIu16 ".",
+			 function,
+			 entry_index );
+
+			goto on_error;
+		}
+		internal_access_control_entry = NULL;
+	}
 	return( 1 );
 
 on_error:
+	if( internal_access_control_entry != NULL )
+	{
+		libfwnt_internal_access_control_entry_free(
+		 &internal_access_control_entry,
+		 NULL );
+	}
+	if( internal_access_control_list->entries_array != NULL )
+	{
+		libcdata_array_free(
+		 &( internal_access_control_list->entries_array ),
+		 (int (*)(intptr_t **, libcerror_error_t **)) &libfwnt_internal_access_control_entry_free,
+		 NULL );
+	}
 	return( -1 );
 }
 

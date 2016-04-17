@@ -34,8 +34,8 @@ extern "C" {
 void libfwnt_debug_print_security_descriptor_control_flags(
       uint32_t control_flags );
 
-void libfwnt_debug_print_access_control_entry_type(
-      uint8_t entry_type );
+const char *libfwnt_debug_print_access_control_entry_type(
+             uint8_t entry_type );
 
 #endif /* defined( HAVE_DEBUG_OUTPUT ) */
 
