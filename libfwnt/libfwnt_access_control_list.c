@@ -112,9 +112,7 @@ int libfwnt_access_control_list_free(
      libfwnt_access_control_list_t **access_control_list,
      libcerror_error_t **error )
 {
-	libfwnt_internal_access_control_list_t *internal_access_control_list = NULL;
-	static char *function                                                = "libfwnt_access_control_list_free";
-	int result                                                           = 1;
+	static char *function = "libfwnt_access_control_list_free";
 
 	if( access_control_list == NULL )
 	{
@@ -129,13 +127,38 @@ int libfwnt_access_control_list_free(
 	}
 	if( *access_control_list != NULL )
 	{
-		internal_access_control_list = (libfwnt_internal_access_control_list_t *) *access_control_list;
-		*access_control_list         = NULL;
+		*access_control_list = NULL;
+	}
+	return( 1 );
+}
 
-		if( internal_access_control_list->entries_array != NULL )
+/* Frees an access control list
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_internal_access_control_list_free(
+     libfwnt_internal_access_control_list_t **internal_access_control_list,
+     libcerror_error_t **error )
+{
+	static char *function = "libfwnt_internal_access_control_list_free";
+	int result            = 1;
+
+	if( internal_access_control_list == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( -1 );
+	}
+	if( *internal_access_control_list != NULL )
+	{
+		if( ( *internal_access_control_list )->entries_array != NULL )
 		{
 			if( libcdata_array_free(
-			     &( internal_access_control_list->entries_array ),
+			     &( ( *internal_access_control_list )->entries_array ),
 			     (int (*)(intptr_t **, libcerror_error_t **)) &libfwnt_internal_access_control_entry_free,
 			     error ) != 1 )
 			{
@@ -150,7 +173,9 @@ int libfwnt_access_control_list_free(
 			}
 		}
 		memory_free(
-		 internal_access_control_list );
+		 *internal_access_control_list );
+
+		*internal_access_control_list = NULL;
 	}
 	return( result );
 }

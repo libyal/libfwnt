@@ -36,6 +36,10 @@ Security descriptor functions
 .Fn libfwnt_security_descriptor_get_owner "libfwnt_security_descriptor_t *security_descriptor, libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
 .Ft int
 .Fn libfwnt_security_descriptor_get_group "libfwnt_security_descriptor_t *security_descriptor, libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_security_descriptor_get_discretionary_acl "libfwnt_security_descriptor_t *security_descriptor, libfwnt_access_control_list_t **access_control_list, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_security_descriptor_get_system_acl "libfwnt_security_descriptor_t *security_descriptor, libfwnt_access_control_list_t **access_control_list, libfwnt_error_t **error"
 .Pp
 Security identifier (SID) functions
 .Ft int
@@ -70,6 +74,10 @@ Access control list (ACL) functions
 Access control entry (ACE) functions
 .Ft int
 .Fn libfwnt_access_control_entry_free "libfwnt_access_control_entry_t **access_control_entry, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_access_control_entry_get_type "libfwnt_access_control_entry_t *access_control_entry, uint8_t *access_mask, libfwnt_error_t **error"
+.Ft int
+.Fn libfwnt_access_control_entry_get_flags "libfwnt_access_control_entry_t *access_control_entry, uint8_t *access_mask, libfwnt_error_t **error"
 .Ft int
 .Fn libfwnt_access_control_entry_get_access_mask "libfwnt_access_control_entry_t *access_control_entry, uint32_t *access_mask, libfwnt_error_t **error"
 .Ft int

@@ -96,6 +96,18 @@ int libfwnt_security_descriptor_get_group(
      libfwnt_security_identifier_t **security_identifier,
      libcerror_error_t **error );
 
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_discretionary_acl(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_access_control_list_t **access_control_list,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_system_acl(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_access_control_list_t **access_control_list,
+     libcerror_error_t **error );
+
 #if defined( __cplusplus )
 }
 #endif

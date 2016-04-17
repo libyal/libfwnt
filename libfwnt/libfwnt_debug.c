@@ -317,6 +317,38 @@ void libfwnt_debug_print_access_control_entry_access_mask(
 		libcnotify_printf(
 		 "\t(fsdrightSynchronize)\n" );
 	}
+
+	if( ( access_mask & 0x01000000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(ACCESS_SYSTEM_SECURITY)\n" );
+	}
+	if( ( access_mask & 0x02000000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(MAXIMUM_ALLOWED)\n" );
+	}
+
+	if( ( access_mask & 0x10000000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(GENERIC_ALL)\n" );
+	}
+	if( ( access_mask & 0x20000000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(GENERIC_EXECUTE)\n" );
+	}
+	if( ( access_mask & 0x40000000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(GENERIC_WRITE)\n" );
+	}
+	if( ( access_mask & 0x80000000UL ) != 0 )
+	{
+		libcnotify_printf(
+		 "\t(GENERIC_READ)\n" );
+	}
 }
 
 #endif /* defined( HAVE_DEBUG_OUTPUT ) */

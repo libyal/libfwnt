@@ -116,7 +116,7 @@ The value includes the size of the access control list header.
 The access control list header is followed by access control entries (ACE).
 
 == Access control entry (ACE)
-The access control entry header is 4 bytes of size and consists of:
+The access control entry header (ACE_HEADER) is 4 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
 |===
@@ -143,7 +143,8 @@ size and format of the ACE data is dependent on the flags.
 (Basic ACE data structure)
 | 0x02 | SYSTEM_AUDIT_ACE_TYPE | System-audit +
 (Basic ACE data structure)
-| 0x03 | SYSTEM_ALARM_ACE_TYPE | Reserved (System-alarm) +
+| 0x03 | SYSTEM_ALARM_ACE_TYPE +
+(ACCESS_MAX_MS_V2_ACE_TYPE) | Reserved (System-alarm) +
 (Basic ACE data structure) +
 Maximum number of ACE types supported in an ACL revision number 2
 | 0x04 | ACCESS_ALLOWED_COMPOUND_ACE_TYPE | Reserved +
@@ -155,7 +156,8 @@ Maximum number of ACE types supported in an ACL revision number 3
 (Object ACE data structure)
 | 0x07 | SYSTEM_AUDIT_OBJECT_ACE_TYPE | System-audit +
 (Object ACE data structure)
-| 0x08 | SYSTEM_ALARM_OBJECT_ACE_TYPE | Reserved (System-alarm) +
+| 0x08 | SYSTEM_ALARM_OBJECT_ACE_TYPE +
+(ACCESS_MAX_MS_V4_ACE_TYPE) | Reserved (System-alarm) +
 (Object data structure) +
 Maximum number of ACE types supported in an ACL revision number 4
 | 0x09 | ACCESS_ALLOWED_CALLBACK_ACE_TYPE | Access allowed +
@@ -178,6 +180,11 @@ Maximum number of ACE types supported in an ACL revision number 5
 | 0x11 | SYSTEM_MANDATORY_LABEL_ACE_TYPE | Mandatory label +
 (Basic ACE data structure)
 |===
+
+==== Notes
+....
+ACCESS_MAX_MS_V3_ACE_TYPE
+....
 
 ==== Basic ACE data structure
 The basic ACE data structure is variable of size and consists of:
@@ -230,17 +237,36 @@ Contains a GUID
 
 === [[access_rights_flags]]Access rights flags (ACCESS_MASK)
 
-==== Standard access rights flags
+[cols="1,1,1,5",options="header"]
+|===
+| Bit offset | Identifier | Description
+| 0 - 15 | | Specific rights
+| 16 - 23 | | Standard rights +
+See section: <<standard_access_rights_flags,Standard access rights flags>>
+| 24 | ACCESS_SYSTEM_SECURITY (0x01000000) | Access system security
+| 25 | MAXIMUM_ALLOWED (0x02000000) | Maximum allowed
+| 26 - 27 | | [yellow-background]*Unknown (Reserved)*
+| 28 | GENERIC_ALL (0x10000000) | Generic all
+| 29 | GENERIC_EXECUTE (0x20000000) | Generic execute
+| 30 | GENERIC_WRITE (0x40000000) | Generic write
+| 31 | GENERIC_READ (0x80000000) | Generic read
+|===
+
+==== [[standard_access_rights_flags]]Standard access rights flags
 
 [cols="1,1,5",options="header"]
 |===
 | Value | Identifier | Description
-| 0x00010000 | fsdrightDelete | Delete
-| 0x00020000 | fsdrightReadControl | Read control
-| 0x00040000 | fsdrightWriteSD | Write DAC +
-DAC => discretionary access control?
-| 0x00080000 | fsdrightWriteOwner | Write owner
-| 0x00100000 | fsdrightSynchronize | Synchronize
+| 0x00010000 | fsdrightDelete +
+(DELETE) | Delete access
+| 0x00020000 | fsdrightReadControl +
+(READ_CONTROL) | Read access to the owner, group, and discretionary ACL (DACL)
+| 0x00040000 | fsdrightWriteSD +
+(WRITE_DAC) | Write access to the discretionary ACL (DACL)
+| 0x00080000 | fsdrightWriteOwner +
+(WRITE_OWNER) | Write access to owner SID
+| 0x00100000 | fsdrightSynchronize +
+(SYNCHRONIZE) | Synchronize access
 |===
 
 ==== Non-folder item access rights flags
@@ -325,4 +351,6 @@ All folder access rights: 0x00000fbf
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379563(v=vs.85).aspx[MSDN: Security Descriptors]
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379571(v=vs.85).aspx[MSDN: Security Identifiers]
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379561(v=vs.85).aspx[SECURITY_DESCRIPTOR structure]
+* https://msdn.microsoft.com/en-us/library/windows/desktop/aa374919(v=vs.85).aspx[ACE_HEADER structure]
+* https://msdn.microsoft.com/en-us/library/windows/desktop/aa374847(v=vs.85).aspx[ACCESS_MASK]
 

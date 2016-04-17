@@ -86,6 +86,18 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_type(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint8_t *type,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_flags(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint8_t *flags,
+     libcerror_error_t **error );
+
+LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_get_access_mask(
      libfwnt_access_control_entry_t *access_control_entry,
      uint32_t *access_mask,

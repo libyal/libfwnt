@@ -168,8 +168,8 @@ int libfwnt_security_descriptor_free(
 		}
 		if( internal_security_descriptor->discretionary_acl != NULL )
 		{
-			if( libfwnt_access_control_list_free(
-			     &( internal_security_descriptor->discretionary_acl ),
+			if( libfwnt_internal_access_control_list_free(
+			     (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->discretionary_acl ),
 			     error ) != 1 )
 			{
 				libcerror_error_set(
@@ -184,8 +184,8 @@ int libfwnt_security_descriptor_free(
 		}
 		if( internal_security_descriptor->system_acl != NULL )
 		{
-			if( libfwnt_access_control_list_free(
-			     &( internal_security_descriptor->system_acl ),
+			if( libfwnt_internal_access_control_list_free(
+			     (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->system_acl ),
 			     error ) != 1 )
 			{
 				libcerror_error_set(
@@ -241,6 +241,50 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 	}
 	internal_security_descriptor = (libfwnt_internal_security_descriptor_t *) security_descriptor;
 
+	if( internal_security_descriptor->owner_sid != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security descriptor - owner SID value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->group_sid != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security descriptor - group SID value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->discretionary_acl != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security descriptor - discretionary ACL value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->system_acl != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security descriptor - system ACL value already set.",
+		 function );
+
+		return( -1 );
+	}
 	if( byte_stream == NULL )
 	{
 		libcerror_error_set(
@@ -733,14 +777,14 @@ on_error:
 #endif
 	if( internal_security_descriptor->system_acl != NULL )
 	{
-		libfwnt_access_control_list_free(
-		 &( internal_security_descriptor->system_acl ),
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->system_acl ),
 		 NULL );
 	}
 	if( internal_security_descriptor->discretionary_acl != NULL )
 	{
-		libfwnt_access_control_list_free(
-		 &( internal_security_descriptor->discretionary_acl ),
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->discretionary_acl ),
 		 NULL );
 	}
 	if( internal_security_descriptor->group_sid != NULL )
@@ -758,7 +802,7 @@ on_error:
 	return( -1 );
 }
 
-/* Retrieves the owner security identifier
+/* Retrieves the owner security identifier (SID)
  * Returns 1 if successful, 0 if not available or -1 on error
  */
 int libfwnt_security_descriptor_get_owner(
@@ -813,7 +857,7 @@ int libfwnt_security_descriptor_get_owner(
 	return( 1 );
 }
 
-/* Retrieves the group security identifier
+/* Retrieves the group security identifier (SID)
  * Returns 1 if successful, 0 if not available or -1 on error
  */
 int libfwnt_security_descriptor_get_group(
@@ -864,6 +908,116 @@ int libfwnt_security_descriptor_get_group(
 		return( 0 );
 	}
 	*security_identifier = internal_security_descriptor->group_sid;
+
+	return( 1 );
+}
+
+/* Retrieves the discretionary access control list (ACL)
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+int libfwnt_security_descriptor_get_discretionary_acl(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_access_control_list_t **access_control_list,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_security_descriptor_t *internal_security_descriptor = NULL;
+	static char *function                                                = "libfwnt_security_descriptor_get_discretionary_acl";
+
+	if( security_descriptor == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security descriptor.",
+		 function );
+
+		return( -1 );
+	}
+	internal_security_descriptor = (libfwnt_internal_security_descriptor_t *) security_descriptor;
+
+	if( access_control_list == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( -1 );
+	}
+	if( *access_control_list != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid access control list value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->discretionary_acl == NULL )
+	{
+		return( 0 );
+	}
+	*access_control_list = internal_security_descriptor->discretionary_acl;
+
+	return( 1 );
+}
+
+/* Retrieves the system access control list (ACL)
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+int libfwnt_security_descriptor_get_system_acl(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_access_control_list_t **access_control_list,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_security_descriptor_t *internal_security_descriptor = NULL;
+	static char *function                                                = "libfwnt_security_descriptor_get_system_acl";
+
+	if( security_descriptor == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid security descriptor.",
+		 function );
+
+		return( -1 );
+	}
+	internal_security_descriptor = (libfwnt_internal_security_descriptor_t *) security_descriptor;
+
+	if( access_control_list == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control list.",
+		 function );
+
+		return( -1 );
+	}
+	if( *access_control_list != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid access control list value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->system_acl == NULL )
+	{
+		return( 0 );
+	}
+	*access_control_list = internal_security_descriptor->system_acl;
 
 	return( 1 );
 }

@@ -343,7 +343,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		case LIBFWNT_SYSTEM_ALARM_CALLBACK:
 		case LIBFWNT_SYSTEM_MANDATORY_LABEL:
 			access_mask_offset = 4;
-			sid_offset         = 12;
+			sid_offset         = 8;
 			break;
 
 		/* Object types */
@@ -411,6 +411,19 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 
 			goto on_error;
 		}
+		if( internal_access_control_entry->security_identifier == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
+			 "%s: invalid access control entry - missing owner security identifier.",
+			 function );
+
+			goto on_error;
+		}
+		( (libfwnt_internal_security_identifier_t *) internal_access_control_entry->security_identifier )->is_managed = 1;
+
 		if( libfwnt_security_identifier_copy_from_byte_stream(
 		     internal_access_control_entry->security_identifier,
 		     &( byte_stream[ sid_offset ] ),
@@ -529,6 +542,86 @@ on_error:
 		 NULL );
 	}
 	return( -1 );
+}
+
+/* Retrieves the type
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_access_control_entry_get_type(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint8_t *type,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_get_type";
+
+	if( access_control_entry == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( -1 );
+	}
+	internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) access_control_entry;
+
+	if( type == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid type.",
+		 function );
+
+		return( -1 );
+	}
+	*type = internal_access_control_entry->type;
+
+	return( 1 );
+}
+
+/* Retrieves the flags
+ * Returns 1 if successful or -1 on error
+ */
+int libfwnt_access_control_entry_get_flags(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint8_t *flags,
+     libcerror_error_t **error )
+{
+	libfwnt_internal_access_control_entry_t *internal_access_control_entry = NULL;
+	static char *function                                                  = "libfwnt_access_control_entry_get_flags";
+
+	if( access_control_entry == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( -1 );
+	}
+	internal_access_control_entry = (libfwnt_internal_access_control_entry_t *) access_control_entry;
+
+	if( flags == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid flags.",
+		 function );
+
+		return( -1 );
+	}
+	*flags = internal_access_control_entry->flags;
+
+	return( 1 );
 }
 
 /* Retrieves the access mask

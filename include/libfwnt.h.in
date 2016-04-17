@@ -126,7 +126,7 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
      int byte_order,
      libfwnt_error_t **error );
 
-/* Retrieves the owner security identifier
+/* Retrieves the owner security identifier (SID)
  * Returns 1 if successful, 0 if not available or -1 on error
  */
 LIBFWNT_EXTERN \
@@ -135,13 +135,31 @@ int libfwnt_security_descriptor_get_owner(
      libfwnt_security_identifier_t **security_identifier,
      libfwnt_error_t **error );
 
-/* Retrieves the group security identifier
+/* Retrieves the group security identifier (SID)
  * Returns 1 if successful, 0 if not available or -1 on error
  */
 LIBFWNT_EXTERN \
 int libfwnt_security_descriptor_get_group(
      libfwnt_security_descriptor_t *security_descriptor,
      libfwnt_security_identifier_t **security_identifier,
+     libfwnt_error_t **error );
+
+/* Retrieves the discretionary access control list (ACL)
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_discretionary_acl(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_access_control_list_t **access_control_list,
+     libfwnt_error_t **error );
+
+/* Retrieves the system access control list (ACL)
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_security_descriptor_get_system_acl(
+     libfwnt_security_descriptor_t *security_descriptor,
+     libfwnt_access_control_list_t **access_control_list,
      libfwnt_error_t **error );
 
 /* -------------------------------------------------------------------------
@@ -305,7 +323,25 @@ int libfwnt_access_control_entry_free(
      libfwnt_access_control_entry_t **access_control_entry,
      libfwnt_error_t **error );
 
-/* Retrieves the owner security identifier
+/* Retrieves the type
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_type(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint8_t *access_mask,
+     libfwnt_error_t **error );
+
+/* Retrieves the flags
+ * Returns 1 if successful, 0 if not available or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_access_control_entry_get_flags(
+     libfwnt_access_control_entry_t *access_control_entry,
+     uint8_t *access_mask,
+     libfwnt_error_t **error );
+
+/* Retrieves the access mask
  * Returns 1 if successful, 0 if not available or -1 on error
  */
 LIBFWNT_EXTERN \

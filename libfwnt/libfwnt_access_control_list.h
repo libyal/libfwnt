@@ -61,6 +61,10 @@ int libfwnt_access_control_list_free(
      libfwnt_access_control_list_t **access_control_list,
      libcerror_error_t **error );
 
+int libfwnt_internal_access_control_list_free(
+     libfwnt_internal_access_control_list_t **internal_access_control_list,
+     libcerror_error_t **error );
+
 LIBFWNT_EXTERN \
 int libfwnt_access_control_list_copy_from_byte_stream(
      libfwnt_access_control_list_t *access_control_list,
