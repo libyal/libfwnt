@@ -237,7 +237,7 @@ Contains a GUID
 
 === [[access_rights_flags]]Access rights flags (ACCESS_MASK)
 
-[cols="1,1,1,5",options="header"]
+[cols="1,1,5",options="header"]
 |===
 | Bit offset | Identifier | Description
 | 0 - 15 | | Specific rights
