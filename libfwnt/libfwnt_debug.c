@@ -123,58 +123,58 @@ const char *libfwnt_debug_print_access_control_entry_type(
 {
 	switch( entry_type )
 	{
-		case 0x00:
+		case LIBFWNT_ACCESS_ALLOWED:
 			return( "Access allowed (ACCESS_ALLOWED_ACE_TYPE)" );
 
-		case 0x01:
+		case LIBFWNT_ACCESS_DENIED:
 			return( "Access denied (ACCESS_DENIED_ACE_TYPE)" );
 
-		case 0x02:
+		case LIBFWNT_SYSTEM_AUDIT:
 			return( "System-audit (SYSTEM_AUDIT_ACE_TYPE)" );
 
-		case 0x03:
+		case LIBFWNT_SYSTEM_ALARM:
 			return( "System-alarm (SYSTEM_ALARM_ACE_TYPE)" );
 
-		case 0x04:
+		case LIBFWNT_ACCESS_ALLOWED_COMPOUND:
 			return( "Access allowed (ACCESS_ALLOWED_COMPOUND_ACE_TYPE)" );
 
-		case 0x05:
+		case LIBFWNT_ACCESS_ALLOWED_OBJECT:
 			return( "Access allowed (ACCESS_ALLOWED_OBJECT_ACE_TYPE)" );
 
-		case 0x06:
+		case LIBFWNT_ACCESS_DENIED_OBJECT:
 			return( "Access denied (ACCESS_DENIED_OBJECT_ACE_TYPE)" );
 
-		case 0x07:
+		case LIBFWNT_SYSTEM_AUDIT_OBJECT:
 			return( "System-audit (SYSTEM_AUDIT_OBJECT_ACE_TYPE)" );
 
-		case 0x08:
+		case LIBFWNT_SYSTEM_ALARM_OBJECT:
 			return( "System-alarm (SYSTEM_ALARM_OBJECT_ACE_TYPE)" );
 
-		case 0x09:
+		case LIBFWNT_ACCESS_ALLOWED_CALLBACK:
 			return( "Access allowed (ACCESS_ALLOWED_CALLBACK_ACE_TYPE)" );
 
-		case 0x0a:
+		case LIBFWNT_ACCESS_DENIED_CALLBACK:
 			return( "Access denied (ACCESS_DENIED_CALLBACK_ACE_TYPE)" );
 
-		case 0x0b:
+		case LIBFWNT_ACCESS_ALLOWED_CALLBACK_OBJECT:
 			return( "Access allowed (ACCESS_ALLOWED_CALLBACK_OBJECT_ACE_TYPE)" );
 
-		case 0x0c:
+		case LIBFWNT_ACCESS_DENIED_CALLBACK_OBJECT:
 			return( "Access denied (ACCESS_DENIED_CALLBACK_OBJECT_ACE_TYPE)" );
 
-		case 0x0d:
+		case LIBFWNT_SYSTEM_AUDIT_CALLBACK:
 			return( "System-audit (SYSTEM_AUDIT_CALLBACK_ACE_TYPE)" );
 
-		case 0x0e:
+		case LIBFWNT_SYSTEM_ALARM_CALLBACK:
 			return( "System-alarm (SYSTEM_ALARM_CALLBACK_ACE_TYPE)" );
 
-		case 0x0f:
+		case LIBFWNT_SYSTEM_AUDIT_CALLBACK_OBJECT:
 			return( "System-audit (SYSTEM_AUDIT_CALLBACK_OBJECT_ACE_TYPE)" );
 
-		case 0x10:
+		case LIBFWNT_SYSTEM_ALARM_CALLBACK_OBJECT:
 			return( "System-alarm (SYSTEM_ALARM_CALLBACK_OBJECT_ACE_TYPE)" );
 
-		case 0x11:
+		case LIBFWNT_SYSTEM_MANDATORY_LABEL:
 			return( "Mandatory label (SYSTEM_MANDATORY_LABEL_ACE_TYPE)" );
 	}
 	return( "UNKNOWN" );

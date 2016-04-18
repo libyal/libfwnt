@@ -64,6 +64,18 @@ int pyfwnt_access_control_entry_init(
 void pyfwnt_access_control_entry_free(
       pyfwnt_access_control_entry_t *pyfwnt_access_control_entry );
 
+PyObject *pyfwnt_access_control_entry_get_type(
+           pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
+           PyObject *arguments );
+
+PyObject *pyfwnt_access_control_entry_get_flags(
+           pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
+           PyObject *arguments );
+
+PyObject *pyfwnt_access_control_entry_get_access_mask(
+           pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
+           PyObject *arguments );
+
 PyObject *pyfwnt_access_control_entry_get_security_identifier(
            pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
            PyObject *arguments );

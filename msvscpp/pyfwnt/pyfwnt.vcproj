@@ -186,6 +186,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_access_control_types.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\pyfwnt\pyfwnt_error.c"
 				>
 			</File>
@@ -221,6 +225,10 @@
 			</File>
 			<File
 				RelativePath="..\..\pyfwnt\pyfwnt_access_control_list.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_access_control_types.h"
 				>
 			</File>
 			<File

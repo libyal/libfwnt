@@ -1,4 +1,4 @@
-.Dd April 17, 2016
+.Dd April 18, 2016
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
@@ -75,9 +75,9 @@ Access control entry (ACE) functions
 .Ft int
 .Fn libfwnt_access_control_entry_free "libfwnt_access_control_entry_t **access_control_entry, libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_entry_get_type "libfwnt_access_control_entry_t *access_control_entry, uint8_t *access_mask, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_get_type "libfwnt_access_control_entry_t *access_control_entry, uint8_t *type, libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_entry_get_flags "libfwnt_access_control_entry_t *access_control_entry, uint8_t *access_mask, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_get_flags "libfwnt_access_control_entry_t *access_control_entry, uint8_t *flags, libfwnt_error_t **error"
 .Ft int
 .Fn libfwnt_access_control_entry_get_access_mask "libfwnt_access_control_entry_t *access_control_entry, uint32_t *access_mask, libfwnt_error_t **error"
 .Ft int

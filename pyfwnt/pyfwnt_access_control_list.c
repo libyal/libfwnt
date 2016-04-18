@@ -232,7 +232,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes a access control list object
+/* Intializes an access control list object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_list_init(
@@ -256,7 +256,7 @@ int pyfwnt_access_control_list_init(
 	return( 0 );
 }
 
-/* Frees a access control list object
+/* Frees an access control list object
  */
 void pyfwnt_access_control_list_free(
       pyfwnt_access_control_list_t *pyfwnt_access_control_list )

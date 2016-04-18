@@ -28,6 +28,7 @@
 
 #include "pyfwnt_access_control_entry.h"
 #include "pyfwnt_error.h"
+#include "pyfwnt_integer.h"
 #include "pyfwnt_libcerror.h"
 #include "pyfwnt_libcstring.h"
 #include "pyfwnt_libfwnt.h"
@@ -38,6 +39,27 @@
 PyMethodDef pyfwnt_access_control_entry_object_methods[] = {
 
 	/* Functions to access the access control entry */
+
+	{ "get_type",
+	  (PyCFunction) pyfwnt_access_control_entry_get_type,
+	  METH_NOARGS,
+	  "get_type() -> Integer\n"
+	  "\n"
+	  "Retrieves the type." },
+
+	{ "get_flags",
+	  (PyCFunction) pyfwnt_access_control_entry_get_flags,
+	  METH_NOARGS,
+	  "get_flags() -> Integer\n"
+	  "\n"
+	  "Retrieves the flags." },
+
+	{ "get_access_mask",
+	  (PyCFunction) pyfwnt_access_control_entry_get_access_mask,
+	  METH_NOARGS,
+	  "get_access_mask() -> Integer\n"
+	  "\n"
+	  "Retrieves the access mask." },
 
 	{ "get_security_identifier",
 	  (PyCFunction) pyfwnt_access_control_entry_get_security_identifier,
@@ -51,6 +73,12 @@ PyMethodDef pyfwnt_access_control_entry_object_methods[] = {
 };
 
 PyGetSetDef pyfwnt_access_control_entry_object_get_set_definitions[] = {
+
+	{ "access_mask",
+	  (getter) pyfwnt_access_control_entry_get_access_mask,
+	  (setter) 0,
+	  "The access mask.",
+	  NULL },
 
 	{ "security_identifier",
 	  (getter) pyfwnt_access_control_entry_get_security_identifier,
@@ -218,7 +246,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes a access control entry object
+/* Intializes an access control entry object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_entry_init(
@@ -242,7 +270,7 @@ int pyfwnt_access_control_entry_init(
 	return( 0 );
 }
 
-/* Frees a access control entry object
+/* Frees an access control entry object
  */
 void pyfwnt_access_control_entry_free(
       pyfwnt_access_control_entry_t *pyfwnt_access_control_entry )
@@ -317,6 +345,170 @@ void pyfwnt_access_control_entry_free(
 	}
 	ob_type->tp_free(
 	 (PyObject*) pyfwnt_access_control_entry );
+}
+
+/* Retrieves the type
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyfwnt_access_control_entry_get_type(
+           pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
+           PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
+{
+	libcerror_error_t *error = NULL;
+	PyObject *integer_object = NULL;
+	static char *function    = "pyfwnt_access_control_entry_get_type";
+	uint8_t type             = 0;
+	int result               = 0;
+
+	PYFWNT_UNREFERENCED_PARAMETER( arguments )
+
+	if( pyfwnt_access_control_entry == NULL )
+	{
+		PyErr_Format(
+		 PyExc_TypeError,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( NULL );
+	}
+	Py_BEGIN_ALLOW_THREADS
+
+	result = libfwnt_access_control_entry_get_type(
+	          pyfwnt_access_control_entry->access_control_entry,
+	          &type,
+	          &error );
+
+	Py_END_ALLOW_THREADS
+
+	if( result != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_IOError,
+		 "%s: unable to retrieve type.",
+		 function );
+
+		libcerror_error_free(
+		 &error );
+
+		return( NULL );
+	}
+#if PY_MAJOR_VERSION >= 3
+	integer_object = PyLong_FromLong(
+	                  (long) type );
+#else
+	integer_object = PyInt_FromLong(
+	                  (long) type );
+#endif
+	return( integer_object );
+}
+
+/* Retrieves the flags
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyfwnt_access_control_entry_get_flags(
+           pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
+           PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
+{
+	libcerror_error_t *error = NULL;
+	PyObject *integer_object = NULL;
+	static char *function    = "pyfwnt_access_control_entry_get_flags";
+	uint8_t flags            = 0;
+	int result               = 0;
+
+	PYFWNT_UNREFERENCED_PARAMETER( arguments )
+
+	if( pyfwnt_access_control_entry == NULL )
+	{
+		PyErr_Format(
+		 PyExc_TypeError,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( NULL );
+	}
+	Py_BEGIN_ALLOW_THREADS
+
+	result = libfwnt_access_control_entry_get_flags(
+	          pyfwnt_access_control_entry->access_control_entry,
+	          &flags,
+	          &error );
+
+	Py_END_ALLOW_THREADS
+
+	if( result != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_IOError,
+		 "%s: unable to retrieve flags.",
+		 function );
+
+		libcerror_error_free(
+		 &error );
+
+		return( NULL );
+	}
+#if PY_MAJOR_VERSION >= 3
+	integer_object = PyLong_FromLong(
+	                  (long) flags );
+#else
+	integer_object = PyInt_FromLong(
+	                  (long) flags );
+#endif
+	return( integer_object );
+}
+
+/* Retrieves the access mask
+ * Returns a Python object if successful or NULL on error
+ */
+PyObject *pyfwnt_access_control_entry_get_access_mask(
+           pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
+           PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
+{
+	libcerror_error_t *error = NULL;
+	PyObject *integer_object = NULL;
+	static char *function    = "pyfwnt_access_control_entry_get_access_mask";
+	uint32_t access_mask     = 0;
+	int result               = 0;
+
+	PYFWNT_UNREFERENCED_PARAMETER( arguments )
+
+	if( pyfwnt_access_control_entry == NULL )
+	{
+		PyErr_Format(
+		 PyExc_TypeError,
+		 "%s: invalid access control entry.",
+		 function );
+
+		return( NULL );
+	}
+	Py_BEGIN_ALLOW_THREADS
+
+	result = libfwnt_access_control_entry_get_access_mask(
+	          pyfwnt_access_control_entry->access_control_entry,
+	          &access_mask,
+	          &error );
+
+	Py_END_ALLOW_THREADS
+
+	if( result != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_IOError,
+		 "%s: unable to retrieve access mask.",
+		 function );
+
+		libcerror_error_free(
+		 &error );
+
+		return( NULL );
+	}
+	integer_object = pyfwnt_integer_unsigned_new_from_64bit(
+	                  (uint32_t) access_mask );
+
+	return( integer_object );
 }
 
 /* Retrieves the security identifier

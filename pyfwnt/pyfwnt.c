@@ -29,6 +29,7 @@
 #include "pyfwnt.h"
 #include "pyfwnt_access_control_entries.h"
 #include "pyfwnt_access_control_entry.h"
+#include "pyfwnt_access_control_types.h"
 #include "pyfwnt_access_control_list.h"
 #include "pyfwnt_error.h"
 #include "pyfwnt_libcerror.h"
@@ -129,6 +130,7 @@ PyMODINIT_FUNC initpyfwnt(
 	PyObject *module                                 = NULL;
 	PyTypeObject *access_control_entries_type_object = NULL;
 	PyTypeObject *access_control_entry_type_object   = NULL;
+	PyTypeObject *access_control_types_type_object   = NULL;
 	PyTypeObject *access_control_list_type_object    = NULL;
 	PyTypeObject *security_descriptor_type_object    = NULL;
 	PyTypeObject *security_identifier_type_object    = NULL;
@@ -264,6 +266,25 @@ PyMODINIT_FUNC initpyfwnt(
 	 module,
 	 "access_control_entry",
 	 (PyObject *) access_control_entry_type_object );
+
+	/* Setup the access control types type object
+	 */
+	pyfwnt_access_control_types_type_object.tp_new = PyType_GenericNew;
+
+	if( PyType_Ready(
+	     &pyfwnt_access_control_types_type_object ) < 0 )
+	{
+		goto on_error;
+	}
+	Py_IncRef(
+	 (PyObject *) &pyfwnt_access_control_types_type_object );
+
+	access_control_types_type_object = &pyfwnt_access_control_types_type_object;
+
+	PyModule_AddObject(
+	 module,
+	 "access_control_types",
+	 (PyObject *) access_control_types_type_object );
 
 #if PY_MAJOR_VERSION >= 3
 	return( module );

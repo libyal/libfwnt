@@ -329,7 +329,7 @@ int libfwnt_access_control_entry_free(
 LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_get_type(
      libfwnt_access_control_entry_t *access_control_entry,
-     uint8_t *access_mask,
+     uint8_t *type,
      libfwnt_error_t **error );
 
 /* Retrieves the flags
@@ -338,7 +338,7 @@ int libfwnt_access_control_entry_get_type(
 LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_get_flags(
      libfwnt_access_control_entry_t *access_control_entry,
-     uint8_t *access_mask,
+     uint8_t *flags,
      libfwnt_error_t **error );
 
 /* Retrieves the access mask

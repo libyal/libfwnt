@@ -1,9 +1,4 @@
 TODO
-* Python bindings
-  - security identifier copy from byte stream (add byte order)
-  - security descriptor copy from byte stream (add byte order)
-* remove libcthreads
-
 * lzx
   - add decompression support
   - add compression support
@@ -33,6 +28,9 @@ TODO
   - currently debug functions only
 * security identifier:
   - use array for sub authorities?
+
+20160418
+* worked on Python bindings
 
 20160417
 * worked on security descriptor support
