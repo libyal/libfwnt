@@ -74,6 +74,18 @@ PyMethodDef pyfwnt_access_control_entry_object_methods[] = {
 
 PyGetSetDef pyfwnt_access_control_entry_object_get_set_definitions[] = {
 
+	{ "type",
+	  (getter) pyfwnt_access_control_entry_get_type,
+	  (setter) 0,
+	  "The access mask.",
+	  NULL },
+
+	{ "flags",
+	  (getter) pyfwnt_access_control_entry_get_flags,
+	  (setter) 0,
+	  "The access mask.",
+	  NULL },
+
 	{ "access_mask",
 	  (getter) pyfwnt_access_control_entry_get_access_mask,
 	  (setter) 0,
