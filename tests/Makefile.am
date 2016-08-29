@@ -23,6 +23,7 @@ EXTRA_DIST = \
 	$(check_SCRIPTS)
 
 check_PROGRAMS = \
+	fwnt_test_error \
 	fwnt_test_get_version \
 	fwnt_test_lznt1_decompress \
 	fwnt_test_lzxpress_decompress \
@@ -30,10 +31,23 @@ check_PROGRAMS = \
 	fwnt_test_security_identifier_copy_from \
 	fwnt_test_security_identifier_to_string
 
-fwnt_test_get_version_SOURCES = \
+fwnt_test_error_SOURCES = \
+	fwnt_test_error.c
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_unused.h
+
+fwnt_test_error_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCSTRING_LIBADD@
+
+fwnt_test_get_version_SOURCES = \
 	fwnt_test_get_version.c
+	fwnt_test_libcstring.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_unused.h
 
 fwnt_test_get_version_LDADD = \
 	../libfwnt/libfwnt.la \

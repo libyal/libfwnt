@@ -120,6 +120,7 @@ stamp-h[1-9]
 /libfwnt/libfwnt.rc
 /libfwnt/libfwnt_definitions.h
 /pyfwnt-python[23]/*.[ch]
+/tests/fwnt_test_error
 /tests/fwnt_test_get_version
 /tests/fwnt_test_lznt1_decompress
 /tests/fwnt_test_lzxpress_decompress

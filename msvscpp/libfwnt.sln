@@ -1,6 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fwnt_test_error", "fwnt_test_error\fwnt_test_error.vcproj", "{3D788BD0-5658-47C1-BCFE-27E6D54204A9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A643F7B5-DCC2-4D9D-A424-DABD357F9DCA} = {A643F7B5-DCC2-4D9D-A424-DABD357F9DCA}
+		{20FFC4C9-F44C-45F6-A827-4819B4DF3C9F} = {20FFC4C9-F44C-45F6-A827-4819B4DF3C9F}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fwnt_test_get_version", "fwnt_test_get_version\fwnt_test_get_version.vcproj", "{700B9907-8E83-43AF-9EDF-4CB4A9BBB663}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A643F7B5-DCC2-4D9D-A424-DABD357F9DCA} = {A643F7B5-DCC2-4D9D-A424-DABD357F9DCA}
@@ -124,6 +130,10 @@ Global
 		VSDebug|Win32 = VSDebug|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3D788BD0-5658-47C1-BCFE-27E6D54204A9}.Release|Win32.ActiveCfg = Release|Win32
+		{3D788BD0-5658-47C1-BCFE-27E6D54204A9}.Release|Win32.Build.0 = Release|Win32
+		{3D788BD0-5658-47C1-BCFE-27E6D54204A9}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{3D788BD0-5658-47C1-BCFE-27E6D54204A9}.VSDebug|Win32.Build.0 = VSDebug|Win32
 		{700B9907-8E83-43AF-9EDF-4CB4A9BBB663}.Release|Win32.ActiveCfg = Release|Win32
 		{700B9907-8E83-43AF-9EDF-4CB4A9BBB663}.Release|Win32.Build.0 = Release|Win32
 		{700B9907-8E83-43AF-9EDF-4CB4A9BBB663}.VSDebug|Win32.ActiveCfg = VSDebug|Win32

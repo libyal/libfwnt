@@ -1,4 +1,5 @@
 MSVSCPP_FILES = \
+	fwnt_test_error/fwnt_test_error.vcproj \
 	fwnt_test_get_version/fwnt_test_get_version.vcproj \
 	fwnt_test_lznt1_decompress/fwnt_test_lznt1_decompress.vcproj \
 	fwnt_test_lzxpress_decompress/fwnt_test_lzxpress_decompress.vcproj \
