@@ -1,11 +1,11 @@
 MSVSCPP_FILES = \
 	fwnt_test_error/fwnt_test_error.vcproj \
-	fwnt_test_get_version/fwnt_test_get_version.vcproj \
 	fwnt_test_lznt1_decompress/fwnt_test_lznt1_decompress.vcproj \
 	fwnt_test_lzxpress_decompress/fwnt_test_lzxpress_decompress.vcproj \
 	fwnt_test_lzxpress_huffman_decompress/fwnt_test_lzxpress_huffman_decompress.vcproj \
 	fwnt_test_security_identifier_copy_from/fwnt_test_security_identifier_copy_from.vcproj \
 	fwnt_test_security_identifier_to_string/fwnt_test_security_identifier_to_string.vcproj \
+	fwnt_test_support/fwnt_test_support.vcproj \
 	libcdata/libcdata.vcproj \
 	libcerror/libcerror.vcproj \
 	libcfile/libcfile.vcproj \

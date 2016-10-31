@@ -123,23 +123,23 @@ int main(
 
 	FWNT_TEST_RUN(
 	 "libfwnt_error_free",
-	 fwnt_test_error_free() )
+	 fwnt_test_error_free );
 
 	FWNT_TEST_RUN(
 	 "libfwnt_error_fprint",
-	 fwnt_test_error_fprint() )
+	 fwnt_test_error_fprint );
 
 	FWNT_TEST_RUN(
 	 "libfwnt_error_sprint",
-	 fwnt_test_error_sprint() )
+	 fwnt_test_error_sprint );
 
 	FWNT_TEST_RUN(
 	 "libfwnt_error_backtrace_fprint",
-	 fwnt_test_error_backtrace_fprint() )
+	 fwnt_test_error_backtrace_fprint );
 
 	FWNT_TEST_RUN(
 	 "libfwnt_error_backtrace_sprint",
-	 fwnt_test_error_backtrace_sprint() )
+	 fwnt_test_error_backtrace_sprint );
 
 	return( EXIT_SUCCESS );
 

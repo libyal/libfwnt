@@ -287,5 +287,5 @@ enum LIBFWNT_OUTPUT_ERROR
 	LIBFWNT_OUTPUT_ERROR_INSUFFICIENT_SPACE		= 1
 };
 
-#endif
+#endif /* !defined( _LIBFWNT_ERROR_H ) */
 

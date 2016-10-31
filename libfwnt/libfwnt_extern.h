@@ -38,10 +38,9 @@
 #include <libfwnt/extern.h>
 
 #else
-
 #define LIBFWNT_EXTERN	extern
 
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_INTERNAL_EXTERN_H ) */
 

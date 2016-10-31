@@ -210,5 +210,5 @@ typedef intptr_t libfwnt_security_identifier_t;
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_TYPES_H ) */
 
