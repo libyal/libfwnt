@@ -87,9 +87,15 @@ int main(
 	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
 	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
 
+	/* TODO add tests for libfwnt_access_control_list_initialize */
+
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_list_free",
 	 fwnt_test_access_control_list_free );
+
+	/* TODO add tests for libfwnt_access_control_list_copy_from_byte_stream */
+	/* TODO add tests for libfwnt_access_control_list_get_number_of_entries */
+	/* TODO add tests for libfwnt_access_control_list_get_entry_by_index */
 
 	return( EXIT_SUCCESS );
 

@@ -77,7 +77,6 @@ int libfwnt_internal_access_control_entry_free(
      libfwnt_internal_access_control_entry_t **internal_access_control_entry,
      libcerror_error_t **error );
 
-LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_copy_from_byte_stream(
      libfwnt_access_control_entry_t *access_control_entry,
      const uint8_t *byte_stream,

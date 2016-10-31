@@ -87,9 +87,17 @@ int main(
 	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
 	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
 
+	/* TODO add tests for libfwnt_access_control_entry_initialize */
+
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_entry_free",
 	 fwnt_test_access_control_entry_free );
+
+	/* TODO add tests for libfwnt_access_control_entry_copy_from_byte_stream */
+	/* TODO add tests for libfwnt_access_control_entry_get_type */
+	/* TODO add tests for libfwnt_access_control_entry_get_flags */
+	/* TODO add tests for libfwnt_access_control_entry_get_access_mask */
+	/* TODO add tests for libfwnt_access_control_entry_get_security_identifier */
 
 	return( EXIT_SUCCESS );
 

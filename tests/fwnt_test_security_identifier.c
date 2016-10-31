@@ -34,15 +34,19 @@
 #include "fwnt_test_memory.h"
 #include "fwnt_test_unused.h"
 
+uint8_t fwnt_test_security_identifier_byte_stream[ 28 ] = {
+	0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
+	0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
+
 /* Tests the libfwnt_security_identifier_initialize function
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_security_identifier_initialize(
      void )
 {
-	libcerror_error_t *error = NULL;
-	libfwnt_security_identifier_t *security_identifier      = NULL;
-	int result               = 0;
+	libcerror_error_t *error                           = NULL;
+	libfwnt_security_identifier_t *security_identifier = NULL;
+	int result                                         = 0;
 
 	/* Test libfwnt_security_identifier_initialize
 	 */
@@ -257,10 +261,6 @@ on_error:
 int fwnt_test_security_identifier_copy_from_byte_stream(
      void )
 {
-	uint8_t byte_stream[ 28 ] = {
-		0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
-		0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
-
 	libcerror_error_t *error                           = NULL;
 	libfwnt_security_identifier_t *security_identifier = NULL;
 	int result                                         = 0;
@@ -288,7 +288,7 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 */
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -306,7 +306,7 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 */
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          NULL,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -344,7 +344,7 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          0,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -360,7 +360,7 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          (size_t) SSIZE_MAX + 1,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -376,7 +376,7 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          8,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -395,7 +395,7 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          (uint8_t) 'X',
 	          &error );
@@ -454,10 +454,6 @@ on_error:
 int fwnt_test_security_identifier_get_string_size(
      void )
 {
-	uint8_t byte_stream[ 28 ] = {
-		0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
-		0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
-
 	libcerror_error_t *error                           = NULL;
 	libfwnt_security_identifier_t *security_identifier = NULL;
 	size_t string_size                                 = 0;
@@ -484,7 +480,7 @@ int fwnt_test_security_identifier_get_string_size(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -615,10 +611,6 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 {
 	uint8_t utf8_string[ 64 ];
 
-	uint8_t byte_stream[ 28 ] = {
-		0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
-		0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
-
 	libcerror_error_t *error                           = NULL;
 	libfwnt_security_identifier_t *security_identifier = NULL;
 	size_t utf8_string_index                           = 0;
@@ -645,7 +637,7 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -824,10 +816,6 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 {
 	uint16_t utf16_string[ 64 ];
 
-	uint8_t byte_stream[ 28 ] = {
-		0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
-		0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
-
 	libcerror_error_t *error                           = NULL;
 	libfwnt_security_identifier_t *security_identifier = NULL;
 	size_t utf16_string_index                          = 0;
@@ -854,7 +842,7 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -1033,10 +1021,6 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 {
 	uint32_t utf32_string[ 64 ];
 
-	uint8_t byte_stream[ 28 ] = {
-		0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
-		0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
-
 	libcerror_error_t *error                           = NULL;
 	libfwnt_security_identifier_t *security_identifier = NULL;
 	size_t utf32_string_index                          = 0;
@@ -1063,7 +1047,7 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
-	          byte_stream,
+	          fwnt_test_security_identifier_byte_stream,
 	          28,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
