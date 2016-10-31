@@ -666,6 +666,10 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
+        FWNT_TEST_ASSERT_IS_NOT_NULL(
+         "access_control_entry",
+         access_control_entry );
+
 	result = libfwnt_access_control_entry_free(
 	          &access_control_entry,
 	          NULL );
