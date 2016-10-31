@@ -10,26 +10,54 @@ AM_CPPFLAGS = \
 
 TESTS = \
 	test_api_functions.sh \
-	test_security_identifier_copy_from.sh \
-	test_security_identifier_to_string.sh
+	test_api_types.sh
 
 check_SCRIPTS = \
 	test_api_functions.sh \
-	test_runner.sh \
-	test_security_identifier_copy_from.sh \
-	test_security_identifier_to_string.sh
+	test_api_types.sh \
+	test_runner.sh
 
 EXTRA_DIST = \
 	$(check_SCRIPTS)
 
 check_PROGRAMS = \
+	fwnt_test_access_control_entry \
+	fwnt_test_access_control_list \
 	fwnt_test_error \
 	fwnt_test_lznt1_decompress \
 	fwnt_test_lzxpress_decompress \
 	fwnt_test_lzxpress_huffman_decompress \
-	fwnt_test_security_identifier_copy_from \
-	fwnt_test_security_identifier_to_string \
+	fwnt_test_security_descriptor \
+	fwnt_test_security_identifier \
 	fwnt_test_support
+
+fwnt_test_access_control_entry_SOURCES = \
+	fwnt_test_access_control_entry.c
+	fwnt_test_libcerror.h \
+	fwnt_test_libcstring.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_memory.c fwnt_test_memory.h \
+	fwnt_test_unused.h
+
+fwnt_test_access_control_entry_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
+
+fwnt_test_access_control_list_SOURCES = \
+	fwnt_test_access_control_list.c
+	fwnt_test_libcerror.h \
+	fwnt_test_libcstring.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_memory.c fwnt_test_memory.h \
+	fwnt_test_unused.h
+
+fwnt_test_access_control_list_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
 
 fwnt_test_error_SOURCES = \
 	fwnt_test_error.c
@@ -90,24 +118,30 @@ fwnt_test_lzxpress_huffman_decompress_LDADD = \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 
-fwnt_test_security_identifier_copy_from_SOURCES = \
+fwnt_test_security_descriptor_SOURCES = \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
-	fwnt_test_security_identifier_copy_from.c
+	fwnt_test_macros.h \
+	fwnt_test_memory.c fwnt_test_memory.h \
+	fwnt_test_security_descriptor.c
+	fwnt_test_unused.h
 
-fwnt_test_security_identifier_copy_from_LDADD = \
+fwnt_test_security_descriptor_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 
-fwnt_test_security_identifier_to_string_SOURCES = \
+fwnt_test_security_identifier_SOURCES = \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
-	fwnt_test_security_identifier_to_string.c
+	fwnt_test_macros.h \
+	fwnt_test_memory.c fwnt_test_memory.h \
+	fwnt_test_security_identifier.c
+	fwnt_test_unused.h
 
-fwnt_test_security_identifier_to_string_LDADD = \
+fwnt_test_security_identifier_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@

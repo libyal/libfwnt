@@ -14,11 +14,7 @@ TODO
   - lznt1 functions
   - lzxpress functions
 * add tests
-  - access control entry functions
-  - access control list functions
   - locale identifier functions
-  - security descriptor functions (improve)
-  - security identifier functions (check)
   - compression
 * Python bindings
   - add locale identifier support
@@ -28,6 +24,9 @@ TODO
   - currently debug functions only
 * security identifier:
   - use array for sub authorities?
+
+20161031
+* worked on tests
 
 20160418
 * worked on Python bindings

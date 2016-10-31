@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fwnt_test_security_identifier_to_string"
-	ProjectGUID="{9A1EC29B-8646-497C-A680-0039BD1D5EEE}"
-	RootNamespace="fwnt_test_security_identifier_to_string"
+	Name="fwnt_test_security_identifier"
+	ProjectGUID="{5D14A80B-32AE-44F7-ABB2-BD4FDA81FB91}"
+	RootNamespace="fwnt_test_security_identifier"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -176,7 +176,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\tests\fwnt_test_security_identifier_to_string.c"
+				RelativePath="..\..\tests\fwnt_test_memory.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_security_identifier.c"
 				>
 			</File>
 		</Filter>
@@ -195,6 +199,18 @@
 			</File>
 			<File
 				RelativePath="..\..\tests\fwnt_test_libfwnt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_macros.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_memory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_unused.h"
 				>
 			</File>
 		</Filter>
