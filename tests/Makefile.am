@@ -32,7 +32,7 @@ check_PROGRAMS = \
 	fwnt_test_support
 
 fwnt_test_access_control_entry_SOURCES = \
-	fwnt_test_access_control_entry.c
+	fwnt_test_access_control_entry.c \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
@@ -46,7 +46,7 @@ fwnt_test_access_control_entry_LDADD = \
 	@LIBCSTRING_LIBADD@
 
 fwnt_test_access_control_list_SOURCES = \
-	fwnt_test_access_control_list.c
+	fwnt_test_access_control_list.c \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
@@ -124,7 +124,7 @@ fwnt_test_security_descriptor_SOURCES = \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_memory.c fwnt_test_memory.h \
-	fwnt_test_security_descriptor.c
+	fwnt_test_security_descriptor.c \
 	fwnt_test_unused.h
 
 fwnt_test_security_descriptor_LDADD = \
@@ -138,7 +138,7 @@ fwnt_test_security_identifier_SOURCES = \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_memory.c fwnt_test_memory.h \
-	fwnt_test_security_identifier.c
+	fwnt_test_security_identifier.c \
 	fwnt_test_unused.h
 
 fwnt_test_security_identifier_LDADD = \
