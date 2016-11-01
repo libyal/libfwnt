@@ -4,8 +4,7 @@ AM_CFLAGS = \
 	-I$(top_srcdir)/common \
 	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
-	@LIBCDATA_CPPFLAGS@ \
-	@LIBUNA_CPPFLAGS@
+	@LIBCDATA_CPPFLAGS@
 
 pyexec_LTLIBRARIES = pyfwnt.la
 
