@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="fwnt_test_lznt1_decompress"
-	ProjectGUID="{01B92B09-63E1-453E-B11A-BBE533E41AA9}"
-	RootNamespace="fwnt_test_lznt1_decompress"
+	Name="fwnt_test_lznt1"
+	ProjectGUID="{EAD946E7-E740-4FFE-BAAA-70910816401C}"
+	RootNamespace="fwnt_test_lznt1"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -176,7 +176,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\tests\fwnt_test_lznt1_decompress.c"
+				RelativePath="..\..\tests\fwnt_test_lznt1.c"
 				>
 			</File>
 		</Filter>
@@ -190,15 +190,19 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\tests\fwnt_test_libcfile.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\tests\fwnt_test_libcstring.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\tests\fwnt_test_libfwnt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_macros.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\fwnt_test_unused.h"
 				>
 			</File>
 		</Filter>

@@ -2,7 +2,7 @@ MSVSCPP_FILES = \
 	fwnt_test_access_control_entry/fwnt_test_access_control_entry.vcproj \
 	fwnt_test_access_control_list/fwnt_test_access_control_list.vcproj \
 	fwnt_test_error/fwnt_test_error.vcproj \
-	fwnt_test_lznt1_decompress/fwnt_test_lznt1_decompress.vcproj \
+	fwnt_test_lznt1/fwnt_test_lznt1.vcproj \
 	fwnt_test_lzxpress_decompress/fwnt_test_lzxpress_decompress.vcproj \
 	fwnt_test_lzxpress_huffman_decompress/fwnt_test_lzxpress_huffman_decompress.vcproj \
 	fwnt_test_security_descriptor/fwnt_test_security_descriptor.vcproj \
