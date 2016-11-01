@@ -138,5 +138,5 @@ int libfwnt_lzxpress_huffman_stream_decompress(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_LZXPRESS_H ) */
 

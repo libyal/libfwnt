@@ -34,7 +34,7 @@
 #include "fwnt_test_macros.h"
 #include "fwnt_test_unused.h"
 
-uint8_t fwnt_test_lznt1_compressed_byte_stream[ 4064 ] = {
+uint8_t fwnt_test_lzxpress_compressed_byte_stream[ 4064 ] = {
 	0x67, 0xb8, 0x00, 0x09, 0x09, 0x20, 0x20, 0x20, 0x47, 0x4e, 0x55, 0x00, 0x20, 0x4c, 0x45, 0x53,
 	0x53, 0x45, 0x52, 0x20, 0x00, 0x47, 0x45, 0x4e, 0x45, 0x52, 0x41, 0x4c, 0x20, 0x80, 0x50, 0x55,
 	0x42, 0x4c, 0x49, 0x43, 0x20, 0x00, 0x18, 0x60, 0x45, 0x4e, 0x53, 0x45, 0x0a, 0x00, 0x90, 0x11,
@@ -290,10 +290,10 @@ uint8_t fwnt_test_lznt1_compressed_byte_stream[ 4064 ] = {
 	0x1f, 0x01, 0x1f, 0x01, 0xff, 0x1f, 0x01, 0x1f, 0x01, 0x1f, 0x01, 0x1f, 0x01, 0x1f, 0x01, 0x1f,
 	0x01, 0x1f, 0x01, 0x1f, 0x01, 0x1f, 0x1f, 0x01, 0x1f, 0x01, 0x1f, 0x01, 0x1f, 0x01, 0x18, 0x01 };
 
-/* Tests the libfwnt_lznt1_decompress function
+/* Tests the libfwnt_lzxpress_decompress function
  * Returns 1 if successful or 0 if not
  */
-int fwnt_test_lznt1_decompress(
+int fwnt_test_lzxpress_decompress(
      void )
 {
 	uint8_t uncompressed_data[ 8192 ];
@@ -305,8 +305,8 @@ int fwnt_test_lznt1_decompress(
 	/* Must uncompressed data must be 4k block aligned
 	 * even though effective resulting data will be 7640 bytes in size
 	 */
-	result = libfwnt_lznt1_decompress(
-	          fwnt_test_lznt1_compressed_byte_stream,
+	result = libfwnt_lzxpress_decompress(
+	          fwnt_test_lzxpress_compressed_byte_stream,
 	          4064,
 	          uncompressed_data,
 	          &uncompressed_data_size,
@@ -326,7 +326,7 @@ int fwnt_test_lznt1_decompress(
 
 	/* Test error cases
 	 */
-	result = libfwnt_lznt1_decompress(
+	result = libfwnt_lzxpress_decompress(
 	          NULL,
 	          4064,
 	          uncompressed_data,
@@ -345,8 +345,8 @@ int fwnt_test_lznt1_decompress(
 	libcerror_error_free(
 	 &error );
 
-	result = libfwnt_lznt1_decompress(
-	          fwnt_test_lznt1_compressed_byte_stream,
+	result = libfwnt_lzxpress_decompress(
+	          fwnt_test_lzxpress_compressed_byte_stream,
 	          (size_t) SSIZE_MAX + 1,
 	          uncompressed_data,
 	          &uncompressed_data_size,
@@ -364,8 +364,8 @@ int fwnt_test_lznt1_decompress(
 	libcerror_error_free(
 	 &error );
 
-	result = libfwnt_lznt1_decompress(
-	          fwnt_test_lznt1_compressed_byte_stream,
+	result = libfwnt_lzxpress_decompress(
+	          fwnt_test_lzxpress_compressed_byte_stream,
 	          4064,
 	          NULL,
 	          &uncompressed_data_size,
@@ -383,8 +383,8 @@ int fwnt_test_lznt1_decompress(
 	libcerror_error_free(
 	 &error );
 
-	result = libfwnt_lznt1_decompress(
-	          fwnt_test_lznt1_compressed_byte_stream,
+	result = libfwnt_lzxpress_decompress(
+	          fwnt_test_lzxpress_compressed_byte_stream,
 	          4064,
 	          uncompressed_data,
 	          NULL,
@@ -423,11 +423,15 @@ int main(
 	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
 	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
 
-	/* TODO add tests for libfwnt_lznt1_compress */
+	/* TODO add tests for libfwnt_lzxpress_get_uncompressed_data_size */
+	/* TODO add tests for libfwnt_lzxpress_compress */
 
 	FWNT_TEST_RUN(
-	 "libfwnt_lznt1_decompress",
-	 fwnt_test_lznt1_decompress );
+	 "libfwnt_lzxpress_decompress",
+	 fwnt_test_lzxpress_decompress );
+
+	/* TODO add tests for libfwnt_lzxpress_huffman_decompress */
+	/* TODO add tests for libfwnt_lzxpress_huffman_stream_decompress */
 
 	return( EXIT_SUCCESS );
 

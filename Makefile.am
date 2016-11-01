@@ -14,9 +14,6 @@ SUBDIRS = \
 	pyfwnt-python3 \
 	po \
 	manuals \
-	libclocale \
-	libuna \
-	libcfile \
 	tests \
 	msvscpp
 

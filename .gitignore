@@ -125,8 +125,7 @@ stamp-h[1-9]
 /tests/fwnt_test_access_control_list
 /tests/fwnt_test_error
 /tests/fwnt_test_lznt1
-/tests/fwnt_test_lzxpress_decompress
-/tests/fwnt_test_lzxpress_huffman_decompress
+/tests/fwnt_test_lzxpress
 /tests/fwnt_test_security_descriptor
 /tests/fwnt_test_security_identifier
 /tests/fwnt_test_support
