@@ -61,5 +61,5 @@ int libfwnt_lznt1_decompress(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_LZNT1_H ) */
 

@@ -496,8 +496,6 @@ int libfwnt_lznt1_decompress(
 		{
 			/* Adjust the compression chunk size for the iteration
 			 */
-			// compression_chunk_size += 2;
-
 			uncompressed_chunk_size = *uncompressed_data_size - uncompressed_data_index;
 
 			if( libfwnt_lznt1_decompress_chunk(

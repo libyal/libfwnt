@@ -24,7 +24,7 @@ check_PROGRAMS = \
 	fwnt_test_access_control_entry \
 	fwnt_test_access_control_list \
 	fwnt_test_error \
-	fwnt_test_lznt1_decompress \
+	fwnt_test_lznt1 \
 	fwnt_test_lzxpress_decompress \
 	fwnt_test_lzxpress_huffman_decompress \
 	fwnt_test_security_descriptor \
@@ -70,19 +70,16 @@ fwnt_test_error_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCSTRING_LIBADD@
 
-fwnt_test_lznt1_decompress_SOURCES = \
-	fwnt_test_libcfile.h \
+fwnt_test_lznt1_SOURCES = \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
-	fwnt_test_lznt1_decompress.c
+	fwnt_test_lznt1.c \
+	fwnt_test_macros.h \
+	fwnt_test_unused.h
 
-fwnt_test_lznt1_decompress_LDADD = \
+fwnt_test_lznt1_LDADD = \
 	../libfwnt/libfwnt.la \
-	@LIBCFILE_LIBADD@ \
-	@LIBUNA_LIBADD@ \
-	@LIBCNOTIFY_LIBADD@ \
-	@LIBCLOCALE_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 
