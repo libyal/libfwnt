@@ -29,71 +29,6 @@
 #include "libfwnt_libcnotify.h"
 #include "libfwnt_lzxpress.h"
 
-/* Determines the uncompressed data size from the LZXPRESS (LZ77 + DIRECT2) compressed data
- * Return 1 on success or -1 on error
- */
-int libfwnt_lzxpress_get_uncompressed_data_size(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     size_t *uncompressed_data_size,
-     libcerror_error_t **error )
-{
-	static char *function = "libfwnt_lzxpress_get_uncompressed_data_size";
-
-	if( compressed_data == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data.",
-		 function );
-
-		return( -1 );
-	}
-	if( compressed_data_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid compressed data size value exceeds maximum.",
-		 function );
-
-		return( -1 );
-	}
-	if( uncompressed_data_size == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid uncompressed data size.",
-		 function );
-
-		return( -1 );
-	}
-	if( compressed_data_size <= 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: compressed data size value too small.",
-		 function );
-
-		return( -1 );
-	}
-	/* The uncompressed data size is: ( ( compressed data size - 1 ) * 2 ) + 2
-	 * The first byte in the compressed data contains a bitmask no data.
-	 * Every other compressed byte is uncompressed as an UTF-16 little-endian
-	 * character. An additional end of string characters is added.
-	 */
-	*uncompressed_data_size = compressed_data_size * 2;
-
-	return( 1 );
-}
-
 /* Compresses data using LZXPRESS (LZ77 + DIRECT2) compression
  * Returns 1 on success or -1 on error
  */
@@ -171,9 +106,9 @@ int libfwnt_lzxpress_decompress(
 	size_t uncompressed_data_index         = 0;
 	uint32_t compression_indicator         = 0;
 	uint32_t compression_indicator_bitmask = 0;
-	uint16_t compression_size              = 0;
 	uint16_t compression_tuple             = 0;
-	int16_t compression_offset             = 0;
+	uint16_t compression_tuple_size        = 0;
+	int16_t compression_tuple_offset       = 0;
 
 	if( compressed_data == NULL )
 	{
@@ -230,29 +165,44 @@ int libfwnt_lzxpress_decompress(
 
 		return( -1 );
 	}
-	if( *uncompressed_data_size < ( 2 * compressed_data_size ) )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: uncompressed data size value too small.",
-		 function );
-
-		return( -1 );
-	}
 	while( compressed_data_index < compressed_data_size )
 	{
+		if( uncompressed_data_index >= *uncompressed_data_size )
+		{
+			break;
+		}
 		byte_stream_copy_to_uint32_little_endian(
 		 &( compressed_data[ compressed_data_index ] ),
 		 compression_indicator );
 
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: compressed data index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 function,
+			 compressed_data_index,
+			 compressed_data_index );
+
+			libcnotify_printf(
+			 "%s: compression indicator\t\t\t: 0x%08" PRIx32 "\n",
+			 function,
+			 compression_indicator );
+
+			libcnotify_printf(
+			 "\n" );
+		}
+#endif
 		compressed_data_index += 4;
 
 		for( compression_indicator_bitmask = 0x80000000UL;
 		     compression_indicator_bitmask > 0;
 		     compression_indicator_bitmask >>= 1 )
 		{
+			if( uncompressed_data_index >= *uncompressed_data_size )
+			{
+				break;
+			}
 			if( compressed_data_index >= compressed_data_size )
 			{
 				break;
@@ -271,8 +221,6 @@ int libfwnt_lzxpress_decompress(
 					 "%s: compressed data too small.",
 					 function );
 
-					*uncompressed_data_size = uncompressed_data_index;
-
 					return( -1 );
 				}
 		                byte_stream_copy_to_uint16_little_endian(
@@ -285,14 +233,14 @@ int libfwnt_lzxpress_decompress(
 				 * 0 - 2	the size
 				 * 3 - 15	the offset - 1
 				 */
-				compression_size   = ( compression_tuple & 0x0007 );
-				compression_offset = ( compression_tuple >> 3 ) + 1;
+				compression_tuple_size   = ( compression_tuple & 0x0007 );
+				compression_tuple_offset = ( compression_tuple >> 3 ) + 1;
 
 				/* Check for a first level extended size
-				 * stored in the 4-bits of a shared extended compression size byte
+				 * stored in the 4-bits of a shared extended compression tuple size byte
 				 * the size is added to the previous size
 				 */
-				if( compression_size == 0x07 )
+				if( compression_tuple_size == 0x07 )
 				{
 					if( compression_shared_byte_index == 0 )
 					{
@@ -305,17 +253,15 @@ int libfwnt_lzxpress_decompress(
 							 "%s: compressed data too small.",
 							 function );
 
-							*uncompressed_data_size = uncompressed_data_index;
-
 							return( -1 );
 						}
-						compression_size += compressed_data[ compressed_data_index ] & 0x0f;
+						compression_tuple_size += compressed_data[ compressed_data_index ] & 0x0f;
 
 						compression_shared_byte_index = compressed_data_index++;
 					}
 					else
 					{
-						compression_size += compressed_data[ compression_shared_byte_index ] >> 4;
+						compression_tuple_size += compressed_data[ compression_shared_byte_index ] >> 4;
 
 						compression_shared_byte_index = 0;
 					}
@@ -324,7 +270,7 @@ int libfwnt_lzxpress_decompress(
 				 * stored in the 8-bits of the next byte
 				 * the size is added to the previous size
 				 */
-				if( compression_size == ( 0x07 + 0x0f ) )
+				if( compression_tuple_size == ( 0x07 + 0x0f ) )
 				{
 					if( compressed_data_index >= compressed_data_size )
 					{
@@ -335,17 +281,15 @@ int libfwnt_lzxpress_decompress(
 						 "%s: compressed data too small.",
 						 function );
 
-						*uncompressed_data_size = uncompressed_data_index;
-
 						return( -1 );
 					}
-					compression_size += compressed_data[ compressed_data_index++ ];
+					compression_tuple_size += compressed_data[ compressed_data_index++ ];
 				}
 				/* Check for a third level extended size
 				 * stored in the 16-bits of the next two bytes
 				 * the previous size is ignored
 				 */
-				if( compression_size == ( 0x07 + 0x0f + 0xff ) )
+				if( compression_tuple_size == ( 0x07 + 0x0f + 0xff ) )
 				{
 					if( compressed_data_index >= ( compressed_data_size - 1 ) )
 					{
@@ -356,13 +300,11 @@ int libfwnt_lzxpress_decompress(
 						 "%s: compressed data too small.",
 						 function );
 
-						*uncompressed_data_size = uncompressed_data_index;
-
 						return( -1 );
 					}
 			                byte_stream_copy_to_uint16_little_endian(
 			                 &( compressed_data[ compressed_data_index ] ),
-			                 compression_size );
+			                 compression_tuple_size );
 		
 					compressed_data_index += 2;
 
@@ -370,24 +312,50 @@ int libfwnt_lzxpress_decompress(
 				/* The size value is stored as
 				 * size - 3
 				 */
-				compression_size += 3;
+				compression_tuple_size += 3;
 
-				if( compression_size > 32771 )
+#if defined( HAVE_DEBUG_OUTPUT )
+				if( libcnotify_verbose != 0 )
+				{
+					libcnotify_printf(
+					 "%s: compressed data index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+					 function,
+					 compressed_data_index,
+					 compressed_data_index );
+
+					libcnotify_printf(
+					 "%s: compression tuple offset\t\t\t: %" PRIi16 "\n",
+					 function,
+					 compression_tuple_offset );
+
+					libcnotify_printf(
+					 "%s: compression tuple size\t\t\t: %" PRIu16 "\n",
+					 function,
+					 compression_tuple_size );
+
+					libcnotify_printf(
+					 "%s: uncompressed data index\t\t\t: %" PRIzd "\n",
+					 function,
+					 uncompressed_data_index );
+
+					libcnotify_printf(
+					 "\n" );
+				}
+#endif
+				if( compression_tuple_size > 32771 )
 				{
 					libcerror_error_set(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compression size value out of bounds.",
+					 "%s: compression tuple size value out of bounds.",
 					 function );
-
-					*uncompressed_data_size = uncompressed_data_index;
 
 					return( -1 );
 				}
-				compression_index = uncompressed_data_index - compression_offset;
+				compression_index = uncompressed_data_index - compression_tuple_offset;
 
-				while( compression_size > 0 )
+				while( compression_tuple_size > 0 )
 				{
 					if( compression_index > uncompressed_data_index )
 					{
@@ -401,8 +369,6 @@ int libfwnt_lzxpress_decompress(
 						 compression_index,
 						 uncompressed_data_index );
 
-						*uncompressed_data_size = uncompressed_data_index;
-
 						return( -1 );
 					}
 					if( uncompressed_data_index > *uncompressed_data_size )
@@ -414,13 +380,11 @@ int libfwnt_lzxpress_decompress(
 						 "%s: uncompressed data too small.",
 						 function );
 
-						*uncompressed_data_size = uncompressed_data_index;
-
 						return( -1 );
 					}
 					uncompressed_data[ uncompressed_data_index++ ] = uncompressed_data[ compression_index++ ];
 
-					compression_size--;
+					compression_tuple_size--;
 				}
 			}
 			else
@@ -434,8 +398,6 @@ int libfwnt_lzxpress_decompress(
 					 "%s: compressed data too small.",
 					 function );
 
-					*uncompressed_data_size = uncompressed_data_index;
-
 					return( -1 );
 				}
 				if( uncompressed_data_index > *uncompressed_data_size )
@@ -446,8 +408,6 @@ int libfwnt_lzxpress_decompress(
 					 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
 					 "%s: uncompressed data too small.",
 					 function );
-
-					*uncompressed_data_size = uncompressed_data_index;
 
 					return( -1 );
 				}

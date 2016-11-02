@@ -3,6 +3,7 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/common \
 	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
+	@LIBCNOTIFY_CPPFLAGS@ \
 	@LIBFWNT_DLL_IMPORT@
 
 TESTS = \
@@ -68,6 +69,7 @@ fwnt_test_error_LDADD = \
 
 fwnt_test_lznt1_SOURCES = \
 	fwnt_test_libcerror.h \
+	fwnt_test_libcnotify.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_lznt1.c \
@@ -76,12 +78,13 @@ fwnt_test_lznt1_SOURCES = \
 
 fwnt_test_lznt1_LDADD = \
 	../libfwnt/libfwnt.la \
+	@LIBCNOTIFY_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 
 fwnt_test_lzxpress_SOURCES = \
-	fwnt_test_libcfile.h \
 	fwnt_test_libcerror.h \
+	fwnt_test_libcnotify.h \
 	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_lzxpress.c \
@@ -90,6 +93,7 @@ fwnt_test_lzxpress_SOURCES = \
 
 fwnt_test_lzxpress_LDADD = \
 	../libfwnt/libfwnt.la \
+	@LIBCNOTIFY_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@
 

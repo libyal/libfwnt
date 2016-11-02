@@ -212,7 +212,7 @@ int libfwnt_lznt1_decompress_chunk(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed byte index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
 			 *compressed_data_index,
 			 *compressed_data_index );
@@ -250,7 +250,7 @@ int libfwnt_lznt1_decompress_chunk(
 				if( libcnotify_verbose != 0 )
 				{
 					libcnotify_printf(
-					 "%s: compressed byte index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+					 "%s: compressed data index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 					 function,
 					 *compressed_data_index,
 					 *compressed_data_index );
@@ -431,6 +431,10 @@ int libfwnt_lznt1_decompress(
 	}
 	while( compressed_data_index < compressed_data_size )
 	{
+		if( uncompressed_data_index >= *uncompressed_data_size )
+		{
+			break;
+		}
 		if( ( compressed_data_index + 1 ) >= compressed_data_size )
 		{
 			libcerror_error_set(
@@ -455,7 +459,7 @@ int libfwnt_lznt1_decompress(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed byte index\t\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data index\t\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
 			 compressed_data_index,
 			 compressed_data_index );
