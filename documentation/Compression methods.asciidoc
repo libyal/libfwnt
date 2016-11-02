@@ -10,8 +10,99 @@ by the RtlCompressBuffer and RtlDecompressBuffer functions.
 | COMPRESSION_FORMAT_XPRESS_HUFF | LZXPRESS with Huffman compression.
 |===
 
+=== LZNT1
+The LZNT1 compressed data consists of multiple chunks. Each chunk consists of:
+
+* a chunk header
+* a chunks data
+
+The LZNT1 chunk header is 2 bytes of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0.0 | 12 bits | | Chunk data size +
+The value is stored as chunk data size - 1
+| 1.4 | 3 bits | | [yellow-background]*Signature value*
+| 1.7 | 1 bit | | Is compressed flag +
+0 => uncompressed +
+1 => compressed
+|===
+
+A chunk header value of 0 indicates the end of the compressed data.
+
+....
+while "compressed data" available:
+    read "chunk header"
+
+    if "chunk data size" is 0:
+        break
+
+    if the "is compressed flag" is not set:
+        chunk data is uncompressed
+
+    else:
+        read a "flag byte"
+
+        for "flag bit" in "flag byte" starting with the LSB:
+            if "flag bit" is not set:
+                read a literal (uncompressed) byte
+
+            else:
+                read 16-bit compression tuple
+
+                use the compression tuple to read previously
+                decompressed data
+....
+
+[yellow-background]*TODO describe compression tuple*
+
+=== LZXPRESS
+[yellow-background]*TODO*
+
+=== LZXPRESS Huffman
+The LZXPRESS Huffman compressed data consists of multiple chunks. Each chunk 
+consists of:
+
+* a prefix code table 
+* Huffmann encoded data
+
+The LZXPRESS Huffman prefix code table 256 bytes of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 256 | | Array of prefix codes +
+|===
+
+LZXPRESS Huffman prefix code table contains 512 x 4-bit prefix codes where the 
+4 LSB of byte 0 contain the prefix code for symbol 0, the 4 MSB the prefix code 
+for symbol 1, etc.
+
+Where prefix codes:
+
+* 0 - 255 represent their corresponding byte values;
+* 256 - 511 represent compression tuples (size, offset).
+
+[yellow-background]*TODO: describe how to create prefix code tree*
+
+compression tuple symbol
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0.0 | 4 bits | | Compression size
+| 0.4 | 4 bits | | Compression offset
+| 1.0 | 1 bit | | Compression tuple flag
+|===
+
+[yellow-background]*TODO: describe extended compression size*
+
 == External Links
 
 * http://msdn.microsoft.com/en-us/Library/ff552127(v=vs.85).aspx[MSDN: RtlCompressBuffer function]
 * http://msdn.microsoft.com/en-us/Library/ff552191(v=VS.85).aspx[MSDN: RtlDecompressBuffer function]
 * http://msdn.microsoft.com/en-us/library/jj711990.aspx[MSDN: LZNT1]
+* http://msdn.microsoft.com/library/hh554002(v=prot.10).aspx[MSDN: MS-XCA - Xpress Compression Algorithm]
+* https://msdn.microsoft.com/en-us/library/dd644731.aspx[MSDN: LZXPRESS Huffman]
+

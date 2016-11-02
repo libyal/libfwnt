@@ -49,9 +49,12 @@ struct libfwnt_lzxpress_huffman_tree_node
 	 */
 	libfwnt_lzxpress_huffman_tree_node_t *sub_tree_nodes[ 2 ];
 
+#if defined( HAVE_DEBUG_OUTPUT )
+
 	/* The sub tree node indexes
 	 */
 	uint16_t sub_tree_node_indexes[ 2 ];
+#endif
 };
 
 typedef struct libfwnt_lzxpress_huffman_code_symbol libfwnt_lzxpress_huffman_code_symbol_t;

@@ -478,17 +478,23 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
 
 		if( tree_node->sub_tree_nodes[ sub_tree_node_index ] == NULL )
 		{
-			tree_node->sub_tree_nodes[ sub_tree_node_index ]        = &( tree_nodes[ next_tree_node_index ] );
+			tree_node->sub_tree_nodes[ sub_tree_node_index ] = &( tree_nodes[ next_tree_node_index ] );
+			tree_nodes[ next_tree_node_index ].is_leaf       = 0;
+
+#if defined( HAVE_DEBUG_OUTPUT )
 			tree_node->sub_tree_node_indexes[ sub_tree_node_index ] = next_tree_node_index;
-			tree_nodes[ next_tree_node_index ].is_leaf              = 0;
+#endif
 
 			next_tree_node_index++;
 		}
 		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
 	}
-/* TODO store index instead of pointer */
-	tree_node->sub_tree_nodes[ bits & 0x00000001UL ]        = &( tree_nodes[ tree_node_index ] );
+/* TODO store index instead of pointer ? */
+	tree_node->sub_tree_nodes[ bits & 0x00000001UL ] = &( tree_nodes[ tree_node_index ] );
+
+#if defined( HAVE_DEBUG_OUTPUT )
 	tree_node->sub_tree_node_indexes[ bits & 0x00000001UL ] = tree_node_index;
+#endif
 
 	return( next_tree_node_index );
 }
