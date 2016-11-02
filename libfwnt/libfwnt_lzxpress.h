@@ -48,6 +48,10 @@ struct libfwnt_lzxpress_huffman_tree_node
 	/* The sub tree nodes
 	 */
 	libfwnt_lzxpress_huffman_tree_node_t *sub_tree_nodes[ 2 ];
+
+	/* The sub tree node indexes
+	 */
+	uint16_t sub_tree_node_indexes[ 2 ];
 };
 
 typedef struct libfwnt_lzxpress_huffman_code_symbol libfwnt_lzxpress_huffman_code_symbol_t;
@@ -84,20 +88,20 @@ int libfwnt_lzxpress_huffman_compare_symbols(
      libfwnt_lzxpress_huffman_code_symbol_t *second_symbol );
 
 int libfwnt_lzxpress_huffman_tree_add_leaf(
-     libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
+     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      int tree_node_index,
      uint32_t bits,
      uint8_t number_of_bits );
 
 int libfwnt_lzxpress_huffman_tree_read(
-     libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
+     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      const uint8_t *compressed_data,
      size_t compressed_data_size,
      size_t compressed_data_index,
      libcerror_error_t **error );
 
 int libfwnt_lzxpress_huffman_tree_read_symbol(
-     libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
+     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      libfwnt_bit_stream_t *compressed_data_bit_stream,
      uint16_t *symbol,
      libcerror_error_t **error );

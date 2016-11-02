@@ -75,5 +75,5 @@ ssize_t libfwnt_bit_stream_read(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_BIT_STREAM_H ) */
 

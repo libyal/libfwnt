@@ -458,7 +458,7 @@ int libfwnt_lzxpress_huffman_compare_symbols(
  * Returns 1 on success or -1 on error
  */
 int libfwnt_lzxpress_huffman_tree_add_leaf(
-     libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
+     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      int tree_node_index,
      uint32_t bits,
      uint8_t number_of_bits )
@@ -478,14 +478,17 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
 
 		if( tree_node->sub_tree_nodes[ sub_tree_node_index ] == NULL )
 		{
-			tree_node->sub_tree_nodes[ sub_tree_node_index ] = &( tree_nodes[ next_tree_node_index ] );
-			tree_nodes[ next_tree_node_index ].is_leaf       = 0;
+			tree_node->sub_tree_nodes[ sub_tree_node_index ]        = &( tree_nodes[ next_tree_node_index ] );
+			tree_node->sub_tree_node_indexes[ sub_tree_node_index ] = next_tree_node_index;
+			tree_nodes[ next_tree_node_index ].is_leaf              = 0;
 
 			next_tree_node_index++;
 		}
 		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
 	}
-	tree_node->sub_tree_nodes[ bits & 0x00000001UL ] = &( tree_nodes[ tree_node_index ] );
+/* TODO store index instead of pointer */
+	tree_node->sub_tree_nodes[ bits & 0x00000001UL ]        = &( tree_nodes[ tree_node_index ] );
+	tree_node->sub_tree_node_indexes[ bits & 0x00000001UL ] = tree_node_index;
 
 	return( next_tree_node_index );
 }
@@ -494,7 +497,7 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
  * Returns 1 on success or -1 on error
  */
 int libfwnt_lzxpress_huffman_tree_read(
-     libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
+     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      const uint8_t *compressed_data,
      size_t compressed_data_size,
      size_t compressed_data_index,
@@ -558,13 +561,13 @@ int libfwnt_lzxpress_huffman_tree_read(
 
 		return( -1 );
 	}
+	/* The initial table contains a 4-bits code size per symbol
+	 */
 	for( byte_index = 0;
 	     byte_index < 256;
 	     byte_index++ )
 	{
-		byte_value = compressed_data[ compressed_data_index ];
-
-		compressed_data_index++;
+		byte_value = compressed_data[ compressed_data_index++ ];
 
 		code_symbols[ symbol_index ].symbol    = symbol_index;
 		code_symbols[ symbol_index ].code_size = (uint16_t) ( byte_value & 0x0f );
@@ -589,7 +592,7 @@ int libfwnt_lzxpress_huffman_tree_read(
 	/* Find the first symbol with a code size > 0
 	 */
 	for( symbol_index = 0;
- 	     symbol_index < 512;
+	     symbol_index < 512;
 	     symbol_index++ )
 	{
 		if( code_symbols[ symbol_index ].code_size > 0 )
@@ -619,9 +622,62 @@ int libfwnt_lzxpress_huffman_tree_read(
 		                   number_of_bits );
 
 		bits++;
-
 		symbol_index++;
 	}
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( libcnotify_verbose != 0 )
+	{
+		for( tree_node_index = 0;
+		     tree_node_index < 1024;
+		     tree_node_index++ )
+		{
+			libcnotify_printf(
+			 "%s: tree node: %04d symbol\t\t: 0x%04" PRIx16 "\n",
+			 function,
+			 tree_node_index,
+			 tree_nodes[ tree_node_index ].symbol );
+
+			libcnotify_printf(
+			 "%s: tree node: %04d is leaf\t\t: %" PRId8 "\n",
+			 function,
+			 tree_node_index,
+			 tree_nodes[ tree_node_index ].is_leaf );
+
+			libcnotify_printf(
+			 "%s: tree node: %04d sub node: 0\t\t: %" PRId16 "\n",
+			 function,
+			 tree_node_index,
+			 tree_nodes[ tree_node_index ].sub_tree_node_indexes[ 0 ] );
+
+			libcnotify_printf(
+			 "%s: tree node: %04d sub node: 1\t\t: %" PRId16 "\n",
+			 function,
+			 tree_node_index,
+			 tree_nodes[ tree_node_index ].sub_tree_node_indexes[ 1 ] );
+		}
+		libcnotify_printf(
+		 "\n" );
+
+		for( symbol_index = 0;
+		     symbol_index < 512;
+		     symbol_index++ )
+		{
+			libcnotify_printf(
+			 "%s: symbol: %03d symbol\t\t\t: 0x%04" PRIx16 "\n",
+			 function,
+			 symbol_index,
+			 code_symbols[ symbol_index ].symbol );
+
+			libcnotify_printf(
+			 "%s: symbol: %03d code size\t\t: %" PRIu16 "\n",
+			 function,
+			 symbol_index,
+			 code_symbols[ symbol_index ].code_size );
+		}
+		libcnotify_printf(
+		 "\n" );
+	}
+#endif
 	return( 1 );
 }
 
@@ -629,13 +685,14 @@ int libfwnt_lzxpress_huffman_tree_read(
  * Returns 1 on success or -1 on error
  */
 int libfwnt_lzxpress_huffman_tree_read_symbol(
-     libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ],
+     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      libfwnt_bit_stream_t *compressed_data_bit_stream,
      uint16_t *symbol,
      libcerror_error_t **error )
 {
 	libfwnt_lzxpress_huffman_tree_node_t *tree_node = NULL;
 	static char *function                           = "libfwnt_lzxpress_huffman_tree_read_symbol";
+	uint16_t bits                                   = 0;
 	uint8_t sub_tree_node_index                     = 0;
 
 	if( compressed_data_bit_stream == NULL )
@@ -670,6 +727,26 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
 		compressed_data_bit_stream->bits          <<= 1;
 		compressed_data_bit_stream->number_of_bits -= 1;
 
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: sub tree node index\t\t: 0x%02" PRIx8 "\n",
+			 function,
+			 sub_tree_node_index );
+		}
+#endif
+		if( ( compressed_data_bit_stream->number_of_bits < 16 )
+		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
+		{
+			byte_stream_copy_to_uint16_little_endian(
+			 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
+			 bits );
+
+			compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
+			compressed_data_bit_stream->byte_stream_offset += 2;
+			compressed_data_bit_stream->number_of_bits     += 16;
+		}
 		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
 
 		if( tree_node == NULL )
@@ -846,6 +923,16 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
         while( ( compressed_data_bit_stream->byte_stream_offset < compressed_data_bit_stream->byte_stream_size )
             || ( compressed_data_bit_stream->number_of_bits > 0 ) )
 	{
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: compressed data index\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 function,
+			 compressed_data_bit_stream->byte_stream_offset,
+			 compressed_data_bit_stream->byte_stream_offset );
+		}
+#endif
 		if( libfwnt_lzxpress_huffman_tree_read_symbol(
 		     tree_nodes,
 		     compressed_data_bit_stream,
@@ -861,6 +948,20 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 
 			goto on_error;
 		}
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: number of bits\t\t: %" PRId8 "\n",
+			 function,
+			 compressed_data_bit_stream->number_of_bits );
+
+			libcnotify_printf(
+			 "%s: huffman symbol\t\t: 0x%04" PRIx16 "\n",
+			 function,
+			 symbol );
+		}
+#endif
 		if( ( compressed_data_bit_stream->number_of_bits < 16 )
 		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
 		{
@@ -905,7 +1006,21 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 /* TODO add a read number of bits function ? */
 				compression_offset = (uint32_t) ( compressed_data_bit_stream->bits >> ( 32 - symbol ) );
 			}
-			compression_offset = (uint32_t) ( ( 1 << symbol ) + compression_offset );
+#if defined( HAVE_DEBUG_OUTPUT )
+			if( libcnotify_verbose != 0 )
+			{
+				libcnotify_printf(
+				 "%s: compression size\t: %" PRIu16 "\n",
+				 function,
+				 compression_size );
+
+				libcnotify_printf(
+				 "%s: compression offset\t: %" PRIu32 "\n",
+				 function,
+				 compression_offset );
+			}
+#endif
+			compression_offset = (uint32_t) ( ( 1 << symbol ) | compression_offset );
 
 			compressed_data_bit_stream->bits          <<= symbol;
 			compressed_data_bit_stream->number_of_bits -= (uint8_t) symbol;
@@ -951,6 +1066,25 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 			}
 			compression_size += 3;
 
+#if defined( HAVE_DEBUG_OUTPUT )
+			if( libcnotify_verbose != 0 )
+			{
+				libcnotify_printf(
+				 "%s: compression offset\t: %" PRIi16 "\n",
+				 function,
+				 compression_offset );
+
+				libcnotify_printf(
+				 "%s: compression size\t: %" PRIu16 "\n",
+				 function,
+				 compression_size );
+
+				libcnotify_printf(
+				 "%s: uncompressed data index\t: %" PRIzd "\n",
+				 function,
+				 uncompressed_data_index );
+			}
+#endif
 			if( compression_offset > uncompressed_data_index )
 			{
 				libcerror_error_set(
@@ -1000,6 +1134,13 @@ int libfwnt_lzxpress_huffman_decompress_with_index(
 				compressed_data_bit_stream->number_of_bits     += 16;
 			}
 		}
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "\n" );
+		}
+#endif
 	}
 	*compressed_data_index += compressed_data_bit_stream->byte_stream_offset;
 
