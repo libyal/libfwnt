@@ -98,6 +98,8 @@ compression tuple symbol
 
 [yellow-background]*TODO: describe extended compression size*
 
+[yellow-background]*TODO: decompress up to 65536 bytes of data*
+
 == External Links
 
 * http://msdn.microsoft.com/en-us/Library/ff552127(v=vs.85).aspx[MSDN: RtlCompressBuffer function]

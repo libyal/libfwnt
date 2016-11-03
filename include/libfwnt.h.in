@@ -400,17 +400,6 @@ int libfwnt_lzxpress_huffman_decompress(
      size_t *uncompressed_data_size,
      libfwnt_error_t **error );
 
-/* Decompresses data using LZXPRESS Huffman stream compression
- * Return 1 on success or -1 on error
- */
-LIBFWNT_EXTERN \
-int libfwnt_lzxpress_huffman_stream_decompress(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     uint8_t *uncompressed_data,
-     size_t *uncompressed_data_size,
-     libfwnt_error_t **error );
-
 #if defined( __cplusplus )
 }
 #endif

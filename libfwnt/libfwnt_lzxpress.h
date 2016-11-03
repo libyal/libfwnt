@@ -100,7 +100,7 @@ int libfwnt_lzxpress_huffman_tree_read(
      libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
      const uint8_t *compressed_data,
      size_t compressed_data_size,
-     size_t compressed_data_index,
+     size_t compressed_data_offset,
      libcerror_error_t **error );
 
 int libfwnt_lzxpress_huffman_tree_read_symbol(
@@ -109,25 +109,17 @@ int libfwnt_lzxpress_huffman_tree_read_symbol(
      uint16_t *symbol,
      libcerror_error_t **error );
 
-int libfwnt_lzxpress_huffman_decompress_with_index(
+int libfwnt_lzxpress_huffman_decompress_chunk(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
-     size_t *compressed_data_index,
+     size_t *compressed_data_offset,
      uint8_t *uncompressed_data,
-     size_t *uncompressed_data_size,
-     size_t uncompressed_data_index,
+     size_t uncompressed_data_size,
+     size_t *uncompressed_data_offset,
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
 int libfwnt_lzxpress_huffman_decompress(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     uint8_t *uncompressed_data,
-     size_t *uncompressed_data_size,
-     libcerror_error_t **error );
-
-LIBFWNT_EXTERN \
-int libfwnt_lzxpress_huffman_stream_decompress(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
      uint8_t *uncompressed_data,
