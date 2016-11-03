@@ -43,7 +43,7 @@ int libfwnt_lznt1_compress(
 int libfwnt_lznt1_decompress_chunk(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
-     size_t *compressed_data_index,
+     size_t *compressed_data_offset,
      size_t compression_chunk_size,
      uint8_t *uncompressed_data,
      size_t *uncompressed_data_size,

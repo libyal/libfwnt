@@ -39,7 +39,7 @@ enum LIBFWNT_ERROR_DOMAINS
 	LIBFWNT_ERROR_DOMAIN_INPUT			= (int) 'i',
 	LIBFWNT_ERROR_DOMAIN_MEMORY			= (int) 'm',
 	LIBFWNT_ERROR_DOMAIN_OUTPUT			= (int) 'o',
-	LIBFWNT_ERROR_DOMAIN_RUNTIME			= (int) 'r',
+	LIBFWNT_ERROR_DOMAIN_RUNTIME			= (int) 'r'
 };
 
 /* The argument error codes
@@ -208,6 +208,17 @@ enum LIBFWNT_MEMORY_ERROR
 	LIBFWNT_MEMORY_ERROR_SET_FAILED			= 3
 };
 
+/* The output error codes
+ */
+enum LIBFWNT_OUTPUT_ERROR
+{
+	LIBFWNT_OUTPUT_ERROR_GENERIC			= 0,
+
+	/* There is insuficient space to write the output
+	 */
+	LIBFWNT_OUTPUT_ERROR_INSUFFICIENT_SPACE		= 1
+};
+
 /* The runtime error codes
  * to signify errors regarding runtime processing
  */
@@ -274,17 +285,6 @@ enum LIBFWNT_RUNTIME_ERROR
 	/* An abort was requested
 	 */
 	LIBFWNT_RUNTIME_ERROR_ABORT_REQUESTED		= 15
-};
-
-/* The output error codes
- */
-enum LIBFWNT_OUTPUT_ERROR
-{
-	LIBFWNT_OUTPUT_ERROR_GENERIC			= 0,
-
-	/* There is insuficient space to write the output
-	 */
-	LIBFWNT_OUTPUT_ERROR_INSUFFICIENT_SPACE		= 1
 };
 
 #endif /* !defined( _LIBFWNT_ERROR_H ) */

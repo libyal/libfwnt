@@ -94,7 +94,7 @@ int libfwnt_lznt1_compress(
 int libfwnt_lznt1_decompress_chunk(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
-     size_t *compressed_data_index,
+     size_t *compressed_data_offset,
      size_t compression_chunk_size,
      uint8_t *uncompressed_data,
      size_t *uncompressed_data_size,
@@ -103,7 +103,7 @@ int libfwnt_lznt1_decompress_chunk(
 	static char *function                   = "libfwnt_lznt1_decompress_chunk";
 	size_t compression_tuple_index          = 0;
 	size_t compression_tuple_threshold      = 0;
-	size_t uncompressed_data_index          = 0;
+	size_t uncompressed_data_offset         = 0;
 	uint16_t compression_tuple              = 0;
 	uint16_t compression_tuple_offset_shift = 0;
 	uint16_t compression_tuple_size         = 0;
@@ -134,24 +134,24 @@ int libfwnt_lznt1_decompress_chunk(
 
 		return( -1 );
 	}
-	if( compressed_data_index == NULL )
+	if( compressed_data_offset == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data index.",
+		 "%s: invalid compressed data offset.",
 		 function );
 
 		return( -1 );
 	}
-	if( *compressed_data_index > compressed_data_size )
+	if( *compressed_data_offset > compressed_data_size )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: invalid compressed data index value out of bounds.",
+		 "%s: invalid compressed data offset value out of bounds.",
 		 function );
 
 		return( -1 );
@@ -167,7 +167,7 @@ int libfwnt_lznt1_decompress_chunk(
 
 		return( -1 );
 	}
-	if( ( *compressed_data_index + compression_chunk_size ) > compressed_data_size )
+	if( ( *compressed_data_offset + compression_chunk_size ) > compressed_data_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -206,16 +206,16 @@ int libfwnt_lznt1_decompress_chunk(
 
 	while( compression_chunk_size > 0 )
 	{
-		compression_flag_byte = compressed_data[ *compressed_data_index ];
+		compression_flag_byte = compressed_data[ *compressed_data_offset ];
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed data index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data offset\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
-			 *compressed_data_index,
-			 *compressed_data_index );
+			 *compressed_data_offset,
+			 *compressed_data_offset );
 
 			libcnotify_printf(
 			 "%s: compression flag byte\t\t\t: 0x%02" PRIx8 "\n",
@@ -226,7 +226,7 @@ int libfwnt_lznt1_decompress_chunk(
 			 "\n" );
 		}
 #endif
-		*compressed_data_index += 1;
+		*compressed_data_offset += 1;
 		compression_chunk_size -= 1;
 
 		for( compression_flag_bit_index = 0;
@@ -240,7 +240,7 @@ int libfwnt_lznt1_decompress_chunk(
 				/* Read the compression ( size, offset ) tuple
 				 */
 				byte_stream_copy_to_uint16_little_endian(
-				 &( compressed_data[ *compressed_data_index ] ),
+				 &( compressed_data[ *compressed_data_offset ] ),
 				 compression_tuple );
 
 				compression_tuple_offset = ( compression_tuple >> compression_tuple_offset_shift ) + 1;
@@ -250,10 +250,10 @@ int libfwnt_lznt1_decompress_chunk(
 				if( libcnotify_verbose != 0 )
 				{
 					libcnotify_printf(
-					 "%s: compressed data index\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+					 "%s: compressed data offset\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 					 function,
-					 *compressed_data_index,
-					 *compressed_data_index );
+					 *compressed_data_offset,
+					 *compressed_data_offset );
 
 					libcnotify_printf(
 					 "%s: compression tuple\t\t\t: 0x%04" PRIx16 " (shift: %" PRIu16 ", mask: 0x%04" PRIx16 ")\n",
@@ -273,20 +273,20 @@ int libfwnt_lznt1_decompress_chunk(
 					 compression_tuple_size );
 
 					libcnotify_printf(
-					 "%s: uncompressed data index\t\t\t: %" PRIzd "\n",
+					 "%s: uncompressed data offset\t\t\t: %" PRIzd "\n",
 					 function,
-					 uncompressed_data_index );
+					 uncompressed_data_offset );
 
 					libcnotify_printf(
 					 "\n" );
 				}
 #endif
-				*compressed_data_index += 2;
+				*compressed_data_offset += 2;
 				compression_chunk_size -= 2;
 
 				/* The compression tuple offset refers to an offset in the uncompressed data
 				 */
-				if( (size_t) compression_tuple_offset > uncompressed_data_index )
+				if( (size_t) compression_tuple_offset > uncompressed_data_offset )
 				{
 					libcerror_error_set(
 					 error,
@@ -297,11 +297,11 @@ int libfwnt_lznt1_decompress_chunk(
 
 					return( -1 );
 				}
-				compression_tuple_index = uncompressed_data_index - compression_tuple_offset;
+				compression_tuple_index = uncompressed_data_offset - compression_tuple_offset;
 
 				while( compression_tuple_size > 0 )
 				{
-					if( compression_tuple_index > uncompressed_data_index )
+					if( compression_tuple_index > uncompressed_data_offset )
 					{
 						libcerror_error_set(
 						 error,
@@ -312,7 +312,7 @@ int libfwnt_lznt1_decompress_chunk(
 
 						return( -1 );
 					}
-					if( uncompressed_data_index > *uncompressed_data_size )
+					if( uncompressed_data_offset > *uncompressed_data_size )
 					{
 						libcerror_error_set(
 						 error,
@@ -323,14 +323,14 @@ int libfwnt_lznt1_decompress_chunk(
 
 						return( -1 );
 					}
-					uncompressed_data[ uncompressed_data_index++ ] = uncompressed_data[ compression_tuple_index++ ];
+					uncompressed_data[ uncompressed_data_offset++ ] = uncompressed_data[ compression_tuple_index++ ];
 
 					compression_tuple_size -= 1;
 				}
 			}
 			else
 			{
-				if( uncompressed_data_index > *uncompressed_data_size )
+				if( uncompressed_data_offset > *uncompressed_data_size )
 				{
 					libcerror_error_set(
 					 error,
@@ -341,9 +341,9 @@ int libfwnt_lznt1_decompress_chunk(
 
 					return( -1 );
 				}
-				uncompressed_data[ uncompressed_data_index++ ] = compressed_data[ *compressed_data_index ];
+				uncompressed_data[ uncompressed_data_offset++ ] = compressed_data[ *compressed_data_offset ];
 
-				*compressed_data_index += 1;
+				*compressed_data_offset += 1;
 				compression_chunk_size -= 1;
 			}
 			compression_flag_byte >>= 1;
@@ -355,7 +355,7 @@ int libfwnt_lznt1_decompress_chunk(
 			/* The compression tuple size mask and offset shift
 			 * are dependent on the current buffer offset in the uncompressed data
 			 */
-			while( uncompressed_data_index > compression_tuple_threshold )
+			while( uncompressed_data_offset > compression_tuple_threshold )
 			{
 				compression_tuple_offset_shift -= 1;
 				compression_tuple_size_mask   >>= 1;
@@ -363,7 +363,7 @@ int libfwnt_lznt1_decompress_chunk(
 			}
 		}
 	}
-	*uncompressed_data_size = uncompressed_data_index;
+	*uncompressed_data_size = uncompressed_data_offset;
 
 	return( 1 );
 }
@@ -379,9 +379,9 @@ int libfwnt_lznt1_decompress(
      libcerror_error_t **error )
 {
 	static char *function             = "libfwnt_lznt1_decompress";
-	size_t compressed_data_index      = 0;
+	size_t compressed_data_offset     = 0;
 	size_t uncompressed_chunk_size    = 0;
-	size_t uncompressed_data_index    = 0;
+	size_t uncompressed_data_offset   = 0;
 	uint16_t compression_chunk_header = 0;
 	uint16_t compression_chunk_size   = 0;
 
@@ -429,13 +429,13 @@ int libfwnt_lznt1_decompress(
 
 		return( -1 );
 	}
-	while( compressed_data_index < compressed_data_size )
+	while( compressed_data_offset < compressed_data_size )
 	{
-		if( uncompressed_data_index >= *uncompressed_data_size )
+		if( uncompressed_data_offset >= *uncompressed_data_size )
 		{
 			break;
 		}
-		if( ( compressed_data_index + 1 ) >= compressed_data_size )
+		if( ( compressed_data_offset + 1 ) >= compressed_data_size )
 		{
 			libcerror_error_set(
 			 error,
@@ -452,17 +452,17 @@ int libfwnt_lznt1_decompress(
 		 * 15		is compressed flag
 		 */
 		byte_stream_copy_to_uint16_little_endian(
-		 &( compressed_data[ compressed_data_index ] ),
+		 &( compressed_data[ compressed_data_offset ] ),
 		 compression_chunk_header );
 
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed data index\t\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data offset\t\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
-			 compressed_data_index,
-			 compressed_data_index );
+			 compressed_data_offset,
+			 compressed_data_offset );
 
 			libcnotify_printf(
 			 "%s: compression chunk header\t\t\t: 0x%04" PRIx16 "\n",
@@ -488,7 +488,7 @@ int libfwnt_lznt1_decompress(
 			 "\n" );
 		}
 #endif
-		compressed_data_index += 2;
+		compressed_data_offset += 2;
 
 		if( compression_chunk_header == 0 )
 		{
@@ -500,14 +500,14 @@ int libfwnt_lznt1_decompress(
 		{
 			/* Adjust the compression chunk size for the iteration
 			 */
-			uncompressed_chunk_size = *uncompressed_data_size - uncompressed_data_index;
+			uncompressed_chunk_size = *uncompressed_data_size - uncompressed_data_offset;
 
 			if( libfwnt_lznt1_decompress_chunk(
 			     compressed_data,
 			     compressed_data_size,
-			     &compressed_data_index,
+			     &compressed_data_offset,
 			     compression_chunk_size,
-			     &( uncompressed_data[ uncompressed_data_index ] ),
+			     &( uncompressed_data[ uncompressed_data_offset ] ),
 			     &uncompressed_chunk_size,
 			     error ) != 1 )
 			{
@@ -520,11 +520,11 @@ int libfwnt_lznt1_decompress(
 
 				return( -1 );
 			}
-			uncompressed_data_index += uncompressed_chunk_size;
+			uncompressed_data_offset += uncompressed_chunk_size;
 		}
 		else
 		{
-			if( ( compressed_data_index + compression_chunk_size ) > compressed_data_size )
+			if( ( compressed_data_offset + compression_chunk_size ) > compressed_data_size )
 			{
 				libcerror_error_set(
 				 error,
@@ -535,7 +535,7 @@ int libfwnt_lznt1_decompress(
 
 				return( -1 );
 			}
-			if( ( uncompressed_data_index + compression_chunk_size ) > *uncompressed_data_size )
+			if( ( uncompressed_data_offset + compression_chunk_size ) > *uncompressed_data_size )
 			{
 				libcerror_error_set(
 				 error,
@@ -547,8 +547,8 @@ int libfwnt_lznt1_decompress(
 				return( -1 );
 			}
 			if( memory_copy(
-			     &( uncompressed_data[ uncompressed_data_index ] ),
-			     &( compressed_data[ compressed_data_index ] ),
+			     &( uncompressed_data[ uncompressed_data_offset ] ),
+			     &( compressed_data[ compressed_data_offset ] ),
 			     compression_chunk_size ) == NULL )
 			{
 				libcerror_error_set(
@@ -560,11 +560,11 @@ int libfwnt_lznt1_decompress(
 
 				return( -1 );
 			}
-			compressed_data_index   += (size_t) compression_chunk_size;
-			uncompressed_data_index += (size_t) compression_chunk_size;
+			compressed_data_offset   += (size_t) compression_chunk_size;
+			uncompressed_data_offset += (size_t) compression_chunk_size;
 		}
 	}
-	*uncompressed_data_size = uncompressed_data_index;
+	*uncompressed_data_size = uncompressed_data_offset;
 
 	return( 1 );
 }
