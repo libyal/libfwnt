@@ -65,7 +65,7 @@ The LZXPRESS Huffman compressed data consists of multiple chunks. Each chunk
 consists of:
 
 * a prefix code table 
-* Huffmann encoded data
+* Huffmann encoded bit stream
 
 The LZXPRESS Huffman prefix code table 256 bytes of size and consists of:
 
@@ -99,6 +99,9 @@ compression tuple symbol
 [yellow-background]*TODO: describe extended compression size*
 
 [yellow-background]*TODO: decompress up to 65536 bytes of data*
+
+The uncompressed chunk size is 65536 (0x10000) or the remaining uncompressed
+data size for the last chunk.
 
 == External Links
 
