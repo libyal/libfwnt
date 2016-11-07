@@ -20,6 +20,7 @@
  */
 
 #include <common.h>
+#include <narrow_string.h>
 #include <types.h>
 
 #if defined( HAVE_STDLIB_H )
@@ -33,7 +34,6 @@
 #include "pyfwnt_access_control_list.h"
 #include "pyfwnt_error.h"
 #include "pyfwnt_libcerror.h"
-#include "pyfwnt_libcstring.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
 #include "pyfwnt_security_descriptor.h"
@@ -77,7 +77,7 @@ PyObject *pyfwnt_get_version(
 
 	Py_END_ALLOW_THREADS
 
-	version_string_length = libcstring_narrow_string_length(
+	version_string_length = narrow_string_length(
 	                         version_string );
 
 	/* Pass the string length to PyUnicode_DecodeUTF8

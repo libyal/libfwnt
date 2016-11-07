@@ -8,7 +8,6 @@ if HAVE_PYTHON2
 AM_CFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@
 
@@ -23,7 +22,6 @@ BUILT_SOURCES = \
 	pyfwnt_error.c pyfwnt_error.h \
 	pyfwnt_integer.c pyfwnt_integer.h \
 	pyfwnt_libcerror.h \
-	pyfwnt_libcstring.h \
 	pyfwnt_libfwnt.h \
 	pyfwnt_python.h \
 	pyfwnt_security_descriptor.c pyfwnt_security_descriptor.h \
@@ -35,7 +33,6 @@ pyexec_LTLIBRARIES = pyfwnt.la
 nodist_pyfwnt_la_SOURCES = $(BUILT_SOURCES)
 
 pyfwnt_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	../libfwnt/libfwnt.la \
 	@LIBCDATA_LIBADD@

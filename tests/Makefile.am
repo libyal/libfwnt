@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCNOTIFY_CPPFLAGS@ \
 	@LIBFWNT_DLL_IMPORT@
@@ -31,7 +30,6 @@ check_PROGRAMS = \
 fwnt_test_access_control_entry_SOURCES = \
 	fwnt_test_access_control_entry.c \
 	fwnt_test_libcerror.h \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_memory.c fwnt_test_memory.h \
@@ -39,13 +37,11 @@ fwnt_test_access_control_entry_SOURCES = \
 
 fwnt_test_access_control_entry_LDADD = \
 	../libfwnt/libfwnt.la \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 fwnt_test_access_control_list_SOURCES = \
 	fwnt_test_access_control_list.c \
 	fwnt_test_libcerror.h \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_memory.c fwnt_test_memory.h \
@@ -53,24 +49,20 @@ fwnt_test_access_control_list_SOURCES = \
 
 fwnt_test_access_control_list_LDADD = \
 	../libfwnt/libfwnt.la \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 fwnt_test_error_SOURCES = \
 	fwnt_test_error.c
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_unused.h
 
 fwnt_test_error_LDADD = \
-	../libfwnt/libfwnt.la \
-	@LIBCSTRING_LIBADD@
+	../libfwnt/libfwnt.la
 
 fwnt_test_lznt1_SOURCES = \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcnotify.h \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_lznt1.c \
 	fwnt_test_macros.h \
@@ -79,13 +71,11 @@ fwnt_test_lznt1_SOURCES = \
 fwnt_test_lznt1_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCNOTIFY_LIBADD@ \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 fwnt_test_lzxpress_SOURCES = \
 	fwnt_test_libcerror.h \
 	fwnt_test_libcnotify.h \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_lzxpress.c \
 	fwnt_test_macros.h \
@@ -94,12 +84,10 @@ fwnt_test_lzxpress_SOURCES = \
 fwnt_test_lzxpress_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCNOTIFY_LIBADD@ \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 fwnt_test_security_descriptor_SOURCES = \
 	fwnt_test_libcerror.h \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_memory.c fwnt_test_memory.h \
@@ -108,12 +96,10 @@ fwnt_test_security_descriptor_SOURCES = \
 
 fwnt_test_security_descriptor_LDADD = \
 	../libfwnt/libfwnt.la \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 fwnt_test_security_identifier_SOURCES = \
 	fwnt_test_libcerror.h \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_memory.c fwnt_test_memory.h \
@@ -122,19 +108,16 @@ fwnt_test_security_identifier_SOURCES = \
 
 fwnt_test_security_identifier_LDADD = \
 	../libfwnt/libfwnt.la \
-	@LIBCERROR_LIBADD@ \
-	@LIBCSTRING_LIBADD@
+	@LIBCERROR_LIBADD@
 
 fwnt_test_support_SOURCES = \
-	fwnt_test_libcstring.h \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_support.c
 	fwnt_test_unused.h
 
 fwnt_test_support_LDADD = \
-	../libfwnt/libfwnt.la \
-	@LIBCSTRING_LIBADD@
+	../libfwnt/libfwnt.la
 
 MAINTAINERCLEANFILES = \
 	Makefile.in

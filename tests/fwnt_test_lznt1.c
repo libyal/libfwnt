@@ -21,16 +21,15 @@
 
 #include <common.h>
 #include <memory.h>
+#include <file_stream.h>
+#include <types.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
 #endif
 
-#include <stdio.h>
-
 #include "fwnt_test_libcerror.h"
 #include "fwnt_test_libcnotify.h"
-#include "fwnt_test_libcstring.h"
 #include "fwnt_test_libfwnt.h"
 #include "fwnt_test_macros.h"
 #include "fwnt_test_unused.h"
@@ -417,7 +416,7 @@ on_error:
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain(
      int argc FWNT_TEST_ATTRIBUTE_UNUSED,
      wchar_t * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )

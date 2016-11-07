@@ -10,7 +10,6 @@ MSVSCPP_FILES = \
 	libcdata/libcdata.vcproj \
 	libcerror/libcerror.vcproj \
 	libcnotify/libcnotify.vcproj \
-	libcstring/libcstring.vcproj \
 	libcthreads/libcthreads.vcproj \
 	libfwnt/libfwnt.vcproj \
 	pyfwnt/pyfwnt.vcproj \

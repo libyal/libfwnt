@@ -2,7 +2,6 @@ if HAVE_PYTHON
 AM_CFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@
 
@@ -17,7 +16,6 @@ pyfwnt_la_SOURCES = \
 	pyfwnt_error.c pyfwnt_error.h \
 	pyfwnt_integer.c pyfwnt_integer.h \
 	pyfwnt_libcerror.h \
-	pyfwnt_libcstring.h \
 	pyfwnt_libfwnt.h \
 	pyfwnt_python.h \
 	pyfwnt_security_descriptor.c pyfwnt_security_descriptor.h \
@@ -25,7 +23,6 @@ pyfwnt_la_SOURCES = \
 	pyfwnt_unused.h
 
 pyfwnt_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	../libfwnt/libfwnt.la \
 	@LIBCDATA_LIBADD@

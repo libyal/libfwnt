@@ -30,7 +30,6 @@
 #include "pyfwnt_error.h"
 #include "pyfwnt_integer.h"
 #include "pyfwnt_libcerror.h"
-#include "pyfwnt_libcstring.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
 #include "pyfwnt_security_identifier.h"

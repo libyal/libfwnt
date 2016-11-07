@@ -273,7 +273,7 @@ int libfwnt_lznt1_decompress_chunk(
 					 compression_tuple_size );
 
 					libcnotify_printf(
-					 "%s: uncompressed data offset\t\t\t: %" PRIzd "\n",
+					 "%s: uncompressed data offset\t\t: %" PRIzd "\n",
 					 function,
 					 uncompressed_data_offset );
 

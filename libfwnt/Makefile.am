@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCTHREADS_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@ \
@@ -22,7 +21,6 @@ libfwnt_la_SOURCES = \
 	libfwnt_libcerror.h \
 	libfwnt_libcdata.h \
 	libfwnt_libcnotify.h \
-	libfwnt_libcstring.h \
 	libfwnt_locale_identifier.c libfwnt_locale_identifier.h \
 	libfwnt_lznt1.c libfwnt_lznt1.h \
 	libfwnt_lzxpress.c libfwnt_lzxpress.h \
@@ -33,7 +31,6 @@ libfwnt_la_SOURCES = \
 	libfwnt_unused.h
 
 libfwnt_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCTHREADS_LIBADD@ \
 	@LIBCDATA_LIBADD@ \

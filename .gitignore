@@ -137,6 +137,5 @@ stamp-h[1-9]
 /libcfile
 /libclocale
 /libcnotify
-/libcstring
 /libcthreads
 /libuna

@@ -22,7 +22,10 @@
 #include <common.h>
 #include <byte_stream.h>
 #include <memory.h>
+#include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #include "libfwnt_access_control_entry.h"
 #include "libfwnt_debug.h"
@@ -196,7 +199,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 	size_t sid_offset                                                      = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
-	libcstring_system_character_t *sid_string                              = NULL;
+	system_character_t *sid_string                                         = NULL;
 	size_t sid_string_size                                                 = 0;
 	int result                                                             = 0;
 #endif
@@ -464,7 +467,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 
 			if( sid_string_size > 0 )
 			{
-				sid_string = libcstring_system_string_allocate(
+				sid_string = system_string_allocate(
 					      sid_string_size );
 
 				if( sid_string == NULL )
@@ -478,7 +481,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 
 					goto on_error;
 				}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 				result = libfwnt_security_identifier_copy_to_utf16_string(
 					  internal_access_control_entry->security_identifier,
 					  (uint16_t *) sid_string,
@@ -505,7 +508,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 					goto on_error;
 				}
 				libcnotify_printf(
-				 "%" PRIs_LIBCSTRING_SYSTEM "",
+				 "%" PRIs_SYSTEM "",
 				 sid_string );
 
 				memory_free(
