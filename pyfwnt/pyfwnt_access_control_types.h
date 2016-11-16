@@ -50,10 +50,10 @@ PyObject *pyfwnt_access_control_types_new(
            void );
 
 int pyfwnt_access_control_types_init(
-     pyfwnt_access_control_types_t *pyfwnt_access_control_types );
+     pyfwnt_access_control_types_t *definitions_object );
 
 void pyfwnt_access_control_types_free(
-      pyfwnt_access_control_types_t *pyfwnt_access_control_types );
+      pyfwnt_access_control_types_t *definitions_object );
 
 #if defined( __cplusplus )
 }

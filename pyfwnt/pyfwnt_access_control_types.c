@@ -401,39 +401,39 @@ on_error:
 PyObject *pyfwnt_access_control_types_new(
            void )
 {
-	pyfwnt_access_control_types_t *pyfwnt_access_control_types = NULL;
-	static char *function                                      = "pyfwnt_access_control_types_new";
+	pyfwnt_access_control_types_t *definitions_object = NULL;
+	static char *function                             = "pyfwnt_access_control_types_new";
 
-	pyfwnt_access_control_types = PyObject_New(
-	                               struct pyfwnt_access_control_types,
-	                               &pyfwnt_access_control_types_type_object );
+	definitions_object = PyObject_New(
+	                      struct pyfwnt_access_control_types,
+	                      &pyfwnt_access_control_types_type_object );
 
-	if( pyfwnt_access_control_types == NULL )
+	if( definitions_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_MemoryError,
-		 "%s: unable to initialize access control types.",
+		 "%s: unable to create new definitions object.",
 		 function );
 
 		goto on_error;
 	}
 	if( pyfwnt_access_control_types_init(
-	     pyfwnt_access_control_types ) != 0 )
+	     definitions_object ) != 0 )
 	{
 		PyErr_Format(
 		 PyExc_MemoryError,
-		 "%s: unable to initialize access control types.",
+		 "%s: unable to initialize definitions object.",
 		 function );
 
 		goto on_error;
 	}
-	return( (PyObject *) pyfwnt_access_control_types );
+	return( (PyObject *) definitions_object );
 
 on_error:
-	if( pyfwnt_access_control_types != NULL )
+	if( definitions_object != NULL )
 	{
 		Py_DecRef(
-		 (PyObject *) pyfwnt_access_control_types );
+		 (PyObject *) definitions_object );
 	}
 	return( NULL );
 }
@@ -442,15 +442,15 @@ on_error:
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_types_init(
-     pyfwnt_access_control_types_t *pyfwnt_access_control_types )
+     pyfwnt_access_control_types_t *definitions_object )
 {
 	static char *function = "pyfwnt_access_control_types_init";
 
-	if( pyfwnt_access_control_types == NULL )
+	if( definitions_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: invalid access control types.",
+		 "%s: invalid definitions object.",
 		 function );
 
 		return( -1 );
@@ -461,22 +461,22 @@ int pyfwnt_access_control_types_init(
 /* Frees an access control types object
  */
 void pyfwnt_access_control_types_free(
-      pyfwnt_access_control_types_t *pyfwnt_access_control_types )
+      pyfwnt_access_control_types_t *definitions_object )
 {
 	struct _typeobject *ob_type = NULL;
 	static char *function       = "pyfwnt_access_control_types_free";
 
-	if( pyfwnt_access_control_types == NULL )
+	if( definitions_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: invalid access control types.",
+		 "%s: invalid definitions object.",
 		 function );
 
 		return;
 	}
 	ob_type = Py_TYPE(
-	           pyfwnt_access_control_types );
+	           definitions_object );
 
 	if( ob_type == NULL )
 	{
@@ -497,6 +497,6 @@ void pyfwnt_access_control_types_free(
 		return;
 	}
 	ob_type->tp_free(
-	 (PyObject*) pyfwnt_access_control_types );
+	 (PyObject*) definitions_object );
 }
 
