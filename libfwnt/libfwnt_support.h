@@ -43,5 +43,5 @@ const char *libfwnt_get_version(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_SUPPORT_H ) */
 

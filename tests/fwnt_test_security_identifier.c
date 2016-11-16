@@ -33,6 +33,8 @@
 #include "fwnt_test_memory.h"
 #include "fwnt_test_unused.h"
 
+#include "../libfwnt/libfwnt_security_identifier.h"
+
 uint8_t fwnt_test_security_identifier_byte_stream[ 28 ] = {
 	0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00, 0xc7, 0x99, 0x2e, 0x25,
 	0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01, 0xf5, 0x03, 0x00, 0x00 };
@@ -47,7 +49,13 @@ int fwnt_test_security_identifier_initialize(
 	libfwnt_security_identifier_t *security_identifier = NULL;
 	int result                                         = 0;
 
-	/* Test libfwnt_security_identifier_initialize
+#if defined( HAVE_FWNT_TEST_MEMORY )
+	int number_of_malloc_fail_tests                    = 1;
+	int number_of_memset_fail_tests                    = 1;
+	int test_number                                    = 0;
+#endif
+
+	/* Test regular cases
 	 */
 	result = libfwnt_security_identifier_initialize(
 	          &security_identifier,
@@ -123,79 +131,89 @@ int fwnt_test_security_identifier_initialize(
 
 #if defined( HAVE_FWNT_TEST_MEMORY )
 
-	/* Test libfwnt_security_identifier_initialize with malloc failing
-	 */
-	fwnt_test_malloc_attempts_before_fail = 0;
-
-	result = libfwnt_security_identifier_initialize(
-	          &security_identifier,
-	          &error );
-
-	if( fwnt_test_malloc_attempts_before_fail != -1 )
+	for( test_number = 0;
+	     test_number < number_of_malloc_fail_tests;
+	     test_number++ )
 	{
-		fwnt_test_malloc_attempts_before_fail = -1;
+		/* Test libfwnt_security_identifier_initialize with malloc failing
+		 */
+		fwnt_test_malloc_attempts_before_fail = test_number;
 
-		if( security_identifier != NULL )
+		result = libfwnt_security_identifier_initialize(
+		          &security_identifier,
+		          &error );
+
+		if( fwnt_test_malloc_attempts_before_fail != -1 )
 		{
-			libfwnt_security_identifier_free(
-			 &security_identifier,
-			 NULL );
+			fwnt_test_malloc_attempts_before_fail = -1;
+
+			if( security_identifier != NULL )
+			{
+				libfwnt_security_identifier_free(
+				 &security_identifier,
+				 NULL );
+			}
+		}
+		else
+		{
+			FWNT_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
+
+			FWNT_TEST_ASSERT_IS_NULL(
+			 "security_identifier",
+			 security_identifier );
+
+			FWNT_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
+
+			libcerror_error_free(
+			 &error );
 		}
 	}
-	else
+	for( test_number = 0;
+	     test_number < number_of_memset_fail_tests;
+	     test_number++ )
 	{
-		FWNT_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+		/* Test libfwnt_security_identifier_initialize with memset failing
+		 */
+		fwnt_test_memset_attempts_before_fail = test_number;
 
-		FWNT_TEST_ASSERT_IS_NULL(
-		 "security_identifier",
-		 security_identifier );
+		result = libfwnt_security_identifier_initialize(
+		          &security_identifier,
+		          &error );
 
-		FWNT_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
-
-		libcerror_error_free(
-		 &error );
-	}
-	/* Test libfwnt_security_identifier_initialize with memset failing
-	 */
-	fwnt_test_memset_attempts_before_fail = 0;
-
-	result = libfwnt_security_identifier_initialize(
-	          &security_identifier,
-	          &error );
-
-	if( fwnt_test_memset_attempts_before_fail != -1 )
-	{
-		fwnt_test_memset_attempts_before_fail = -1;
-
-		if( security_identifier != NULL )
+		if( fwnt_test_memset_attempts_before_fail != -1 )
 		{
-			libfwnt_security_identifier_free(
-			 &security_identifier,
-			 NULL );
+			fwnt_test_memset_attempts_before_fail = -1;
+
+			if( security_identifier != NULL )
+			{
+				libfwnt_security_identifier_free(
+				 &security_identifier,
+				 NULL );
+			}
 		}
-	}
-	else
-	{
-		FWNT_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+		else
+		{
+			FWNT_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
 
-		FWNT_TEST_ASSERT_IS_NULL(
-		 "security_identifier",
-		 security_identifier );
+			FWNT_TEST_ASSERT_IS_NULL(
+			 "security_identifier",
+			 security_identifier );
 
-		FWNT_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
+			FWNT_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
 
-		libcerror_error_free(
-		 &error );
+			libcerror_error_free(
+			 &error );
+		}
 	}
 #endif /* defined( HAVE_FWNT_TEST_MEMORY ) */
 

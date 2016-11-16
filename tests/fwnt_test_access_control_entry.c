@@ -33,22 +33,7 @@
 #include "fwnt_test_memory.h"
 #include "fwnt_test_unused.h"
 
-#if defined( __GNUC__ )
-
-extern \
-int libfwnt_access_control_entry_initialize(
-     libfwnt_access_control_entry_t **access_control_entry,
-     libcerror_error_t **error );
-
-extern \
-int libfwnt_access_control_entry_copy_from_byte_stream(
-     libfwnt_access_control_entry_t *access_control_entry,
-     const uint8_t *byte_stream,
-     size_t byte_stream_size,
-     int byte_order,
-     libcerror_error_t **error );
-
-#endif /* defined( __GNUC__ ) */
+#include "../libfwnt/libfwnt_access_control_entry.h"
 
 uint8_t fwnt_test_access_control_entry_byte_stream[ 20 ] = {
 	0x00, 0x00, 0x14, 0x00, 0x9f, 0x01, 0x12, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05,

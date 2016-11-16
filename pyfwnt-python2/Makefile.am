@@ -15,8 +15,8 @@ am_pyfwnt_la_rpath = -rpath $(pyexecdir2)
 
 BUILT_SOURCES = \
 	pyfwnt.c pyfwnt.h \
-	pyfwnt_access_control_entry.c pyfwnt_access_control_entry.h \
 	pyfwnt_access_control_entries.c pyfwnt_access_control_entries.h \
+	pyfwnt_access_control_entry.c pyfwnt_access_control_entry.h \
 	pyfwnt_access_control_list.c pyfwnt_access_control_list.h \
 	pyfwnt_access_control_types.c pyfwnt_access_control_types.h \
 	pyfwnt_error.c pyfwnt_error.h \

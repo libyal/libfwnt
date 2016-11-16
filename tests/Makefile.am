@@ -2,7 +2,10 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
+	@LIBCTHREADS_CPPFLAGS@ \
+	@LIBCDATA_CPPFLAGS@ \
 	@LIBCNOTIFY_CPPFLAGS@ \
+	@PTHREAD_CPPFLAGS@ \
 	@LIBFWNT_DLL_IMPORT@
 
 TESTS = \

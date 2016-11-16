@@ -56,5 +56,5 @@ const char *libfwnt_locale_identifier_language_tag_get_description(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBFWNT_LOCALE_IDENTIFIER_H ) */
 
