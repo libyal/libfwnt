@@ -8,13 +8,21 @@ AM_CPPFLAGS = \
 	@PTHREAD_CPPFLAGS@ \
 	@LIBFWNT_DLL_IMPORT@
 
+if HAVE_PYTHON_TESTS
+TESTS_PYFWNT = \
+	test_python_functions.sh
+endif
+
 TESTS = \
 	test_api_functions.sh \
-	test_api_types.sh
+	test_api_types.sh \
+	$(TESTS_PYFWNT)
 
 check_SCRIPTS = \
+	pyfwnt_test_get_version.py \
 	test_api_functions.sh \
 	test_api_types.sh \
+	test_python_functions.sh \
 	test_runner.sh
 
 EXTRA_DIST = \
@@ -55,7 +63,7 @@ fwnt_test_access_control_list_LDADD = \
 	@LIBCERROR_LIBADD@
 
 fwnt_test_error_SOURCES = \
-	fwnt_test_error.c
+	fwnt_test_error.c \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
 	fwnt_test_unused.h
@@ -116,7 +124,7 @@ fwnt_test_security_identifier_LDADD = \
 fwnt_test_support_SOURCES = \
 	fwnt_test_libfwnt.h \
 	fwnt_test_macros.h \
-	fwnt_test_support.c
+	fwnt_test_support.c \
 	fwnt_test_unused.h
 
 fwnt_test_support_LDADD = \

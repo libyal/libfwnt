@@ -325,10 +325,10 @@ int fwnt_test_lznt1_decompress(
 	 result,
 	 1 );
 
-	FWNT_TEST_ASSERT_EQUAL_INT(
+	FWNT_TEST_ASSERT_EQUAL_SIZE(
 	 "uncompressed_data_size",
 	 uncompressed_data_size,
-	 7640 );
+	 (size_t) 7640 );
 
 	/* Test error cases
 	 */
