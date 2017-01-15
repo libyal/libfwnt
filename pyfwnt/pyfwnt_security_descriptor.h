@@ -1,7 +1,7 @@
 /*
- * Python object definition of the libfwnt security descriptor
+ * Python object wrapper of libfwnt_security_descriptor_t
  *
- * Copyright (C) 2009-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -42,7 +42,7 @@ struct pyfwnt_security_descriptor
 	 */
 	PyObject_HEAD
 
-	/* The libfwnt extension block
+	/* The libfwnt security descriptor
 	 */
 	libfwnt_security_descriptor_t *security_descriptor;
 };

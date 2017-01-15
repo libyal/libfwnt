@@ -19,7 +19,7 @@ TESTS = \
 	$(TESTS_PYFWNT)
 
 check_SCRIPTS = \
-	pyfwnt_test_get_version.py \
+	pyfwnt_test_support.py \
 	test_api_functions.sh \
 	test_api_types.sh \
 	test_python_functions.sh \
