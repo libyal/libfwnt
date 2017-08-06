@@ -41,7 +41,7 @@ uint8_t fwnt_test_access_control_list_byte_stream[ 52 ] = {
 	0x9f, 0x01, 0x12, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x20, 0x00, 0x00, 0x00,
 	0x20, 0x02, 0x00, 0x00 };
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 
 /* Tests the libfwnt_access_control_list_initialize function
  * Returns 1 if successful or 0 if not
@@ -238,7 +238,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 /* Tests the libfwnt_access_control_list_free function
  * Returns 1 if successful or 0 if not
@@ -278,7 +278,7 @@ on_error:
 	return( 0 );
 }
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 
 /* Tests the libfwnt_access_control_list_copy_from_byte_stream function
  * Returns 1 if successful or 0 if not
@@ -764,7 +764,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 /* The main program
  */
@@ -781,19 +781,19 @@ int main(
 	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
 	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_list_initialize",
 	 fwnt_test_access_control_list_initialize );
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_list_free",
 	 fwnt_test_access_control_list_free );
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_list_copy_from_byte_stream",
@@ -807,7 +807,7 @@ int main(
 	 "libfwnt_access_control_list_get_entry_by_index",
 	 fwnt_test_access_control_list_get_entry_by_index );
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	return( EXIT_SUCCESS );
 
