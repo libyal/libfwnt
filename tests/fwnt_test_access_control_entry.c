@@ -70,8 +70,8 @@ int fwnt_test_access_control_entry_initialize(
          "error",
          error );
 
-	result = libfwnt_access_control_entry_free(
-	          &access_control_entry,
+	result = libfwnt_internal_access_control_entry_free(
+	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -141,8 +141,8 @@ int fwnt_test_access_control_entry_initialize(
 
 		if( access_control_entry != NULL )
 		{
-			libfwnt_access_control_entry_free(
-			 &access_control_entry,
+			libfwnt_internal_access_control_entry_free(
+			 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 			 NULL );
 		}
 	}
@@ -178,8 +178,8 @@ int fwnt_test_access_control_entry_initialize(
 
 		if( access_control_entry != NULL )
 		{
-			libfwnt_access_control_entry_free(
-			 &access_control_entry,
+			libfwnt_internal_access_control_entry_free(
+			 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 			 NULL );
 		}
 	}
@@ -213,8 +213,8 @@ on_error:
 	}
 	if( access_control_entry != NULL )
 	{
-		libfwnt_access_control_entry_free(
-		 &access_control_entry,
+		libfwnt_internal_access_control_entry_free(
+		 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 		 NULL );
 	}
 	return( 0 );
@@ -422,8 +422,8 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_entry_free(
-	          &access_control_entry,
+	result = libfwnt_internal_access_control_entry_free(
+	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -449,8 +449,8 @@ on_error:
 	}
 	if( access_control_entry != NULL )
 	{
-		libfwnt_access_control_entry_free(
-		 &access_control_entry,
+		libfwnt_internal_access_control_entry_free(
+		 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 		 NULL );
 	}
 	return( 0 );
@@ -556,8 +556,8 @@ int fwnt_test_access_control_entry_get_type(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_entry_free(
-	          &access_control_entry,
+	result = libfwnt_internal_access_control_entry_free(
+	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -583,8 +583,8 @@ on_error:
 	}
 	if( access_control_entry != NULL )
 	{
-		libfwnt_access_control_entry_free(
-		 &access_control_entry,
+		libfwnt_internal_access_control_entry_free(
+		 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 		 NULL );
 	}
 	return( 0 );
@@ -690,8 +690,8 @@ int fwnt_test_access_control_entry_get_flags(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_entry_free(
-	          &access_control_entry,
+	result = libfwnt_internal_access_control_entry_free(
+	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -717,8 +717,8 @@ on_error:
 	}
 	if( access_control_entry != NULL )
 	{
-		libfwnt_access_control_entry_free(
-		 &access_control_entry,
+		libfwnt_internal_access_control_entry_free(
+		 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 		 NULL );
 	}
 	return( 0 );
@@ -824,8 +824,8 @@ int fwnt_test_access_control_entry_get_access_mask(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_entry_free(
-	          &access_control_entry,
+	result = libfwnt_internal_access_control_entry_free(
+	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -851,8 +851,8 @@ on_error:
 	}
 	if( access_control_entry != NULL )
 	{
-		libfwnt_access_control_entry_free(
-		 &access_control_entry,
+		libfwnt_internal_access_control_entry_free(
+		 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 		 NULL );
 	}
 	return( 0 );
@@ -971,8 +971,8 @@ int fwnt_test_access_control_entry_get_security_identifier(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_entry_free(
-	          &access_control_entry,
+	result = libfwnt_internal_access_control_entry_free(
+	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -998,8 +998,8 @@ on_error:
 	}
 	if( access_control_entry != NULL )
 	{
-		libfwnt_access_control_entry_free(
-		 &access_control_entry,
+		libfwnt_internal_access_control_entry_free(
+		 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
 		 NULL );
 	}
 	return( 0 );

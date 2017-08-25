@@ -78,8 +78,8 @@ int fwnt_test_access_control_list_initialize(
          "error",
          error );
 
-	result = libfwnt_access_control_list_free(
-	          &access_control_list,
+	result = libfwnt_internal_access_control_list_free(
+	          (libfwnt_internal_access_control_list_t **) &access_control_list,
 	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -153,8 +153,8 @@ int fwnt_test_access_control_list_initialize(
 
 			if( access_control_list != NULL )
 			{
-				libfwnt_access_control_list_free(
-				 &access_control_list,
+				libfwnt_internal_access_control_list_free(
+				 (libfwnt_internal_access_control_list_t **) &access_control_list,
 				 NULL );
 			}
 		}
@@ -195,8 +195,8 @@ int fwnt_test_access_control_list_initialize(
 
 			if( access_control_list != NULL )
 			{
-				libfwnt_access_control_list_free(
-				 &access_control_list,
+				libfwnt_internal_access_control_list_free(
+				 (libfwnt_internal_access_control_list_t **) &access_control_list,
 				 NULL );
 			}
 		}
@@ -231,8 +231,8 @@ on_error:
 	}
 	if( access_control_list != NULL )
 	{
-		libfwnt_access_control_list_free(
-		 &access_control_list,
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t **) &access_control_list,
 		 NULL );
 	}
 	return( 0 );
@@ -439,8 +439,8 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_list_free(
-	          &access_control_list,
+	result = libfwnt_internal_access_control_list_free(
+	          (libfwnt_internal_access_control_list_t **) &access_control_list,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -466,8 +466,8 @@ on_error:
 	}
 	if( access_control_list != NULL )
 	{
-		libfwnt_access_control_list_free(
-		 &access_control_list,
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t **) &access_control_list,
 		 NULL );
 	}
 	return( 0 );
@@ -578,8 +578,8 @@ int fwnt_test_access_control_list_get_number_of_entries(
 	}
 	/* Clean up
 	 */
-	result = libfwnt_access_control_list_free(
-	          &access_control_list,
+	result = libfwnt_internal_access_control_list_free(
+	          (libfwnt_internal_access_control_list_t **) &access_control_list,
 	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -605,8 +605,8 @@ on_error:
 	}
 	if( access_control_list != NULL )
 	{
-		libfwnt_access_control_list_free(
-		 &access_control_list,
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t **) &access_control_list,
 		 NULL );
 	}
 	return( 0 );
@@ -730,8 +730,8 @@ int fwnt_test_access_control_list_get_entry_by_index(
 
 	/* Clean up
 	 */
-	result = libfwnt_access_control_list_free(
-	          &access_control_list,
+	result = libfwnt_internal_access_control_list_free(
+	          (libfwnt_internal_access_control_list_t **) &access_control_list,
 	          NULL );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
@@ -757,8 +757,8 @@ on_error:
 	}
 	if( access_control_list != NULL )
 	{
-		libfwnt_access_control_list_free(
-		 &access_control_list,
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t **) &access_control_list,
 		 NULL );
 	}
 	return( 0 );
