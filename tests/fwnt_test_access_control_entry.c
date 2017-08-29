@@ -62,13 +62,13 @@ int fwnt_test_access_control_entry_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_internal_access_control_entry_free(
 	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
@@ -79,13 +79,13 @@ int fwnt_test_access_control_entry_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -98,9 +98,9 @@ int fwnt_test_access_control_entry_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -116,9 +116,9 @@ int fwnt_test_access_control_entry_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -243,9 +243,9 @@ int fwnt_test_access_control_entry_free(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -284,13 +284,13 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test to copy security descriptor from byte stream
 	 */
@@ -306,9 +306,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -324,9 +324,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -343,9 +343,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -362,9 +362,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
@@ -378,9 +378,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
@@ -394,9 +394,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -413,9 +413,9 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -431,13 +431,13 @@ int fwnt_test_access_control_entry_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -478,13 +478,13 @@ int fwnt_test_access_control_entry_get_type(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
@@ -498,9 +498,9 @@ int fwnt_test_access_control_entry_get_type(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test retrieve number of entries
 	 */
@@ -514,9 +514,9 @@ int fwnt_test_access_control_entry_get_type(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -530,9 +530,9 @@ int fwnt_test_access_control_entry_get_type(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -547,9 +547,9 @@ int fwnt_test_access_control_entry_get_type(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -565,13 +565,13 @@ int fwnt_test_access_control_entry_get_type(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -612,13 +612,13 @@ int fwnt_test_access_control_entry_get_flags(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
@@ -632,9 +632,9 @@ int fwnt_test_access_control_entry_get_flags(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test retrieve number of entries
 	 */
@@ -648,9 +648,9 @@ int fwnt_test_access_control_entry_get_flags(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -664,9 +664,9 @@ int fwnt_test_access_control_entry_get_flags(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -681,9 +681,9 @@ int fwnt_test_access_control_entry_get_flags(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -699,13 +699,13 @@ int fwnt_test_access_control_entry_get_flags(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -746,13 +746,13 @@ int fwnt_test_access_control_entry_get_access_mask(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
@@ -766,9 +766,9 @@ int fwnt_test_access_control_entry_get_access_mask(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test retrieve number of entries
 	 */
@@ -782,9 +782,9 @@ int fwnt_test_access_control_entry_get_access_mask(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -798,9 +798,9 @@ int fwnt_test_access_control_entry_get_access_mask(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -815,9 +815,9 @@ int fwnt_test_access_control_entry_get_access_mask(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -833,13 +833,13 @@ int fwnt_test_access_control_entry_get_access_mask(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -880,13 +880,13 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
@@ -900,9 +900,9 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test retrieve entry by index
 	 */
@@ -916,9 +916,9 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
 	result = libfwnt_security_identifier_free(
 	          &security_identifier,
@@ -929,9 +929,9 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -945,9 +945,9 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -962,9 +962,9 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -980,13 +980,13 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 

@@ -70,13 +70,13 @@ int fwnt_test_access_control_list_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_internal_access_control_list_free(
 	          (libfwnt_internal_access_control_list_t **) &access_control_list,
@@ -87,13 +87,13 @@ int fwnt_test_access_control_list_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -106,9 +106,9 @@ int fwnt_test_access_control_list_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -124,9 +124,9 @@ int fwnt_test_access_control_list_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -260,9 +260,9 @@ int fwnt_test_access_control_list_free(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -301,13 +301,13 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test to copy security descriptor from byte stream
 	 */
@@ -323,9 +323,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -341,9 +341,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -360,9 +360,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -379,9 +379,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
@@ -395,9 +395,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
@@ -411,9 +411,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -430,9 +430,9 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -448,13 +448,13 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -496,13 +496,13 @@ int fwnt_test_access_control_list_get_number_of_entries(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
@@ -516,9 +516,9 @@ int fwnt_test_access_control_list_get_number_of_entries(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test regular cases
 	 */
@@ -634,13 +634,13 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
@@ -654,9 +654,9 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test retrieve entry by index
 	 */
@@ -671,9 +671,9 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "access_control_entry",
-         access_control_entry );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
 	result = libfwnt_access_control_entry_free(
 	          &access_control_entry,
@@ -684,9 +684,9 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -701,9 +701,9 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -721,9 +721,9 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -739,13 +739,13 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "access_control_list",
-         access_control_list );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_list",
+	 access_control_list );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 

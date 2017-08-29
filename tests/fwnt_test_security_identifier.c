@@ -66,13 +66,13 @@ int fwnt_test_security_identifier_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_free(
 	          &security_identifier,
@@ -83,13 +83,13 @@ int fwnt_test_security_identifier_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -102,9 +102,9 @@ int fwnt_test_security_identifier_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -120,9 +120,9 @@ int fwnt_test_security_identifier_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -254,9 +254,9 @@ int fwnt_test_security_identifier_free(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -293,13 +293,13 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test to copy security identifier from byte stream
 	 */
@@ -315,9 +315,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -333,9 +333,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -352,9 +352,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -371,9 +371,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
@@ -387,9 +387,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
@@ -403,9 +403,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -422,9 +422,9 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -440,13 +440,13 @@ int fwnt_test_security_identifier_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -487,13 +487,13 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
@@ -507,9 +507,9 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test retrieve string size
 	 */
@@ -524,9 +524,9 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -541,9 +541,9 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -559,9 +559,9 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -577,9 +577,9 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -595,13 +595,13 @@ int fwnt_test_security_identifier_get_string_size(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -644,13 +644,13 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
@@ -664,9 +664,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test copy to UTF-8 string
 	 */
@@ -683,9 +683,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -702,9 +702,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -722,9 +722,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -742,9 +742,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -762,9 +762,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -782,9 +782,9 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -800,13 +800,13 @@ int fwnt_test_security_identifier_copy_to_utf8_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -849,13 +849,13 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
@@ -869,9 +869,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test copy to UTF-16 string
 	 */
@@ -888,9 +888,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -907,9 +907,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -927,9 +927,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -947,9 +947,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -967,9 +967,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -987,9 +987,9 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -1005,13 +1005,13 @@ int fwnt_test_security_identifier_copy_to_utf16_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -1054,13 +1054,13 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
 	          security_identifier,
@@ -1074,9 +1074,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test copy to UTF-32 string
 	 */
@@ -1093,9 +1093,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -1112,9 +1112,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -1132,9 +1132,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -1152,9 +1152,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -1172,9 +1172,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -1192,9 +1192,9 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -1210,13 +1210,13 @@ int fwnt_test_security_identifier_copy_to_utf32_string_with_index(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_identifier",
-         security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 

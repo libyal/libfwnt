@@ -57,9 +57,9 @@ int fwnt_test_bit_stream_free(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );

@@ -72,13 +72,13 @@ int fwnt_test_security_descriptor_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_free(
 	          &security_descriptor,
@@ -89,13 +89,13 @@ int fwnt_test_security_descriptor_initialize(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -108,9 +108,9 @@ int fwnt_test_security_descriptor_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -126,9 +126,9 @@ int fwnt_test_security_descriptor_initialize(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -260,9 +260,9 @@ int fwnt_test_security_descriptor_free(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -299,13 +299,13 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test to copy security descriptor from byte stream
 	 */
@@ -321,9 +321,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -339,9 +339,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -358,9 +358,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -377,9 +377,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
@@ -393,9 +393,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
@@ -409,9 +409,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -428,9 +428,9 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 -1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -446,13 +446,13 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -494,13 +494,13 @@ int fwnt_test_security_descriptor_get_owner(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
@@ -514,9 +514,9 @@ int fwnt_test_security_descriptor_get_owner(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test regular cases
 	 */
@@ -666,13 +666,13 @@ int fwnt_test_security_descriptor_get_group(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
@@ -686,9 +686,9 @@ int fwnt_test_security_descriptor_get_group(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test regular cases
 	 */
@@ -838,13 +838,13 @@ int fwnt_test_security_descriptor_get_discretionary_acl(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
@@ -858,9 +858,9 @@ int fwnt_test_security_descriptor_get_discretionary_acl(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test regular cases
 	 */
@@ -1010,13 +1010,13 @@ int fwnt_test_security_descriptor_get_system_acl(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NOT_NULL(
-         "security_descriptor",
-         security_descriptor );
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
@@ -1030,9 +1030,9 @@ int fwnt_test_security_descriptor_get_system_acl(
 	 result,
 	 1 );
 
-        FWNT_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test regular cases
 	 */
