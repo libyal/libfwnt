@@ -474,7 +474,7 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
 	{
 		number_of_bits--;
 
-		sub_tree_node_index = (uint8_t) ( bits >> number_of_bits ) & 0x00000001UL;
+		sub_tree_node_index = (uint8_t) ( ( bits >> number_of_bits ) & 0x00000001UL );
 
 		if( tree_node->sub_tree_nodes[ sub_tree_node_index ] == NULL )
 		{
