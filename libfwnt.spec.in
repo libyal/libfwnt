@@ -5,13 +5,13 @@ Summary: Library to support common Windows NT specific formats
 Group: System Environment/Libraries
 License: LGPL
 Source: %{name}-%{version}.tar.gz
-URL: https://github.com/libyal/libfwnt/
+URL: https://github.com/libyal/libfwnt
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-@libfwnt_spec_requires@ @ax_libcerror_spec_requires@ @ax_libcnotify_spec_requires@ @ax_libcthreads_spec_requires@
-@libfwnt_spec_build_requires@ @ax_libcerror_spec_build_requires@ @ax_libcnotify_spec_build_requires@ @ax_libcthreads_spec_build_requires@
+@libfwnt_spec_requires@ @ax_libcdata_spec_requires@ @ax_libcerror_spec_requires@ @ax_libcnotify_spec_requires@ @ax_libcthreads_spec_requires@
+@libfwnt_spec_build_requires@ @ax_libcdata_spec_build_requires@ @ax_libcerror_spec_build_requires@ @ax_libcnotify_spec_build_requires@ @ax_libcthreads_spec_build_requires@
 
 %description
-libfwnt is a library to support common Windows NT specific formats
+Library to support common Windows NT specific formats
 
 %package devel
 Summary: Header files and libraries for developing applications for libfwnt
