@@ -220,7 +220,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 
 /* Tests the libfwnt_access_control_entry_free function
@@ -1005,7 +1005,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 /* The main program
  */
@@ -1028,7 +1028,7 @@ int main(
 	 "libfwnt_access_control_entry_initialize",
 	 fwnt_test_access_control_entry_initialize );
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_entry_free",
@@ -1056,7 +1056,7 @@ int main(
 	 "libfwnt_access_control_entry_get_security_identifier",
 	 fwnt_test_access_control_entry_get_security_identifier );
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	return( EXIT_SUCCESS );
 

@@ -238,7 +238,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 /* Tests the libfwnt_access_control_list_free function
  * Returns 1 if successful or 0 if not
@@ -764,7 +764,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 /* The main program
  */
@@ -787,7 +787,7 @@ int main(
 	 "libfwnt_access_control_list_initialize",
 	 fwnt_test_access_control_list_initialize );
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_list_free",
@@ -807,7 +807,7 @@ int main(
 	 "libfwnt_access_control_list_get_entry_by_index",
 	 fwnt_test_access_control_list_get_entry_by_index );
 
-#endif /* #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	return( EXIT_SUCCESS );
 
