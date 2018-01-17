@@ -203,60 +203,6 @@ PyTypeObject pyfwnt_security_descriptor_type_object = {
 	0
 };
 
-/* Creates a new pyfwnt security descriptor object
- * Returns a Python object if successful or NULL on error
- */
-PyObject *pyfwnt_security_descriptor_new(
-           libfwnt_security_descriptor_t *security_descriptor )
-{
-	pyfwnt_security_descriptor_t *pyfwnt_security_descriptor = NULL;
-	static char *function                                    = "pyfwnt_security_descriptor_new";
-
-	if( security_descriptor == NULL )
-	{
-		PyErr_Format(
-		 PyExc_TypeError,
-		 "%s: invalid security descriptor.",
-		 function );
-
-		return( NULL );
-	}
-	pyfwnt_security_descriptor = PyObject_New(
-	                              struct pyfwnt_security_descriptor,
-	                              &pyfwnt_security_descriptor_type_object );
-
-	if( pyfwnt_security_descriptor == NULL )
-	{
-		PyErr_Format(
-		 PyExc_MemoryError,
-		 "%s: unable to initialize security descriptor.",
-		 function );
-
-		goto on_error;
-	}
-	if( pyfwnt_security_descriptor_init(
-	     pyfwnt_security_descriptor ) != 0 )
-	{
-		PyErr_Format(
-		 PyExc_MemoryError,
-		 "%s: unable to initialize security descriptor.",
-		 function );
-
-		goto on_error;
-	}
-	pyfwnt_security_descriptor->security_descriptor = security_descriptor;
-
-	return( (PyObject *) pyfwnt_security_descriptor );
-
-on_error:
-	if( pyfwnt_security_descriptor != NULL )
-	{
-		Py_DecRef(
-		 (PyObject *) pyfwnt_security_descriptor );
-	}
-	return( NULL );
-}
-
 /* Intializes a security descriptor object
  * Returns 0 if successful or -1 on error
  */
@@ -316,15 +262,6 @@ void pyfwnt_security_descriptor_free(
 
 		return;
 	}
-	if( pyfwnt_security_descriptor->security_descriptor == NULL )
-	{
-		PyErr_Format(
-		 PyExc_TypeError,
-		 "%s: invalid security descriptor - missing libfwnt security descriptor.",
-		 function );
-
-		return;
-	}
 	ob_type = Py_TYPE(
 	           pyfwnt_security_descriptor );
 
@@ -346,24 +283,27 @@ void pyfwnt_security_descriptor_free(
 
 		return;
 	}
-	Py_BEGIN_ALLOW_THREADS
-
-	result = libfwnt_security_descriptor_free(
-	          &( pyfwnt_security_descriptor->security_descriptor ),
-	          &error );
-
-	Py_END_ALLOW_THREADS
-
-	if( result != 1 )
+	if( pyfwnt_security_descriptor->security_descriptor != NULL )
 	{
-		pyfwnt_error_raise(
-		 error,
-		 PyExc_MemoryError,
-		 "%s: unable to free security descriptor.",
-		 function );
+		Py_BEGIN_ALLOW_THREADS
 
-		libcerror_error_free(
-		 &error );
+		result = libfwnt_security_descriptor_free(
+		          &( pyfwnt_security_descriptor->security_descriptor ),
+		          &error );
+
+		Py_END_ALLOW_THREADS
+
+		if( result != 1 )
+		{
+			pyfwnt_error_raise(
+			 error,
+			 PyExc_MemoryError,
+			 "%s: unable to free security descriptor.",
+			 function );
+
+			libcerror_error_free(
+			 &error );
+		}
 	}
 	ob_type->tp_free(
 	 (PyObject*) pyfwnt_security_descriptor );

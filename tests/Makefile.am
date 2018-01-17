@@ -19,6 +19,7 @@ TESTS = \
 
 check_SCRIPTS = \
 	pyfwnt_test_security_descriptor.py \
+	pyfwnt_test_security_identifier.py \
 	pyfwnt_test_support.py \
 	test_library.sh \
 	test_python_module.sh \

@@ -181,21 +181,13 @@ PyObject *pyfwnt_security_identifier_new(
 
 		return( NULL );
 	}
+	/* PyObject_New does not invoke tp_init
+	 */
 	pyfwnt_security_identifier = PyObject_New(
 	                              struct pyfwnt_security_identifier,
 	                              &pyfwnt_security_identifier_type_object );
 
 	if( pyfwnt_security_identifier == NULL )
-	{
-		PyErr_Format(
-		 PyExc_MemoryError,
-		 "%s: unable to initialize security identifier.",
-		 function );
-
-		goto on_error;
-	}
-	if( pyfwnt_security_identifier_init(
-	     pyfwnt_security_identifier ) != 0 )
 	{
 		PyErr_Format(
 		 PyExc_MemoryError,
@@ -229,7 +221,8 @@ on_error:
 int pyfwnt_security_identifier_init(
      pyfwnt_security_identifier_t *pyfwnt_security_identifier )
 {
-	static char *function = "pyfwnt_security_identifier_init";
+	libcerror_error_t *error = NULL;
+	static char *function    = "pyfwnt_security_identifier_init";
 
 	if( pyfwnt_security_identifier == NULL )
 	{
@@ -244,6 +237,21 @@ int pyfwnt_security_identifier_init(
 	 */
 	pyfwnt_security_identifier->security_identifier = NULL;
 
+	if( libfwnt_security_identifier_initialize(
+	     &( pyfwnt_security_identifier->security_identifier ),
+	     &error ) != 1 )
+	{
+		pyfwnt_error_raise(
+		 error,
+		 PyExc_MemoryError,
+		 "%s: unable to initialize security identifier.",
+		 function );
+
+		libcerror_error_free(
+		 &error );
+
+		return( -1 );
+	}
 	return( 0 );
 }
 
@@ -262,15 +270,6 @@ void pyfwnt_security_identifier_free(
 		PyErr_Format(
 		 PyExc_TypeError,
 		 "%s: invalid security identifier.",
-		 function );
-
-		return;
-	}
-	if( pyfwnt_security_identifier->security_identifier == NULL )
-	{
-		PyErr_Format(
-		 PyExc_TypeError,
-		 "%s: invalid security identifier - missing libfwnt security identifier.",
 		 function );
 
 		return;
@@ -296,24 +295,27 @@ void pyfwnt_security_identifier_free(
 
 		return;
 	}
-	Py_BEGIN_ALLOW_THREADS
-
-	result = libfwnt_security_identifier_free(
-	          &( pyfwnt_security_identifier->security_identifier ),
-	          &error );
-
-	Py_END_ALLOW_THREADS
-
-	if( result != 1 )
+	if( pyfwnt_security_identifier->security_identifier == NULL )
 	{
-		pyfwnt_error_raise(
-		 error,
-		 PyExc_MemoryError,
-		 "%s: unable to free security identifier.",
-		 function );
+		Py_BEGIN_ALLOW_THREADS
 
-		libcerror_error_free(
-		 &error );
+		result = libfwnt_security_identifier_free(
+		          &( pyfwnt_security_identifier->security_identifier ),
+		          &error );
+
+		Py_END_ALLOW_THREADS
+
+		if( result != 1 )
+		{
+			pyfwnt_error_raise(
+			 error,
+			 PyExc_MemoryError,
+			 "%s: unable to free security identifier.",
+			 function );
+
+			libcerror_error_free(
+			 &error );
+		}
 	}
 	if( pyfwnt_security_identifier->parent_object != NULL )
 	{

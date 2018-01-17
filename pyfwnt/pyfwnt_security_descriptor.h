@@ -50,9 +50,6 @@ struct pyfwnt_security_descriptor
 extern PyMethodDef pyfwnt_security_descriptor_object_methods[];
 extern PyTypeObject pyfwnt_security_descriptor_type_object;
 
-PyObject *pyfwnt_security_descriptor_new(
-           libfwnt_security_descriptor_t *security_descriptor );
-
 int pyfwnt_security_descriptor_init(
      pyfwnt_security_descriptor_t *pyfwnt_security_descriptor );
 

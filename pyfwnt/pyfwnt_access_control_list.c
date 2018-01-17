@@ -189,21 +189,13 @@ PyObject *pyfwnt_access_control_list_new(
 
 		return( NULL );
 	}
+	/* PyObject_New does not invoke tp_init
+	 */
 	pyfwnt_access_control_list = PyObject_New(
 	                              struct pyfwnt_access_control_list,
 	                              &pyfwnt_access_control_list_type_object );
 
 	if( pyfwnt_access_control_list == NULL )
-	{
-		PyErr_Format(
-		 PyExc_MemoryError,
-		 "%s: unable to initialize access control list.",
-		 function );
-
-		goto on_error;
-	}
-	if( pyfwnt_access_control_list_init(
-	     pyfwnt_access_control_list ) != 0 )
 	{
 		PyErr_Format(
 		 PyExc_MemoryError,
@@ -248,11 +240,16 @@ int pyfwnt_access_control_list_init(
 
 		return( -1 );
 	}
-	/* Make sure libfwnt access control list is set to NULL
+	/* Make sure libfwnt asccess control list is set to NULL
 	 */
 	pyfwnt_access_control_list->access_control_list = NULL;
 
-	return( 0 );
+	PyErr_Format(
+	 PyExc_NotImplementedError,
+	 "%s: initialize of access control list not supported.",
+	 function );
+
+	return( -1 );
 }
 
 /* Frees an access control list object
@@ -270,15 +267,6 @@ void pyfwnt_access_control_list_free(
 		PyErr_Format(
 		 PyExc_TypeError,
 		 "%s: invalid access control list.",
-		 function );
-
-		return;
-	}
-	if( pyfwnt_access_control_list->access_control_list == NULL )
-	{
-		PyErr_Format(
-		 PyExc_TypeError,
-		 "%s: invalid access control list - missing libfwnt access control list.",
 		 function );
 
 		return;
@@ -304,24 +292,27 @@ void pyfwnt_access_control_list_free(
 
 		return;
 	}
-	Py_BEGIN_ALLOW_THREADS
-
-	result = libfwnt_access_control_list_free(
-	          &( pyfwnt_access_control_list->access_control_list ),
-	          &error );
-
-	Py_END_ALLOW_THREADS
-
-	if( result != 1 )
+	if( pyfwnt_access_control_list->access_control_list != NULL )
 	{
-		pyfwnt_error_raise(
-		 error,
-		 PyExc_MemoryError,
-		 "%s: unable to free access control list.",
-		 function );
+		Py_BEGIN_ALLOW_THREADS
 
-		libcerror_error_free(
-		 &error );
+		result = libfwnt_access_control_list_free(
+		          &( pyfwnt_access_control_list->access_control_list ),
+		          &error );
+
+		Py_END_ALLOW_THREADS
+
+		if( result != 1 )
+		{
+			pyfwnt_error_raise(
+			 error,
+			 PyExc_MemoryError,
+			 "%s: unable to free access control list.",
+			 function );
+
+			libcerror_error_free(
+			 &error );
+		}
 	}
 	if( pyfwnt_access_control_list->parent_object != NULL )
 	{
