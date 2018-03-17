@@ -1,5 +1,5 @@
 /*
- * Python bindings for libfwnt (pyfwnt)
+ * Python bindings module for libfwnt (pyfwnt)
  *
  * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *

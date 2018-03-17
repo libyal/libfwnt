@@ -1,5 +1,5 @@
 /*
- * Python object definition of the libfwnt access control entry
+ * Python object wrapper of libfwnt_access_control_entry_t
  *
  * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -42,7 +42,7 @@ struct pyfwnt_access_control_entry
 	 */
 	PyObject_HEAD
 
-	/* The libfwnt extension block
+	/* The libfwnt access control entry
 	 */
 	libfwnt_access_control_entry_t *access_control_entry;
 

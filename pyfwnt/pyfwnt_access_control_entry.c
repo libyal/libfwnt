@@ -1,5 +1,5 @@
 /*
- * Python object definition of the libfwnt access control entry
+ * Python object wrapper of libfwnt_access_control_entry_t
  *
  * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -22,7 +22,7 @@
 #include <common.h>
 #include <types.h>
 
-#if defined( HAVE_STDLIB_H )
+#if defined( HAVE_STDLIB_H ) || defined( HAVE_WINAPI )
 #include <stdlib.h>
 #endif
 
@@ -196,7 +196,7 @@ PyTypeObject pyfwnt_access_control_entry_type_object = {
 	0
 };
 
-/* Creates a new pyfwnt access control entry object
+/* Creates a new access control entry object
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_access_control_entry_new(
@@ -209,7 +209,7 @@ PyObject *pyfwnt_access_control_entry_new(
 	if( access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
@@ -260,7 +260,7 @@ int pyfwnt_access_control_entry_init(
 	if( pyfwnt_access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
@@ -291,7 +291,7 @@ void pyfwnt_access_control_entry_free(
 	if( pyfwnt_access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
@@ -367,7 +367,7 @@ PyObject *pyfwnt_access_control_entry_get_type(
 	if( pyfwnt_access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
@@ -423,7 +423,7 @@ PyObject *pyfwnt_access_control_entry_get_flags(
 	if( pyfwnt_access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
@@ -479,7 +479,7 @@ PyObject *pyfwnt_access_control_entry_get_access_mask(
 	if( pyfwnt_access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
@@ -530,7 +530,7 @@ PyObject *pyfwnt_access_control_entry_get_security_identifier(
 	if( pyfwnt_access_control_entry == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid access control entry.",
 		 function );
 
