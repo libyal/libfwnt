@@ -1,4 +1,4 @@
-libfwnt is a library for Windows NT data types.
+Library to support common Windows NT specific formats.
 
 Project information:
 

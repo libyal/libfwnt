@@ -266,7 +266,7 @@ int pyfwnt_access_control_entry_init(
 
 		return( -1 );
 	}
-	/* Make sure libfwnt asccess control entry is set to NULL
+	/* Make sure libfwnt access control entry is set to NULL
 	 */
 	pyfwnt_access_control_entry->access_control_entry = NULL;
 

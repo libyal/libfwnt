@@ -1,7 +1,7 @@
 /*
- * Python object definition of the access control entry sequence and iterator
+ * Python object definition of the sequence and iterator object of access control entries
  *
- * Copyright (C) 2011-2018, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -25,7 +25,6 @@
 #include <common.h>
 #include <types.h>
 
-#include "pyfwnt_access_control_list.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
 
@@ -41,52 +40,52 @@ struct pyfwnt_access_control_entries
 	 */
 	PyObject_HEAD
 
-	/* The access control list object
+	/* The parent object
 	 */
-	pyfwnt_access_control_list_t *access_control_list_object;
+	PyObject *parent_object;
 
-	/* The get entry by index callback function
+	/* The get item by index callback function
 	 */
-	PyObject* (*get_entry_by_index)(
-	             pyfwnt_access_control_list_t *access_control_list_object,
-	             int entry_index );
+	PyObject* (*get_item_by_index)(
+	             PyObject *parent_object,
+	             int index );
 
-	/* The (current) entry index
+	/* The current index
 	 */
-	int entry_index;
+	int current_index;
 
-	/* The number of entries
+	/* The number of items
 	 */
-	int number_of_entries;
+	int number_of_items;
 };
 
 extern PyTypeObject pyfwnt_access_control_entries_type_object;
 
 PyObject *pyfwnt_access_control_entries_new(
-           pyfwnt_access_control_list_t *access_control_list_object,
-           PyObject* (*get_entry_by_index)(
-                        pyfwnt_access_control_list_t *access_control_list_object,
-                        int entry_index ),
-           int number_of_entries );
+           PyObject *parent_object,
+           PyObject* (*get_item_by_index)(
+                        PyObject *parent_object,
+                        int index ),
+           int number_of_items );
 
 int pyfwnt_access_control_entries_init(
-     pyfwnt_access_control_entries_t *pyfwnt_access_control_entries );
+     pyfwnt_access_control_entries_t *sequence_object );
 
 void pyfwnt_access_control_entries_free(
-      pyfwnt_access_control_entries_t *pyfwnt_access_control_entries );
+      pyfwnt_access_control_entries_t *sequence_object );
 
 Py_ssize_t pyfwnt_access_control_entries_len(
-            pyfwnt_access_control_entries_t *pyfwnt_access_control_entries );
+            pyfwnt_access_control_entries_t *sequence_object );
 
 PyObject *pyfwnt_access_control_entries_getitem(
-           pyfwnt_access_control_entries_t *pyfwnt_access_control_entries,
+           pyfwnt_access_control_entries_t *sequence_object,
            Py_ssize_t item_index );
 
 PyObject *pyfwnt_access_control_entries_iter(
-           pyfwnt_access_control_entries_t *pyfwnt_access_control_entries );
+           pyfwnt_access_control_entries_t *sequence_object );
 
 PyObject *pyfwnt_access_control_entries_iternext(
-           pyfwnt_access_control_entries_t *pyfwnt_access_control_entries );
+           pyfwnt_access_control_entries_t *sequence_object );
 
 #if defined( __cplusplus )
 }

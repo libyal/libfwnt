@@ -1,7 +1,7 @@
 /*
- * Python object definition of the access control entry sequence and iterator
+ * Python object definition of the sequence and iterator object of access control entries
  *
- * Copyright (C) 2011-2018, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -28,7 +28,6 @@
 
 #include "pyfwnt_access_control_entries.h"
 #include "pyfwnt_access_control_entry.h"
-#include "pyfwnt_access_control_list.h"
 #include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
@@ -60,7 +59,7 @@ PyTypeObject pyfwnt_access_control_entries_type_object = {
 	PyVarObject_HEAD_INIT( NULL, 0 )
 
 	/* tp_name */
-	"pyfwnt._access_control_entries",
+	"pyfwnt.access_control_entries",
 	/* tp_basicsize */
 	sizeof( pyfwnt_access_control_entries_t ),
 	/* tp_itemsize */
@@ -98,7 +97,7 @@ PyTypeObject pyfwnt_access_control_entries_type_object = {
 	/* tp_flags */
 	Py_TPFLAGS_DEFAULT | Py_TPFLAGS_HAVE_ITER,
 	/* tp_doc */
-	"internal pyfwnt access control entries sequence and iterator object",
+	"pyfwnt sequence and iterator object of access control entries",
 	/* tp_traverse */
 	0,
 	/* tp_clear */
@@ -151,126 +150,131 @@ PyTypeObject pyfwnt_access_control_entries_type_object = {
 	0
 };
 
-/* Creates a new access control entries object
+/* Creates a new access control entries sequence and iterator object
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_access_control_entries_new(
-           pyfwnt_access_control_list_t *access_control_list_object,
-           PyObject* (*get_entry_by_index)(
-                        pyfwnt_access_control_list_t *access_control_list_object,
-                        int entry_index ),
-           int number_of_entries )
+           PyObject *parent_object,
+           PyObject* (*get_item_by_index)(
+                        PyObject *parent_object,
+                        int index ),
+           int number_of_items )
 {
-	pyfwnt_access_control_entries_t *pyfwnt_access_control_entries = NULL;
-	static char *function                                          = "pyfwnt_access_control_entries_new";
+	pyfwnt_access_control_entries_t *sequence_object = NULL;
+	static char *function                            = "pyfwnt_access_control_entries_new";
 
-	if( access_control_list_object == NULL )
+	if( parent_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control list object.",
+		 "%s: invalid parent object.",
 		 function );
 
 		return( NULL );
 	}
-	if( get_entry_by_index == NULL )
+	if( get_item_by_index == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid get entry by index function.",
+		 "%s: invalid get item by index function.",
 		 function );
 
 		return( NULL );
 	}
 	/* Make sure the access control entries values are initialized
 	 */
-	pyfwnt_access_control_entries = PyObject_New(
-	                 struct pyfwnt_access_control_entries,
-	                 &pyfwnt_access_control_entries_type_object );
+	sequence_object = PyObject_New(
+	                   struct pyfwnt_access_control_entries,
+	                   &pyfwnt_access_control_entries_type_object );
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_MemoryError,
-		 "%s: unable to initialize access control entries.",
+		 "%s: unable to create sequence object.",
 		 function );
 
 		goto on_error;
 	}
 	if( pyfwnt_access_control_entries_init(
-	     pyfwnt_access_control_entries ) != 0 )
+	     sequence_object ) != 0 )
 	{
 		PyErr_Format(
 		 PyExc_MemoryError,
-		 "%s: unable to initialize access control entries.",
+		 "%s: unable to initialize sequence object.",
 		 function );
 
 		goto on_error;
 	}
-	pyfwnt_access_control_entries->access_control_list_object = access_control_list_object;
-	pyfwnt_access_control_entries->get_entry_by_index         = get_entry_by_index;
-	pyfwnt_access_control_entries->number_of_entries          = number_of_entries;
+	sequence_object->parent_object     = parent_object;
+	sequence_object->get_item_by_index = get_item_by_index;
+	sequence_object->number_of_items   = number_of_items;
 
 	Py_IncRef(
-	 (PyObject *) pyfwnt_access_control_entries->access_control_list_object );
+	 (PyObject *) sequence_object->parent_object );
 
-	return( (PyObject *) pyfwnt_access_control_entries );
+	return( (PyObject *) sequence_object );
 
 on_error:
-	if( pyfwnt_access_control_entries != NULL )
+	if( sequence_object != NULL )
 	{
 		Py_DecRef(
-		 (PyObject *) pyfwnt_access_control_entries );
+		 (PyObject *) sequence_object );
 	}
 	return( NULL );
 }
 
-/* Intializes a access control entries object
+/* Intializes an access control entries sequence and iterator object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_entries_init(
-     pyfwnt_access_control_entries_t *pyfwnt_access_control_entries )
+     pyfwnt_access_control_entries_t *sequence_object )
 {
 	static char *function = "pyfwnt_access_control_entries_init";
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries.",
+		 "%s: invalid sequence object.",
 		 function );
 
 		return( -1 );
 	}
 	/* Make sure the access control entries values are initialized
 	 */
-	pyfwnt_access_control_entries->access_control_list_object = NULL;
-	pyfwnt_access_control_entries->get_entry_by_index         = NULL;
-	pyfwnt_access_control_entries->entry_index                = 0;
-	pyfwnt_access_control_entries->number_of_entries          = 0;
+	sequence_object->parent_object     = NULL;
+	sequence_object->get_item_by_index = NULL;
+	sequence_object->current_index     = 0;
+	sequence_object->number_of_items   = 0;
+
+	PyErr_Format(
+	 PyExc_NotImplementedError,
+	 "%s: initialize of access control entries not supported.",
+	 function );
 
 	return( 0 );
 }
 
-/* Frees a access control entries object
+/* Frees an access control entries sequence object
  */
 void pyfwnt_access_control_entries_free(
-      pyfwnt_access_control_entries_t *pyfwnt_access_control_entries )
+      pyfwnt_access_control_entries_t *sequence_object )
 {
 	struct _typeobject *ob_type = NULL;
 	static char *function       = "pyfwnt_access_control_entries_free";
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries.",
+		 "%s: invalid sequence object.",
 		 function );
 
 		return;
 	}
 	ob_type = Py_TYPE(
-	           pyfwnt_access_control_entries );
+	           sequence_object );
 
 	if( ob_type == NULL )
 	{
@@ -290,72 +294,72 @@ void pyfwnt_access_control_entries_free(
 
 		return;
 	}
-	if( pyfwnt_access_control_entries->access_control_list_object != NULL )
+	if( sequence_object->parent_object != NULL )
 	{
 		Py_DecRef(
-		 (PyObject *) pyfwnt_access_control_entries->access_control_list_object );
+		 (PyObject *) sequence_object->parent_object );
 	}
 	ob_type->tp_free(
-	 (PyObject*) pyfwnt_access_control_entries );
+	 (PyObject*) sequence_object );
 }
 
 /* The access control entries len() function
  */
 Py_ssize_t pyfwnt_access_control_entries_len(
-            pyfwnt_access_control_entries_t *pyfwnt_access_control_entries )
+            pyfwnt_access_control_entries_t *sequence_object )
 {
 	static char *function = "pyfwnt_access_control_entries_len";
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries.",
+		 "%s: invalid sequence object.",
 		 function );
 
 		return( -1 );
 	}
-	return( (Py_ssize_t) pyfwnt_access_control_entries->number_of_entries );
+	return( (Py_ssize_t) sequence_object->number_of_items );
 }
 
 /* The access control entries getitem() function
  */
 PyObject *pyfwnt_access_control_entries_getitem(
-           pyfwnt_access_control_entries_t *pyfwnt_access_control_entries,
+           pyfwnt_access_control_entries_t *sequence_object,
            Py_ssize_t item_index )
 {
-	PyObject *entry_object = NULL;
-	static char *function  = "pyfwnt_access_control_entries_getitem";
+	PyObject *access_control_entry_object = NULL;
+	static char *function                 = "pyfwnt_access_control_entries_getitem";
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries.",
+		 "%s: invalid sequence object.",
 		 function );
 
 		return( NULL );
 	}
-	if( pyfwnt_access_control_entries->get_entry_by_index == NULL )
+	if( sequence_object->get_item_by_index == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries - missing get entry by index function.",
+		 "%s: invalid sequence object - missing get item by index function.",
 		 function );
 
 		return( NULL );
 	}
-	if( pyfwnt_access_control_entries->number_of_entries < 0 )
+	if( sequence_object->number_of_items < 0 )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries - invalid number of entries.",
+		 "%s: invalid sequence object - invalid number of items.",
 		 function );
 
 		return( NULL );
 	}
 	if( ( item_index < 0 )
-	 || ( item_index >= (Py_ssize_t) pyfwnt_access_control_entries->number_of_entries ) )
+	 || ( item_index >= (Py_ssize_t) sequence_object->number_of_items ) )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
@@ -364,94 +368,94 @@ PyObject *pyfwnt_access_control_entries_getitem(
 
 		return( NULL );
 	}
-	entry_object = pyfwnt_access_control_entries->get_entry_by_index(
-	                pyfwnt_access_control_entries->access_control_list_object,
-	                (int) item_index );
+	access_control_entry_object = sequence_object->get_item_by_index(
+	                               sequence_object->parent_object,
+	                               (int) item_index );
 
-	return( entry_object );
+	return( access_control_entry_object );
 }
 
 /* The access control entries iter() function
  */
 PyObject *pyfwnt_access_control_entries_iter(
-           pyfwnt_access_control_entries_t *pyfwnt_access_control_entries )
+           pyfwnt_access_control_entries_t *sequence_object )
 {
 	static char *function = "pyfwnt_access_control_entries_iter";
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries.",
+		 "%s: invalid sequence object.",
 		 function );
 
 		return( NULL );
 	}
 	Py_IncRef(
-	 (PyObject *) pyfwnt_access_control_entries );
+	 (PyObject *) sequence_object );
 
-	return( (PyObject *) pyfwnt_access_control_entries );
+	return( (PyObject *) sequence_object );
 }
 
 /* The access control entries iternext() function
  */
 PyObject *pyfwnt_access_control_entries_iternext(
-           pyfwnt_access_control_entries_t *pyfwnt_access_control_entries )
+           pyfwnt_access_control_entries_t *sequence_object )
 {
-	PyObject *entry_object = NULL;
-	static char *function  = "pyfwnt_access_control_entries_iternext";
+	PyObject *access_control_entry_object = NULL;
+	static char *function                 = "pyfwnt_access_control_entries_iternext";
 
-	if( pyfwnt_access_control_entries == NULL )
+	if( sequence_object == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries.",
+		 "%s: invalid sequence object.",
 		 function );
 
 		return( NULL );
 	}
-	if( pyfwnt_access_control_entries->get_entry_by_index == NULL )
+	if( sequence_object->get_item_by_index == NULL )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries - missing get entry by index function.",
+		 "%s: invalid sequence object - missing get item by index function.",
 		 function );
 
 		return( NULL );
 	}
-	if( pyfwnt_access_control_entries->entry_index < 0 )
+	if( sequence_object->current_index < 0 )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries - invalid entry index.",
+		 "%s: invalid sequence object - invalid current index.",
 		 function );
 
 		return( NULL );
 	}
-	if( pyfwnt_access_control_entries->number_of_entries < 0 )
+	if( sequence_object->number_of_items < 0 )
 	{
 		PyErr_Format(
 		 PyExc_ValueError,
-		 "%s: invalid access control entries - invalid number of entries.",
+		 "%s: invalid sequence object - invalid number of items.",
 		 function );
 
 		return( NULL );
 	}
-	if( pyfwnt_access_control_entries->entry_index >= pyfwnt_access_control_entries->number_of_entries )
+	if( sequence_object->current_index >= sequence_object->number_of_items )
 	{
 		PyErr_SetNone(
 		 PyExc_StopIteration );
 
 		return( NULL );
 	}
-	entry_object = pyfwnt_access_control_entries->get_entry_by_index(
-	                pyfwnt_access_control_entries->access_control_list_object,
-	                pyfwnt_access_control_entries->entry_index );
+	access_control_entry_object = sequence_object->get_item_by_index(
+	                               sequence_object->parent_object,
+	                               sequence_object->current_index );
 
-	if( entry_object != NULL )
+	if( access_control_entry_object != NULL )
 	{
-		pyfwnt_access_control_entries->entry_index++;
+		sequence_object->current_index++;
 	}
-	return( entry_object );
+	return( access_control_entry_object );
 }
 

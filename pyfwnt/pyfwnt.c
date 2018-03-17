@@ -245,7 +245,7 @@ PyMODINIT_FUNC initpyfwnt(
 
 	PyModule_AddObject(
 	 module,
-	 "_access_control_entries",
+	 "access_control_entries",
 	 (PyObject *) access_control_entries_type_object );
 
 	/* Setup the access control entry type object

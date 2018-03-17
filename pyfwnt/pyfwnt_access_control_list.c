@@ -240,7 +240,7 @@ int pyfwnt_access_control_list_init(
 
 		return( -1 );
 	}
-	/* Make sure libfwnt asccess control list is set to NULL
+	/* Make sure libfwnt access control list is set to NULL
 	 */
 	pyfwnt_access_control_list->access_control_list = NULL;
 
@@ -383,7 +383,7 @@ PyObject *pyfwnt_access_control_list_get_number_of_entries(
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_access_control_list_get_entry_by_index(
-           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           PyObject *pyfwnt_access_control_list,
            int entry_index )
 {
 	libcerror_error_t *error              = NULL;
@@ -404,7 +404,7 @@ PyObject *pyfwnt_access_control_list_get_entry_by_index(
 	Py_BEGIN_ALLOW_THREADS
 
 	result = libfwnt_access_control_list_get_entry_by_index(
-	          pyfwnt_access_control_list->access_control_list,
+	          ( (pyfwnt_access_control_list_t *) pyfwnt_access_control_list )->access_control_list,
 	          entry_index,
 	          &entry,
 	          &error );
@@ -427,7 +427,7 @@ PyObject *pyfwnt_access_control_list_get_entry_by_index(
 	}
 	entry_object = pyfwnt_access_control_entry_new(
 	                entry,
-	                (PyObject *) pyfwnt_access_control_list );
+	                pyfwnt_access_control_list );
 
 	if( entry_object == NULL )
 	{
@@ -472,7 +472,7 @@ PyObject *pyfwnt_access_control_list_get_entry(
 		return( NULL );
 	}
 	entry_object = pyfwnt_access_control_list_get_entry_by_index(
-	                pyfwnt_access_control_list,
+	                (PyObject *) pyfwnt_access_control_list,
 	                entry_index );
 
 	return( entry_object );
@@ -525,7 +525,7 @@ PyObject *pyfwnt_access_control_list_get_entries(
 		return( NULL );
 	}
 	entries_object = pyfwnt_access_control_entries_new(
-	                  pyfwnt_access_control_list,
+	                  (PyObject *) pyfwnt_access_control_list,
 	                  &pyfwnt_access_control_list_get_entry_by_index,
 	                  number_of_entries );
 

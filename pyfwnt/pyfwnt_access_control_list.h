@@ -69,7 +69,7 @@ PyObject *pyfwnt_access_control_list_get_number_of_entries(
            PyObject *arguments );
 
 PyObject *pyfwnt_access_control_list_get_entry_by_index(
-           pyfwnt_access_control_list_t *pyfwnt_access_control_list,
+           PyObject *pyfwnt_access_control_list,
            int entry_index );
 
 PyObject *pyfwnt_access_control_list_get_entry(
