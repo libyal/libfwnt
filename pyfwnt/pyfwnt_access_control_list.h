@@ -1,5 +1,5 @@
 /*
- * Python object definition of the libfwnt access control list
+ * Python object wrapper of libfwnt_access_control_list_t
  *
  * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -25,8 +25,6 @@
 #include <common.h>
 #include <types.h>
 
-#include "pyfwnt_access_control_list.h"
-#include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
 
@@ -42,7 +40,7 @@ struct pyfwnt_access_control_list
 	 */
 	PyObject_HEAD
 
-	/* The libfwnt extension block
+	/* The libfwnt access control list
 	 */
 	libfwnt_access_control_list_t *access_control_list;
 

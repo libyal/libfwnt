@@ -28,7 +28,6 @@
 
 #include "pyfwnt_access_control_entry.h"
 #include "pyfwnt_error.h"
-#include "pyfwnt_integer.h"
 #include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
@@ -36,8 +35,6 @@
 #include "pyfwnt_unused.h"
 
 PyMethodDef pyfwnt_access_control_entry_object_methods[] = {
-
-	/* Functions to access the access control entry */
 
 	{ "get_type",
 	  (PyCFunction) pyfwnt_access_control_entry_get_type,
@@ -56,7 +53,7 @@ PyMethodDef pyfwnt_access_control_entry_object_methods[] = {
 	{ "get_access_mask",
 	  (PyCFunction) pyfwnt_access_control_entry_get_access_mask,
 	  METH_NOARGS,
-	  "get_access_mask() -> Integer\n"
+	  "get_access_mask() -> Integer or None\n"
 	  "\n"
 	  "Retrieves the access mask." },
 
@@ -76,13 +73,13 @@ PyGetSetDef pyfwnt_access_control_entry_object_get_set_definitions[] = {
 	{ "type",
 	  (getter) pyfwnt_access_control_entry_get_type,
 	  (setter) 0,
-	  "The access mask.",
+	  "The type.",
 	  NULL },
 
 	{ "flags",
 	  (getter) pyfwnt_access_control_entry_get_flags,
 	  (setter) 0,
-	  "The access mask.",
+	  "The flags.",
 	  NULL },
 
 	{ "access_mask",
@@ -233,11 +230,9 @@ PyObject *pyfwnt_access_control_entry_new(
 	pyfwnt_access_control_entry->access_control_entry = access_control_entry;
 	pyfwnt_access_control_entry->parent_object        = parent_object;
 
-	if( pyfwnt_access_control_entry->parent_object != NULL )
-	{
-		Py_IncRef(
-		 pyfwnt_access_control_entry->parent_object );
-	}
+	Py_IncRef(
+	 pyfwnt_access_control_entry->parent_object );
+
 	return( (PyObject *) pyfwnt_access_control_entry );
 
 on_error:
@@ -283,8 +278,8 @@ int pyfwnt_access_control_entry_init(
 void pyfwnt_access_control_entry_free(
       pyfwnt_access_control_entry_t *pyfwnt_access_control_entry )
 {
-	libcerror_error_t *error    = NULL;
 	struct _typeobject *ob_type = NULL;
+	libcerror_error_t *error    = NULL;
 	static char *function       = "pyfwnt_access_control_entry_free";
 	int result                  = 0;
 
@@ -333,7 +328,7 @@ void pyfwnt_access_control_entry_free(
 			pyfwnt_error_raise(
 			 error,
 			 PyExc_MemoryError,
-			 "%s: unable to free access control entry.",
+			 "%s: unable to free libfwnt access control entry.",
 			 function );
 
 			libcerror_error_free(
@@ -356,8 +351,8 @@ PyObject *pyfwnt_access_control_entry_get_type(
            pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libcerror_error_t *error = NULL;
 	PyObject *integer_object = NULL;
+	libcerror_error_t *error = NULL;
 	static char *function    = "pyfwnt_access_control_entry_get_type";
 	uint8_t type             = 0;
 	int result               = 0;
@@ -412,8 +407,8 @@ PyObject *pyfwnt_access_control_entry_get_flags(
            pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libcerror_error_t *error = NULL;
 	PyObject *integer_object = NULL;
+	libcerror_error_t *error = NULL;
 	static char *function    = "pyfwnt_access_control_entry_get_flags";
 	uint8_t flags            = 0;
 	int result               = 0;
@@ -468,10 +463,10 @@ PyObject *pyfwnt_access_control_entry_get_access_mask(
            pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libcerror_error_t *error = NULL;
 	PyObject *integer_object = NULL;
+	libcerror_error_t *error = NULL;
 	static char *function    = "pyfwnt_access_control_entry_get_access_mask";
-	uint32_t access_mask     = 0;
+	uint32_t value_32bit     = 0;
 	int result               = 0;
 
 	PYFWNT_UNREFERENCED_PARAMETER( arguments )
@@ -489,12 +484,12 @@ PyObject *pyfwnt_access_control_entry_get_access_mask(
 
 	result = libfwnt_access_control_entry_get_access_mask(
 	          pyfwnt_access_control_entry->access_control_entry,
-	          &access_mask,
+	          &value_32bit,
 	          &error );
 
 	Py_END_ALLOW_THREADS
 
-	if( result != 1 )
+	if( result == -1 )
 	{
 		pyfwnt_error_raise(
 		 error,
@@ -507,8 +502,15 @@ PyObject *pyfwnt_access_control_entry_get_access_mask(
 
 		return( NULL );
 	}
-	integer_object = pyfwnt_integer_unsigned_new_from_64bit(
-	                  (uint32_t) access_mask );
+	else if( result == 0 )
+	{
+		Py_IncRef(
+		 Py_None );
+
+		return( Py_None );
+	}
+	integer_object = PyLong_FromUnsignedLong(
+	                  (unsigned long) value_32bit );
 
 	return( integer_object );
 }
@@ -520,8 +522,9 @@ PyObject *pyfwnt_access_control_entry_get_security_identifier(
            pyfwnt_access_control_entry_t *pyfwnt_access_control_entry,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libfwnt_security_identifier_t *security_identifier = NULL;
+	PyObject *security_identifier_object               = NULL;
 	libcerror_error_t *error                           = NULL;
+	libfwnt_security_identifier_t *security_identifier = NULL;
 	static char *function                              = "pyfwnt_access_control_entry_get_security_identifier";
 	int result                                         = 0;
 
@@ -565,9 +568,20 @@ PyObject *pyfwnt_access_control_entry_get_security_identifier(
 
 		return( Py_None );
 	}
-	return( pyfwnt_security_identifier_new(
-	         security_identifier,
-	         (PyObject *) pyfwnt_access_control_entry ) );
+	security_identifier_object = pyfwnt_security_identifier_new(
+	                              security_identifier,
+	                              (PyObject *) pyfwnt_access_control_entry );
+
+	if( security_identifier_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_MemoryError,
+		 "%s: unable to create security identifier object.",
+		 function );
+
+		goto on_error;
+	}
+	return( security_identifier_object );
 
 on_error:
 	if( security_identifier != NULL )

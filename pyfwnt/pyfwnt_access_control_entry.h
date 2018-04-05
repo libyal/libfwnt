@@ -25,8 +25,6 @@
 #include <common.h>
 #include <types.h>
 
-#include "pyfwnt_access_control_entry.h"
-#include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
 

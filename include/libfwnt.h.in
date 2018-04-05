@@ -324,7 +324,7 @@ int libfwnt_access_control_entry_free(
      libfwnt_error_t **error );
 
 /* Retrieves the type
- * Returns 1 if successful, 0 if not available or -1 on error
+ * Returns 1 if successful or -1 on error
  */
 LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_get_type(
@@ -333,7 +333,7 @@ int libfwnt_access_control_entry_get_type(
      libfwnt_error_t **error );
 
 /* Retrieves the flags
- * Returns 1 if successful, 0 if not available or -1 on error
+ * Returns 1 if successful or -1 on error
  */
 LIBFWNT_EXTERN \
 int libfwnt_access_control_entry_get_flags(
