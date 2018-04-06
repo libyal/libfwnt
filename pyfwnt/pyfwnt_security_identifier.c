@@ -1,5 +1,5 @@
 /*
- * Python object definition of the libfwnt security identifier
+ * Python object wrapper of libfwnt_security_identifier_t
  *
  * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -22,7 +22,7 @@
 #include <common.h>
 #include <types.h>
 
-#if defined( HAVE_STDLIB_H )
+#if defined( HAVE_STDLIB_H ) || defined( HAVE_WINAPI )
 #include <stdlib.h>
 #endif
 
@@ -40,16 +40,14 @@ PyMethodDef pyfwnt_security_identifier_object_methods[] = {
 	  METH_VARARGS | METH_KEYWORDS,
 	  "copy_from_byte_stream(byte_stream)\n"
 	  "\n"
-	  "Copies the the security identifier from the byte stream." },
-
-	/* Functions to access the security identifier */
+	  "Copies the security identifier from the byte stream." },
 
 	{ "get_string",
 	  (PyCFunction) pyfwnt_security_identifier_get_string,
 	  METH_NOARGS,
-	  "get_string() -> Unicode string or None\n"
+	  "get_string() -> Unicode string\n"
 	  "\n"
-	  "Retrieves the string name." },
+	  "Retrieves the security identifier formatted as a string." },
 
 	/* Sentinel */
 	{ NULL, NULL, 0, NULL }
@@ -162,7 +160,7 @@ PyTypeObject pyfwnt_security_identifier_type_object = {
 	0
 };
 
-/* Creates a new pyfwnt security identifier object
+/* Creates a new security identifier object
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_security_identifier_new(
@@ -175,7 +173,7 @@ PyObject *pyfwnt_security_identifier_new(
 	if( security_identifier == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security identifier.",
 		 function );
 
@@ -227,7 +225,7 @@ int pyfwnt_security_identifier_init(
 	if( pyfwnt_security_identifier == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security identifier.",
 		 function );
 
@@ -260,15 +258,15 @@ int pyfwnt_security_identifier_init(
 void pyfwnt_security_identifier_free(
       pyfwnt_security_identifier_t *pyfwnt_security_identifier )
 {
-	libcerror_error_t *error    = NULL;
 	struct _typeobject *ob_type = NULL;
+	libcerror_error_t *error    = NULL;
 	static char *function       = "pyfwnt_security_identifier_free";
 	int result                  = 0;
 
 	if( pyfwnt_security_identifier == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security identifier.",
 		 function );
 
@@ -295,7 +293,7 @@ void pyfwnt_security_identifier_free(
 
 		return;
 	}
-	if( pyfwnt_security_identifier->security_identifier == NULL )
+	if( pyfwnt_security_identifier->security_identifier != NULL )
 	{
 		Py_BEGIN_ALLOW_THREADS
 
@@ -310,7 +308,7 @@ void pyfwnt_security_identifier_free(
 			pyfwnt_error_raise(
 			 error,
 			 PyExc_MemoryError,
-			 "%s: unable to free security identifier.",
+			 "%s: unable to free libfwnt security identifier.",
 			 function );
 
 			libcerror_error_free(
@@ -334,11 +332,11 @@ PyObject *pyfwnt_security_identifier_copy_from_byte_stream(
            PyObject *arguments,
            PyObject *keywords )
 {
-	PyObject *string_object     = NULL;
+	PyObject *bytes_object      = NULL;
 	libcerror_error_t *error    = NULL;
+	const char *byte_stream     = NULL;
 	static char *function       = "pyfwnt_security_identifier_copy_from_byte_stream";
 	static char *keyword_list[] = { "byte_stream", NULL };
-	const char *byte_stream     = NULL;
 	Py_ssize_t byte_stream_size = 0;
 	int result                  = 0;
 
@@ -356,7 +354,7 @@ PyObject *pyfwnt_security_identifier_copy_from_byte_stream(
 	     keywords,
 	     "O",
 	     keyword_list,
-	     &string_object ) == 0 )
+	     &bytes_object ) == 0 )
 	{
 		return( NULL );
 	}
@@ -364,18 +362,18 @@ PyObject *pyfwnt_security_identifier_copy_from_byte_stream(
 
 #if PY_MAJOR_VERSION >= 3
 	result = PyObject_IsInstance(
-		  string_object,
-		  (PyObject *) &PyBytes_Type );
+	          bytes_object,
+	          (PyObject *) &PyBytes_Type );
 #else
 	result = PyObject_IsInstance(
-		  string_object,
-		  (PyObject *) &PyString_Type );
+	          bytes_object,
+	          (PyObject *) &PyString_Type );
 #endif
 	if( result == -1 )
 	{
 		pyfwnt_error_fetch_and_raise(
-	         PyExc_RuntimeError,
-		 "%s: unable to determine if string object is of type string.",
+		 PyExc_RuntimeError,
+		 "%s: unable to determine if object is of type bytes.",
 		 function );
 
 		return( NULL );
@@ -384,7 +382,7 @@ PyObject *pyfwnt_security_identifier_copy_from_byte_stream(
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: unsupported string object type",
+		 "%s: unsupported bytes object type",
 		 function );
 
 		return( NULL );
@@ -393,19 +391,27 @@ PyObject *pyfwnt_security_identifier_copy_from_byte_stream(
 
 #if PY_MAJOR_VERSION >= 3
 	byte_stream = PyBytes_AsString(
-	               string_object );
+	               bytes_object );
 
 	byte_stream_size = PyBytes_Size(
-	                    string_object );
+	                    bytes_object );
 #else
 	byte_stream = PyString_AsString(
-	               string_object );
+	               bytes_object );
 
 	byte_stream_size = PyString_Size(
-	                    string_object );
+	                    bytes_object );
 #endif
-/* TODO size bounds check */
+	if( ( byte_stream_size < 0 )
+	 || ( byte_stream_size > (Py_ssize_t) SSIZE_MAX ) )
+	{
+		PyErr_Format(
+		 PyExc_ValueError,
+		 "%s: invalid byte stream size value out of bounds.",
+		 function );
 
+		return( NULL );
+	}
 	Py_BEGIN_ALLOW_THREADS
 
 	result = libfwnt_security_identifier_copy_from_byte_stream(
@@ -443,11 +449,11 @@ PyObject *pyfwnt_security_identifier_get_string(
            pyfwnt_security_identifier_t *pyfwnt_security_identifier,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libcerror_error_t *error     = NULL;
 	PyObject *string_object      = NULL;
+	libcerror_error_t *error     = NULL;
 	const char *errors           = NULL;
-	uint8_t *string              = NULL;
 	static char *function        = "pyfwnt_security_identifier_get_string";
+	char *utf8_string            = NULL;
 	size_t string_size           = 0;
 	uint32_t string_format_flags = 0;
 	int result                   = 0;
@@ -457,7 +463,7 @@ PyObject *pyfwnt_security_identifier_get_string(
 	if( pyfwnt_security_identifier == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security identifier.",
 		 function );
 
@@ -478,7 +484,7 @@ PyObject *pyfwnt_security_identifier_get_string(
 		pyfwnt_error_raise(
 		 error,
 		 PyExc_IOError,
-		 "%s: unable to retrieve string size.",
+		 "%s: unable to determine size of string as string.",
 		 function );
 
 		libcerror_error_free(
@@ -494,14 +500,14 @@ PyObject *pyfwnt_security_identifier_get_string(
 
 		return( Py_None );
 	}
-	string = (uint8_t *) PyMem_Malloc(
-	                      sizeof( uint8_t ) * string_size );
+	utf8_string = (char *) PyMem_Malloc(
+	                        sizeof( char ) * string_size );
 
-	if( string == NULL )
+	if( utf8_string == NULL )
 	{
 		PyErr_Format(
-		 PyExc_IOError,
-		 "%s: unable to create string.",
+		 PyExc_MemoryError,
+		 "%s: unable to create UTF-8 string.",
 		 function );
 
 		goto on_error;
@@ -509,11 +515,11 @@ PyObject *pyfwnt_security_identifier_get_string(
 	Py_BEGIN_ALLOW_THREADS
 
 	result = libfwnt_security_identifier_copy_to_utf8_string(
-		  pyfwnt_security_identifier->security_identifier,
-		  string,
-		  string_size,
-		  string_format_flags,
-		  &error );
+	          pyfwnt_security_identifier->security_identifier,
+	          (uint8_t *) utf8_string,
+	          string_size,
+	          string_format_flags,
+	          &error );
 
 	Py_END_ALLOW_THREADS
 
@@ -522,7 +528,7 @@ PyObject *pyfwnt_security_identifier_get_string(
 		pyfwnt_error_raise(
 		 error,
 		 PyExc_IOError,
-		 "%s: unable to retrieve string.",
+		 "%s: unable to retrieve string as UTF-8 string.",
 		 function );
 
 		libcerror_error_free(
@@ -530,25 +536,33 @@ PyObject *pyfwnt_security_identifier_get_string(
 
 		goto on_error;
 	}
-	/* Pass the string length to PyUnicode_DecodeUTF8
-	 * otherwise it makes the end of string character is part
-	 * of the string
+	/* Pass the string length to PyUnicode_DecodeUTF8 otherwise it makes
+	 * the end of string character is part of the string.
 	 */
 	string_object = PyUnicode_DecodeUTF8(
-			 (char *) string,
-			 (Py_ssize_t) string_size - 1,
-			 errors );
+	                 utf8_string,
+	                 (Py_ssize_t) string_size - 1,
+	                 errors );
 
+	if( string_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_IOError,
+		 "%s: unable to convert UTF-8 string into Unicode object.",
+		 function );
+
+		goto on_error;
+	}
 	PyMem_Free(
-	 string );
+	 utf8_string );
 
 	return( string_object );
 
 on_error:
-	if( string != NULL )
+	if( utf8_string != NULL )
 	{
 		PyMem_Free(
-		 string );
+		 utf8_string );
 	}
 	return( NULL );
 }

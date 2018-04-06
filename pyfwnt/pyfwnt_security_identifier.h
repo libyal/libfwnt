@@ -1,5 +1,5 @@
 /*
- * Python object definition of the libfwnt security identifier
+ * Python object wrapper of libfwnt_security_identifier_t
  *
  * Copyright (C) 2009-2018, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -25,10 +25,8 @@
 #include <common.h>
 #include <types.h>
 
-#include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
-#include "pyfwnt_security_identifier.h"
 
 #if defined( __cplusplus )
 extern "C" {
@@ -42,7 +40,7 @@ struct pyfwnt_security_identifier
 	 */
 	PyObject_HEAD
 
-	/* The libfwnt extension block
+	/* The libfwnt security identifier
 	 */
 	libfwnt_security_identifier_t *security_identifier;
 

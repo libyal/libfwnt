@@ -205,9 +205,11 @@ PyObject *pyfwnt_access_control_list_new(
 	pyfwnt_access_control_list->access_control_list = access_control_list;
 	pyfwnt_access_control_list->parent_object       = parent_object;
 
-	Py_IncRef(
-	 pyfwnt_access_control_list->parent_object );
-
+	if( pyfwnt_access_control_list->parent_object != NULL )
+	{
+		Py_IncRef(
+		 pyfwnt_access_control_list->parent_object );
+	}
 	return( (PyObject *) pyfwnt_access_control_list );
 
 on_error:
@@ -319,7 +321,7 @@ void pyfwnt_access_control_list_free(
 	 (PyObject*) pyfwnt_access_control_list );
 }
 
-/* Retrieves the number of entries
+/* Retrieves the number of access control entries
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_access_control_list_get_number_of_entries(
@@ -357,7 +359,7 @@ PyObject *pyfwnt_access_control_list_get_number_of_entries(
 		pyfwnt_error_raise(
 		 error,
 		 PyExc_IOError,
-		 "%s: unable to retrieve number of entries.",
+		 "%s: unable to retrieve number of access control entries.",
 		 function );
 
 		libcerror_error_free(
@@ -375,7 +377,7 @@ PyObject *pyfwnt_access_control_list_get_number_of_entries(
 	return( integer_object );
 }
 
-/* Retrieves a specific entry by index
+/* Retrieves a specific access control entry by index
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_access_control_list_get_entry_by_index(
@@ -412,7 +414,7 @@ PyObject *pyfwnt_access_control_list_get_entry_by_index(
 		pyfwnt_error_raise(
 		 error,
 		 PyExc_IOError,
-		 "%s: unable to retrieve entry: %d.",
+		 "%s: unable to retrieve access control entry: %d.",
 		 function,
 		 entry_index );
 
@@ -446,7 +448,7 @@ on_error:
 	return( NULL );
 }
 
-/* Retrieves a specific entry
+/* Retrieves a specific access control entry
  * Returns a Python object if successful or NULL on error
  */
 PyObject *pyfwnt_access_control_list_get_entry(
@@ -521,7 +523,7 @@ PyObject *pyfwnt_access_control_list_get_entries(
 		return( NULL );
 	}
 	sequence_object = pyfwnt_access_control_entries_new(
-	                   pyfwnt_access_control_list,
+	                   (PyObject *) pyfwnt_access_control_list,
 	                   &pyfwnt_access_control_list_get_entry_by_index,
 	                   number_of_entries );
 

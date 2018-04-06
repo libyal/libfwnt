@@ -431,7 +431,7 @@ on_error:
 	return( -1 );
 }
 
-/* Retrieves the number of access control entries (ACE)
+/* Retrieves the number of access control entries
  * Returns 1 if successful or -1 on error
  */
 int libfwnt_access_control_list_get_number_of_entries(
@@ -472,7 +472,7 @@ int libfwnt_access_control_list_get_number_of_entries(
 	return( 1 );
 }
 
-/* Retrieves a specific access control entries (ACE)
+/* Retrieves a specific access control entry
  * Returns 1 if successful or -1 on error
  */
 int libfwnt_access_control_list_get_entry_by_index(

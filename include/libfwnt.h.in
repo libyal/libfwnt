@@ -292,7 +292,7 @@ int libfwnt_access_control_list_free(
      libfwnt_access_control_list_t **access_control_list,
      libfwnt_error_t **error );
 
-/* Retrieves the number of access control entries (ACE)
+/* Retrieves the number of access control entries
  * Returns 1 if successful or -1 on error
  */
 LIBFWNT_EXTERN \
@@ -301,7 +301,7 @@ int libfwnt_access_control_list_get_number_of_entries(
      int *number_of_entries,
      libfwnt_error_t **error );
 
-/* Retrieves a specific access control entries (ACE)
+/* Retrieves a specific access control entry
  * Returns 1 if successful or -1 on error
  */
 LIBFWNT_EXTERN \

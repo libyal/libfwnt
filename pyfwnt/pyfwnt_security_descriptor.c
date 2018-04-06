@@ -42,9 +42,7 @@ PyMethodDef pyfwnt_security_descriptor_object_methods[] = {
 	  METH_VARARGS | METH_KEYWORDS,
 	  "copy_from_byte_stream(byte_stream)\n"
 	  "\n"
-	  "Copies the the security descriptor from the byte stream." },
-
-	/* Functions to access the security identifier */
+	  "Copies the security descriptor from the byte stream." },
 
 	{ "get_owner",
 	  (PyCFunction) pyfwnt_security_descriptor_get_owner,
@@ -215,7 +213,7 @@ int pyfwnt_security_descriptor_init(
 	if( pyfwnt_security_descriptor == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security descriptor.",
 		 function );
 
@@ -248,15 +246,15 @@ int pyfwnt_security_descriptor_init(
 void pyfwnt_security_descriptor_free(
       pyfwnt_security_descriptor_t *pyfwnt_security_descriptor )
 {
-	libcerror_error_t *error    = NULL;
 	struct _typeobject *ob_type = NULL;
+	libcerror_error_t *error    = NULL;
 	static char *function       = "pyfwnt_security_descriptor_free";
 	int result                  = 0;
 
 	if( pyfwnt_security_descriptor == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security descriptor.",
 		 function );
 
@@ -298,7 +296,7 @@ void pyfwnt_security_descriptor_free(
 			pyfwnt_error_raise(
 			 error,
 			 PyExc_MemoryError,
-			 "%s: unable to free security descriptor.",
+			 "%s: unable to free libfwnt security descriptor.",
 			 function );
 
 			libcerror_error_free(
@@ -317,11 +315,11 @@ PyObject *pyfwnt_security_descriptor_copy_from_byte_stream(
            PyObject *arguments,
            PyObject *keywords )
 {
-	PyObject *string_object     = NULL;
+	PyObject *bytes_object      = NULL;
 	libcerror_error_t *error    = NULL;
+	const char *byte_stream     = NULL;
 	static char *function       = "pyfwnt_security_descriptor_copy_from_byte_stream";
 	static char *keyword_list[] = { "byte_stream", NULL };
-	const char *byte_stream     = NULL;
 	Py_ssize_t byte_stream_size = 0;
 	int result                  = 0;
 
@@ -339,7 +337,7 @@ PyObject *pyfwnt_security_descriptor_copy_from_byte_stream(
 	     keywords,
 	     "O",
 	     keyword_list,
-	     &string_object ) == 0 )
+	     &bytes_object ) == 0 )
 	{
 		return( NULL );
 	}
@@ -347,18 +345,18 @@ PyObject *pyfwnt_security_descriptor_copy_from_byte_stream(
 
 #if PY_MAJOR_VERSION >= 3
 	result = PyObject_IsInstance(
-		  string_object,
-		  (PyObject *) &PyBytes_Type );
+	          bytes_object,
+	          (PyObject *) &PyBytes_Type );
 #else
 	result = PyObject_IsInstance(
-		  string_object,
-		  (PyObject *) &PyString_Type );
+	          bytes_object,
+	          (PyObject *) &PyString_Type );
 #endif
 	if( result == -1 )
 	{
 		pyfwnt_error_fetch_and_raise(
-	         PyExc_RuntimeError,
-		 "%s: unable to determine if string object is of type string.",
+		 PyExc_RuntimeError,
+		 "%s: unable to determine if object is of type bytes.",
 		 function );
 
 		return( NULL );
@@ -367,7 +365,7 @@ PyObject *pyfwnt_security_descriptor_copy_from_byte_stream(
 	{
 		PyErr_Format(
 		 PyExc_TypeError,
-		 "%s: unsupported string object type",
+		 "%s: unsupported bytes object type",
 		 function );
 
 		return( NULL );
@@ -376,19 +374,27 @@ PyObject *pyfwnt_security_descriptor_copy_from_byte_stream(
 
 #if PY_MAJOR_VERSION >= 3
 	byte_stream = PyBytes_AsString(
-	               string_object );
+	               bytes_object );
 
 	byte_stream_size = PyBytes_Size(
-	                    string_object );
+	                    bytes_object );
 #else
 	byte_stream = PyString_AsString(
-	               string_object );
+	               bytes_object );
 
 	byte_stream_size = PyString_Size(
-	                    string_object );
+	                    bytes_object );
 #endif
-/* TODO size bounds check */
+	if( ( byte_stream_size < 0 )
+	 || ( byte_stream_size > (Py_ssize_t) SSIZE_MAX ) )
+	{
+		PyErr_Format(
+		 PyExc_ValueError,
+		 "%s: invalid byte stream size value out of bounds.",
+		 function );
 
+		return( NULL );
+	}
 	Py_BEGIN_ALLOW_THREADS
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
@@ -426,17 +432,18 @@ PyObject *pyfwnt_security_descriptor_get_owner(
            pyfwnt_security_descriptor_t *pyfwnt_security_descriptor,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libfwnt_security_identifier_t *security_identifier = NULL;
-	libcerror_error_t *error                           = NULL;
-	static char *function                              = "pyfwnt_security_descriptor_get_owner";
-	int result                                         = 0;
+	PyObject *owner_object               = NULL;
+	libcerror_error_t *error             = NULL;
+	libfwnt_security_identifier_t *owner = NULL;
+	static char *function                = "pyfwnt_security_descriptor_get_owner";
+	int result                           = 0;
 
 	PYFWNT_UNREFERENCED_PARAMETER( arguments )
 
 	if( pyfwnt_security_descriptor == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security descriptor.",
 		 function );
 
@@ -446,7 +453,7 @@ PyObject *pyfwnt_security_descriptor_get_owner(
 
 	result = libfwnt_security_descriptor_get_owner(
 	          pyfwnt_security_descriptor->security_descriptor,
-	          &security_identifier,
+	          &owner,
 	          &error );
 
 	Py_END_ALLOW_THREADS
@@ -471,15 +478,26 @@ PyObject *pyfwnt_security_descriptor_get_owner(
 
 		return( Py_None );
 	}
-	return( pyfwnt_security_identifier_new(
-	         security_identifier,
-	         (PyObject *) pyfwnt_security_descriptor ) );
+	owner_object = pyfwnt_security_identifier_new(
+	                owner,
+	                (PyObject *) pyfwnt_security_descriptor );
+
+	if( owner_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_MemoryError,
+		 "%s: unable to create owner security identifier object.",
+		 function );
+
+		goto on_error;
+	}
+	return( owner_object );
 
 on_error:
-	if( security_identifier != NULL )
+	if( owner != NULL )
 	{
 		libfwnt_security_identifier_free(
-		 &security_identifier,
+		 &owner,
 		 NULL );
 	}
 	return( NULL );
@@ -492,17 +510,18 @@ PyObject *pyfwnt_security_descriptor_get_group(
            pyfwnt_security_descriptor_t *pyfwnt_security_descriptor,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libfwnt_security_identifier_t *security_identifier = NULL;
-	libcerror_error_t *error                           = NULL;
-	static char *function                              = "pyfwnt_security_descriptor_get_group";
-	int result                                         = 0;
+	PyObject *group_object               = NULL;
+	libcerror_error_t *error             = NULL;
+	libfwnt_security_identifier_t *group = NULL;
+	static char *function                = "pyfwnt_security_descriptor_get_group";
+	int result                           = 0;
 
 	PYFWNT_UNREFERENCED_PARAMETER( arguments )
 
 	if( pyfwnt_security_descriptor == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security descriptor.",
 		 function );
 
@@ -512,7 +531,7 @@ PyObject *pyfwnt_security_descriptor_get_group(
 
 	result = libfwnt_security_descriptor_get_group(
 	          pyfwnt_security_descriptor->security_descriptor,
-	          &security_identifier,
+	          &group,
 	          &error );
 
 	Py_END_ALLOW_THREADS
@@ -537,15 +556,26 @@ PyObject *pyfwnt_security_descriptor_get_group(
 
 		return( Py_None );
 	}
-	return( pyfwnt_security_identifier_new(
-	         security_identifier,
-	         (PyObject *) pyfwnt_security_descriptor ) );
+	group_object = pyfwnt_security_identifier_new(
+	                group,
+	                (PyObject *) pyfwnt_security_descriptor );
+
+	if( group_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_MemoryError,
+		 "%s: unable to create group security identifier object.",
+		 function );
+
+		goto on_error;
+	}
+	return( group_object );
 
 on_error:
-	if( security_identifier != NULL )
+	if( group != NULL )
 	{
 		libfwnt_security_identifier_free(
-		 &security_identifier,
+		 &group,
 		 NULL );
 	}
 	return( NULL );
@@ -558,17 +588,18 @@ PyObject *pyfwnt_security_descriptor_get_discretionary_acl(
            pyfwnt_security_descriptor_t *pyfwnt_security_descriptor,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libfwnt_access_control_list_t *access_control_list = NULL;
-	libcerror_error_t *error                           = NULL;
-	static char *function                              = "pyfwnt_security_descriptor_get_discretionary_acl";
-	int result                                         = 0;
+	PyObject *discretionary_acl_object               = NULL;
+	libcerror_error_t *error                         = NULL;
+	libfwnt_access_control_list_t *discretionary_acl = NULL;
+	static char *function                            = "pyfwnt_security_descriptor_get_discretionary_acl";
+	int result                                       = 0;
 
 	PYFWNT_UNREFERENCED_PARAMETER( arguments )
 
 	if( pyfwnt_security_descriptor == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security descriptor.",
 		 function );
 
@@ -578,7 +609,7 @@ PyObject *pyfwnt_security_descriptor_get_discretionary_acl(
 
 	result = libfwnt_security_descriptor_get_discretionary_acl(
 	          pyfwnt_security_descriptor->security_descriptor,
-	          &access_control_list,
+	          &discretionary_acl,
 	          &error );
 
 	Py_END_ALLOW_THREADS
@@ -603,15 +634,26 @@ PyObject *pyfwnt_security_descriptor_get_discretionary_acl(
 
 		return( Py_None );
 	}
-	return( pyfwnt_access_control_list_new(
-	         access_control_list,
-	         (PyObject *) pyfwnt_security_descriptor ) );
+	discretionary_acl_object = pyfwnt_access_control_list_new(
+	                            discretionary_acl,
+	                            (PyObject *) pyfwnt_security_descriptor );
+
+	if( discretionary_acl_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_MemoryError,
+		 "%s: unable to create discretionary access control list object.",
+		 function );
+
+		goto on_error;
+	}
+	return( discretionary_acl_object );
 
 on_error:
-	if( access_control_list != NULL )
+	if( discretionary_acl != NULL )
 	{
 		libfwnt_access_control_list_free(
-		 &access_control_list,
+		 &discretionary_acl,
 		 NULL );
 	}
 	return( NULL );
@@ -624,17 +666,18 @@ PyObject *pyfwnt_security_descriptor_get_system_acl(
            pyfwnt_security_descriptor_t *pyfwnt_security_descriptor,
            PyObject *arguments PYFWNT_ATTRIBUTE_UNUSED )
 {
-	libfwnt_access_control_list_t *access_control_list = NULL;
-	libcerror_error_t *error                           = NULL;
-	static char *function                              = "pyfwnt_security_descriptor_get_system_acl";
-	int result                                         = 0;
+	PyObject *system_acl_object               = NULL;
+	libcerror_error_t *error                  = NULL;
+	libfwnt_access_control_list_t *system_acl = NULL;
+	static char *function                     = "pyfwnt_security_descriptor_get_system_acl";
+	int result                                = 0;
 
 	PYFWNT_UNREFERENCED_PARAMETER( arguments )
 
 	if( pyfwnt_security_descriptor == NULL )
 	{
 		PyErr_Format(
-		 PyExc_TypeError,
+		 PyExc_ValueError,
 		 "%s: invalid security descriptor.",
 		 function );
 
@@ -644,7 +687,7 @@ PyObject *pyfwnt_security_descriptor_get_system_acl(
 
 	result = libfwnt_security_descriptor_get_system_acl(
 	          pyfwnt_security_descriptor->security_descriptor,
-	          &access_control_list,
+	          &system_acl,
 	          &error );
 
 	Py_END_ALLOW_THREADS
@@ -669,15 +712,26 @@ PyObject *pyfwnt_security_descriptor_get_system_acl(
 
 		return( Py_None );
 	}
-	return( pyfwnt_access_control_list_new(
-	         access_control_list,
-	         (PyObject *) pyfwnt_security_descriptor ) );
+	system_acl_object = pyfwnt_access_control_list_new(
+	                     system_acl,
+	                     (PyObject *) pyfwnt_security_descriptor );
+
+	if( system_acl_object == NULL )
+	{
+		PyErr_Format(
+		 PyExc_MemoryError,
+		 "%s: unable to create system access control list object.",
+		 function );
+
+		goto on_error;
+	}
+	return( system_acl_object );
 
 on_error:
-	if( access_control_list != NULL )
+	if( system_acl != NULL )
 	{
 		libfwnt_access_control_list_free(
-		 &access_control_list,
+		 &system_acl,
 		 NULL );
 	}
 	return( NULL );

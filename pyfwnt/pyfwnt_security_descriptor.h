@@ -25,10 +25,8 @@
 #include <common.h>
 #include <types.h>
 
-#include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
 #include "pyfwnt_python.h"
-#include "pyfwnt_security_descriptor.h"
 
 #if defined( __cplusplus )
 extern "C" {

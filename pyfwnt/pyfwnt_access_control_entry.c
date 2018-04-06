@@ -230,9 +230,11 @@ PyObject *pyfwnt_access_control_entry_new(
 	pyfwnt_access_control_entry->access_control_entry = access_control_entry;
 	pyfwnt_access_control_entry->parent_object        = parent_object;
 
-	Py_IncRef(
-	 pyfwnt_access_control_entry->parent_object );
-
+	if( pyfwnt_access_control_entry->parent_object != NULL )
+	{
+		Py_IncRef(
+		 pyfwnt_access_control_entry->parent_object );
+	}
 	return( (PyObject *) pyfwnt_access_control_entry );
 
 on_error:
