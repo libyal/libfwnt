@@ -51,10 +51,7 @@ PyMethodDef pyfwnt_module_methods[] = {
 	  "Retrieves the version." },
 
 	/* Sentinel */
-	{ NULL,
-	  NULL,
-	  0,
-	  NULL}
+	{ NULL, NULL, 0, NULL }
 };
 
 /* Retrieves the pyfwnt/libfwnt version
@@ -173,7 +170,7 @@ PyMODINIT_FUNC initpyfwnt(
 		goto on_error;
 	}
 	Py_IncRef(
-	 (PyObject * ) &pyfwnt_access_control_entries_type_object );
+	 (PyObject *) &pyfwnt_access_control_entries_type_object );
 
 	PyModule_AddObject(
 	 module,
@@ -190,7 +187,7 @@ PyMODINIT_FUNC initpyfwnt(
 		goto on_error;
 	}
 	Py_IncRef(
-	 (PyObject * ) &pyfwnt_access_control_entry_type_object );
+	 (PyObject *) &pyfwnt_access_control_entry_type_object );
 
 	PyModule_AddObject(
 	 module,
@@ -207,7 +204,7 @@ PyMODINIT_FUNC initpyfwnt(
 		goto on_error;
 	}
 	Py_IncRef(
-	 (PyObject * ) &pyfwnt_access_control_list_type_object );
+	 (PyObject *) &pyfwnt_access_control_list_type_object );
 
 	PyModule_AddObject(
 	 module,
@@ -224,7 +221,7 @@ PyMODINIT_FUNC initpyfwnt(
 		goto on_error;
 	}
 	Py_IncRef(
-	 (PyObject * ) &pyfwnt_access_control_types_type_object );
+	 (PyObject *) &pyfwnt_access_control_types_type_object );
 
 	PyModule_AddObject(
 	 module,
@@ -241,7 +238,7 @@ PyMODINIT_FUNC initpyfwnt(
 		goto on_error;
 	}
 	Py_IncRef(
-	 (PyObject * ) &pyfwnt_security_descriptor_type_object );
+	 (PyObject *) &pyfwnt_security_descriptor_type_object );
 
 	PyModule_AddObject(
 	 module,
@@ -258,7 +255,7 @@ PyMODINIT_FUNC initpyfwnt(
 		goto on_error;
 	}
 	Py_IncRef(
-	 (PyObject * ) &pyfwnt_security_identifier_type_object );
+	 (PyObject *) &pyfwnt_security_identifier_type_object );
 
 	PyModule_AddObject(
 	 module,

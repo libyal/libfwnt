@@ -37,8 +37,11 @@
 
 #include <libfwnt/extern.h>
 
+#define LIBFWNT_EXTERN_VARIABLE	LIBFWNT_EXTERN
+
 #else
-#define LIBFWNT_EXTERN	/* extern */
+#define LIBFWNT_EXTERN		/* extern */
+#define LIBFWNT_EXTERN_VARIABLE	extern
 
 #endif /* !defined( HAVE_LOCAL_LIBFWNT ) */
 
