@@ -3,7 +3,8 @@ AM_CFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
-	@LIBCDATA_CPPFLAGS@
+	@LIBCDATA_CPPFLAGS@ \
+	@LIBFWNT_DLL_IMPORT@
 
 pyexec_LTLIBRARIES = pyfwnt.la
 

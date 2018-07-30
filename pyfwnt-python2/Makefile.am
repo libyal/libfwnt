@@ -9,7 +9,8 @@ AM_CFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
-	@LIBCDATA_CPPFLAGS@
+	@LIBCDATA_CPPFLAGS@ \
+	@LIBFWNT_DLL_IMPORT@
 
 am_pyfwnt_la_rpath = -rpath $(pyexecdir2)
 

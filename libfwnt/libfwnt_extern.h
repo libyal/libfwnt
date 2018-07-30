@@ -28,13 +28,6 @@
  */
 #if !defined( HAVE_LOCAL_LIBFWNT )
 
-/* If libtool DLL support is enabled set LIBFWNT_DLL_EXPORT
- * before including libfwnt/extern.h
- */
-#if defined( _WIN32 ) && defined( DLL_EXPORT )
-#define LIBFWNT_DLL_EXPORT
-#endif
-
 #include <libfwnt/extern.h>
 
 #define LIBFWNT_EXTERN_VARIABLE	LIBFWNT_EXTERN
