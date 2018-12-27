@@ -9,6 +9,8 @@ Homepage: https://github.com/libyal/libfwnt
 Package: libfwnt
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: libfwnt1
+Replaces: libfwnt1
 Suggests: libfwnt-dbg
 Description: Library to support common Windows NT specific formats
  libfwnt is a library to support common Windows NT specific formats.
@@ -31,6 +33,8 @@ Package: libfwnt-python
 Section: python
 Architecture: any
 Depends: libfwnt (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Conflicts: python-libfwnt
+Replaces: python-libfwnt
 Suggests: libfwnt-python-dbg
 Description: Python 2 bindings for libfwnt
  Python 2 bindings for libfwnt.
@@ -46,6 +50,8 @@ Package: libfwnt-python3
 Section: python
 Architecture: any
 Depends: libfwnt (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Conflicts: python3-libfwnt
+Replaces: python3-libfwnt
 Suggests: libfwnt-python3-dbg
 Description: Python 3 bindings for libfwnt
  Python 3 bindings for libfwnt.
