@@ -3,7 +3,6 @@ TODO
   - add decompression support
   - add compression support
 * lznt1
-  - add decompression support
   - add compression support
 * lzxpress
   - add compression support
@@ -25,88 +24,8 @@ TODO
 * security identifier:
   - use array for sub authorities?
 
-20161103
-* code clean up
-* worked on tests
-* worked on lzxpress huffman
-
-20161102
-* worked on tests
-
-20161031
-* worked on tests
-
-20160418
-* worked on Python bindings
-
-20160417
-* worked on security descriptor support
-* worked on Python bindings
-
-20160415
-* worked on security descriptor support
-
-20160412
-* worked on security descriptor support
-
-20160411
-* worked on tests
-
-20160106
-* 2016 update
-
-20151206
-* changes in copying security identifier to string
-  to work around issues with VS 2008 compilation
-
-20150621
-* woked on lzxpress support
-
-20150618
-* woked on lzxpress support
-
-20150613
-* woked on lzxpress support
-
-20150612
-* woked on lzxpress support
-
-20150608
-* fixed typo
-
-20150413
-* increased the maximum number of sub authorities from 10 to 15
-
-20150406
-* code clean up
-
-20150104
-* 2015 update
-* worked on tests
-
-20141018
-* changes for deployment
-
-20141012
-* worked on utility scripts
-
-20140921
-* changes for project site move
-
-20140512
-* woked on lzxpress support
-
-20140417
-* woked on lznt1 support
-
-20140415
-* woked on lzxpress support
-
-20140105
-* 2014 update
-* updated dependencies
-
 20130929
+* see `git log' for more recent change log
 * worked on libcthreads build support
 * worked on git files
 * fixes for stand-alone build
