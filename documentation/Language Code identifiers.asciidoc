@@ -191,7 +191,7 @@ A http://www.iana.org/assignments/language-subtag-registry[database of the langu
 | 0x0401 | ar-SA | Arabic, Saudi Arabia
 | 0x0402 | bg-BG | Bulgarian, Bulgaria
 | 0x0403 | ca-ES | Catalan, Spain
-| 0x0404 | zh-TW | Chinese, Taiwan, Province of China
+| 0x0404 | zh-TW | Chinese, Taiwan
 | 0x0405 | cs-CZ | Czech, Czech Republic
 | 0x0406 | da-DK | Danish, Denmark
 | 0x0407 | de-DE | German, Germany
