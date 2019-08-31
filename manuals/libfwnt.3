@@ -1,11 +1,9 @@
-.Dd January 15, 2017
+.Dd August 31, 2019
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
 .Nm libfwnt.h
 .Nd Library to support common Windows NT specific formats
-.Sh LIBRARY
-.Lb libfwnt
 .Sh SYNOPSIS
 .In libfwnt.h
 .Pp
@@ -17,81 +15,81 @@ Error functions
 .Ft void
 .Fn libfwnt_error_free "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_error_fprint "libfwnt_error_t *error, FILE *stream"
+.Fn libfwnt_error_fprint "libfwnt_error_t *error" "FILE *stream"
 .Ft int
-.Fn libfwnt_error_sprint "libfwnt_error_t *error, char *string, size_t size"
+.Fn libfwnt_error_sprint "libfwnt_error_t *error" "char *string" "size_t size"
 .Ft int
-.Fn libfwnt_error_backtrace_fprint "libfwnt_error_t *error, FILE *stream"
+.Fn libfwnt_error_backtrace_fprint "libfwnt_error_t *error" "FILE *stream"
 .Ft int
-.Fn libfwnt_error_backtrace_sprint "libfwnt_error_t *error, char *string, size_t size"
+.Fn libfwnt_error_backtrace_sprint "libfwnt_error_t *error" "char *string" "size_t size"
 .Pp
 Security descriptor functions
 .Ft int
-.Fn libfwnt_security_descriptor_initialize "libfwnt_security_descriptor_t **security_descriptor, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_initialize "libfwnt_security_descriptor_t **security_descriptor" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_descriptor_free "libfwnt_security_descriptor_t **security_descriptor, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_free "libfwnt_security_descriptor_t **security_descriptor" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_descriptor_copy_from_byte_stream "libfwnt_security_descriptor_t *security_descriptor, const uint8_t *byte_stream, size_t byte_stream_size, int byte_order, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_copy_from_byte_stream "libfwnt_security_descriptor_t *security_descriptor" "const uint8_t *byte_stream" "size_t byte_stream_size" "int byte_order" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_descriptor_get_owner "libfwnt_security_descriptor_t *security_descriptor, libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_get_owner "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_descriptor_get_group "libfwnt_security_descriptor_t *security_descriptor, libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_get_group "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_descriptor_get_discretionary_acl "libfwnt_security_descriptor_t *security_descriptor, libfwnt_access_control_list_t **access_control_list, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_get_discretionary_acl "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_access_control_list_t **access_control_list" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_descriptor_get_system_acl "libfwnt_security_descriptor_t *security_descriptor, libfwnt_access_control_list_t **access_control_list, libfwnt_error_t **error"
+.Fn libfwnt_security_descriptor_get_system_acl "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_access_control_list_t **access_control_list" "libfwnt_error_t **error"
 .Pp
 Security identifier (SID) functions
 .Ft int
-.Fn libfwnt_security_identifier_initialize "libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_initialize "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_free "libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_free "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_from_byte_stream "libfwnt_security_identifier_t *security_identifier, const uint8_t *byte_stream, size_t byte_stream_size, int byte_order, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_from_byte_stream "libfwnt_security_identifier_t *security_identifier" "const uint8_t *byte_stream" "size_t byte_stream_size" "int byte_order" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_get_string_size "libfwnt_security_identifier_t *security_identifier, size_t *string_size, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_get_string_size "libfwnt_security_identifier_t *security_identifier" "size_t *string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf8_string "libfwnt_security_identifier_t *security_identifier, uint8_t *utf8_string, size_t utf8_string_size, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_to_utf8_string "libfwnt_security_identifier_t *security_identifier" "uint8_t *utf8_string" "size_t utf8_string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf8_string_with_index "libfwnt_security_identifier_t *security_identifier, uint8_t *utf8_string, size_t utf8_string_size, size_t *utf8_string_index, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_to_utf8_string_with_index "libfwnt_security_identifier_t *security_identifier" "uint8_t *utf8_string" "size_t utf8_string_size" "size_t *utf8_string_index" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf16_string "libfwnt_security_identifier_t *security_identifier, uint16_t *utf16_string, size_t utf16_string_size, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_to_utf16_string "libfwnt_security_identifier_t *security_identifier" "uint16_t *utf16_string" "size_t utf16_string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf16_string_with_index "libfwnt_security_identifier_t *security_identifier, uint16_t *utf16_string, size_t utf16_string_size, size_t *utf16_string_index, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_to_utf16_string_with_index "libfwnt_security_identifier_t *security_identifier" "uint16_t *utf16_string" "size_t utf16_string_size" "size_t *utf16_string_index" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf32_string "libfwnt_security_identifier_t *security_identifier, uint32_t *utf32_string, size_t utf32_string_size, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_to_utf32_string "libfwnt_security_identifier_t *security_identifier" "uint32_t *utf32_string" "size_t utf32_string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf32_string_with_index "libfwnt_security_identifier_t *security_identifier, uint32_t *utf32_string, size_t utf32_string_size, size_t *utf32_string_index, uint32_t string_format_flags, libfwnt_error_t **error"
+.Fn libfwnt_security_identifier_copy_to_utf32_string_with_index "libfwnt_security_identifier_t *security_identifier" "uint32_t *utf32_string" "size_t utf32_string_size" "size_t *utf32_string_index" "uint32_t string_format_flags" "libfwnt_error_t **error"
 .Pp
 Access control list (ACL) functions
 .Ft int
-.Fn libfwnt_access_control_list_free "libfwnt_access_control_list_t **access_control_list, libfwnt_error_t **error"
+.Fn libfwnt_access_control_list_free "libfwnt_access_control_list_t **access_control_list" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_list_get_number_of_entries "libfwnt_access_control_list_t *access_control_list, int *number_of_entries, libfwnt_error_t **error"
+.Fn libfwnt_access_control_list_get_number_of_entries "libfwnt_access_control_list_t *access_control_list" "int *number_of_entries" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_list_get_entry_by_index "libfwnt_access_control_list_t *access_control_list, int entry_index, libfwnt_access_control_entry_t **access_control_entry, libfwnt_error_t **error"
+.Fn libfwnt_access_control_list_get_entry_by_index "libfwnt_access_control_list_t *access_control_list" "int entry_index" "libfwnt_access_control_entry_t **access_control_entry" "libfwnt_error_t **error"
 .Pp
 Access control entry (ACE) functions
 .Ft int
-.Fn libfwnt_access_control_entry_free "libfwnt_access_control_entry_t **access_control_entry, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_free "libfwnt_access_control_entry_t **access_control_entry" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_entry_get_type "libfwnt_access_control_entry_t *access_control_entry, uint8_t *type, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_get_type "libfwnt_access_control_entry_t *access_control_entry" "uint8_t *type" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_entry_get_flags "libfwnt_access_control_entry_t *access_control_entry, uint8_t *flags, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_get_flags "libfwnt_access_control_entry_t *access_control_entry" "uint8_t *flags" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_entry_get_access_mask "libfwnt_access_control_entry_t *access_control_entry, uint32_t *access_mask, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_get_access_mask "libfwnt_access_control_entry_t *access_control_entry" "uint32_t *access_mask" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_access_control_entry_get_security_identifier "libfwnt_access_control_entry_t *access_control_entry, libfwnt_security_identifier_t **security_identifier, libfwnt_error_t **error"
+.Fn libfwnt_access_control_entry_get_security_identifier "libfwnt_access_control_entry_t *access_control_entry" "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
 .Pp
 LZNT1 functions
 .Ft int
-.Fn libfwnt_lznt1_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
+.Fn libfwnt_lznt1_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
 .Pp
 LZXPRESS functions
 .Ft int
-.Fn libfwnt_lzxpress_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
+.Fn libfwnt_lzxpress_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
 .Ft int
-.Fn libfwnt_lzxpress_huffman_decompress "const uint8_t *compressed_data, size_t compressed_data_size, uint8_t *uncompressed_data, size_t *uncompressed_data_size, libfwnt_error_t **error"
+.Fn libfwnt_lzxpress_huffman_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
 .Sh DESCRIPTION
 The
 .Fn libfwnt_get_version
@@ -109,7 +107,7 @@ Please report bugs of any kind on the project issue tracker: https://github.com/
 These man pages are generated from "libfwnt.h".
 .Sh COPYRIGHT
 Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>.
-
+.sp
 This is free software; see the source for copying conditions.
 There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .Sh SEE ALSO

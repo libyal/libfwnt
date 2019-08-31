@@ -22,6 +22,7 @@ check_SCRIPTS = \
 	pyfwnt_test_security_identifier.py \
 	pyfwnt_test_support.py \
 	test_library.sh \
+	test_manpage.sh \
 	test_python_module.sh \
 	test_runner.sh
 

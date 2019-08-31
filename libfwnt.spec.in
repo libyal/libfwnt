@@ -13,6 +13,14 @@ BuildRequires: gcc @ax_libcdata_spec_build_requires@ @ax_libcerror_spec_build_re
 %description -n libfwnt
 Library to support common Windows NT specific formats
 
+%package -n libfwnt-static
+Summary: Library to support common Windows NT specific formats
+Group: Development/Libraries
+Requires: libfwnt = %{version}-%{release}
+
+%description -n libfwnt-static
+Static library version of libfwnt.
+
 %package -n libfwnt-devel
 Summary: Header files and libraries for developing applications for libfwnt
 Group: Development/Libraries
@@ -65,11 +73,16 @@ rm -rf %{buildroot}
 %doc AUTHORS README
 %attr(755,root,root) %{_libdir}/*.so.*
 
+%files -n libfwnt-static
+%defattr(644,root,root,755)
+%license COPYING
+%doc AUTHORS README
+%attr(755,root,root) %{_libdir}/*.a
+
 %files -n libfwnt-devel
 %defattr(644,root,root,755)
 %license COPYING
 %doc AUTHORS README
-%{_libdir}/*.a
 %{_libdir}/*.la
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/libfwnt.pc
