@@ -1,6 +1,6 @@
 == Windows NT compression methods
 
-Windows NT comes with multiple built-in compression methods which are provided 
+Windows NT comes with multiple built-in compression methods which are provided
 by the RtlCompressBuffer and RtlDecompressBuffer functions.
 
 [options="header"]
@@ -226,38 +226,38 @@ This tuples refer to:
 
 === LZXPRESS Huffman
 
-The LZXPRESS Huffman compressed data consists of multiple chunks. Each chunk 
+The LZXPRESS Huffman compressed data consists of multiple chunks. Each chunk
 consists of:
 
-* a prefix code table 
-* Huffmann encoded bit stream
+* a Huffman (prefix) code table
+* Huffman encoded bit stream
 
-The LZXPRESS Huffman prefix code table 256 bytes of size and consists of:
+The LZXPRESS Huffman (prefix) code table 256 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
 |===
 | Offset | Size | Value | Description
-| 0 | 256 | | Array of prefix codes +
+| 0 | 512 x 4 bits | | Array of bit sizes of the Huffman (prefix) codes
 |===
 
-LZXPRESS Huffman prefix code table contains 512 x 4-bit prefix codes where the 
-4 LSB of byte 0 contain the prefix code for symbol 0, the 4 MSB the prefix code 
-for symbol 1, etc.
+The 4 least significant bits (LSB) of byte 0 contain the bit size for Huffman
+prefix code 0, the 4 most significant bits (MSB) the bit size for Huffman
+prefix code 1, etc.
 
-Where prefix codes:
+Where Huffman prefix codes:
 
-* 0 - 255 represent their corresponding byte values;
-* 256 - 511 represent compression tuples (size, offset).
+* 0 - 255 represent literals, which mapping to byte values;
+* 256 - 511 represent matches (or references), which map to compression tuples.
 
 [yellow-background]*TODO: describe how to create prefix code tree*
 
-compression tuple symbol
+A compression tuple symbol
 
 [cols="1,1,1,5",options="header"]
 |===
 | Offset | Size | Value | Description
-| 0.0 | 4 bits | | Compression size
-| 0.4 | 4 bits | | Compression offset
+| 0.0 | 4 bits | | Compression size (length)
+| 0.4 | 4 bits | | Compression offset (distance)
 | 1.0 | 1 bit | | Compression tuple flag
 |===
 
