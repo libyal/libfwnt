@@ -455,7 +455,7 @@ int libfwnt_lzxpress_huffman_compare_symbols(
 }
 
 /* Adds a leaf node to the Huffman tree
- * Returns 1 on success or -1 on error
+ * Returns the next tree node index
  */
 int libfwnt_lzxpress_huffman_tree_add_leaf(
      libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
@@ -479,7 +479,11 @@ int libfwnt_lzxpress_huffman_tree_add_leaf(
 		if( tree_node->sub_tree_nodes[ sub_tree_node_index ] == NULL )
 		{
 			tree_node->sub_tree_nodes[ sub_tree_node_index ] = &( tree_nodes[ next_tree_node_index ] );
-			tree_nodes[ next_tree_node_index ].is_leaf       = 0;
+
+#if defined( HAVE_DEBUG_OUTPUT )
+			tree_nodes[ next_tree_node_index ].symbol  = 0xffff;
+#endif
+			tree_nodes[ next_tree_node_index ].is_leaf = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 			tree_node->sub_tree_node_indexes[ sub_tree_node_index ] = next_tree_node_index;
@@ -511,13 +515,20 @@ int libfwnt_lzxpress_huffman_tree_read(
 {
 	libfwnt_lzxpress_huffman_code_symbol_t code_symbols[ 512 ];
 
-	static char *function  = "libfwnt_lzxpress_huffman_tree_read";
-	size_t byte_index      = 0;
-	uint32_t bits          = 0;
-	uint16_t symbol_index  = 0;
-	uint8_t byte_value     = 0;
-	uint8_t number_of_bits = 0;
-	int tree_node_index    = 0;
+	static char *function           = "libfwnt_lzxpress_huffman_tree_read";
+	size_t byte_index               = 0;
+	uint32_t bits                   = 0;
+	uint16_t code_size              = 0;
+	uint16_t code_symbol_index      = 0;
+	uint16_t number_of_code_symbols = 0;
+	uint16_t symbol_value           = 0;
+	uint8_t byte_value              = 0;
+	uint8_t number_of_bits          = 0;
+	int tree_node_index             = 0;
+
+#if defined( HAVE_DEBUG_OUTPUT )
+	int number_of_tree_nodes        = 0;
+#endif
 
 	if( compressed_data == NULL )
 	{
@@ -574,52 +585,84 @@ int libfwnt_lzxpress_huffman_tree_read(
 	     byte_index++ )
 	{
 		byte_value = compressed_data[ compressed_data_offset++ ];
+		code_size  = byte_value & 0x0f;
 
-		code_symbols[ symbol_index ].symbol    = symbol_index;
-		code_symbols[ symbol_index ].code_size = (uint16_t) ( byte_value & 0x0f );
+		/* Ignore symbols with a code size of 0 since they are not used
+		 * in the Huffman tree
+		 */
+		if( code_size > 0 )
+		{
+			code_symbols[ code_symbol_index ].symbol    = symbol_value;
+			code_symbols[ code_symbol_index ].code_size = code_size;
 
-		symbol_index++;
+			code_symbol_index++;
+		}
+		symbol_value++;
 
-		byte_value >>= 4;
+		code_size = ( byte_value >> 4 ) & 0x0f;
 
-		code_symbols[ symbol_index ].symbol    = symbol_index;
-		code_symbols[ symbol_index ].code_size = (uint16_t) ( byte_value & 0x0f );
+		if( code_size > 0 )
+		{
+			code_symbols[ code_symbol_index ].symbol    = symbol_value;
+			code_symbols[ code_symbol_index ].code_size = code_size;
 
-		symbol_index++;
+			code_symbol_index++;
+		}
+		symbol_value++;
 	}
+	number_of_code_symbols = code_symbol_index;
+
 	/* Sort the symbols
 	 */
 	qsort(
 	 code_symbols,
-	 512,
+	 number_of_code_symbols,
 	 sizeof( libfwnt_lzxpress_huffman_code_symbol_t ),
 	 (int (*)(const void *, const void *)) &libfwnt_lzxpress_huffman_compare_symbols );
 
-	/* Find the first symbol with a code size > 0
-	 */
-	for( symbol_index = 0;
-	     symbol_index < 512;
-	     symbol_index++ )
+#if defined( HAVE_DEBUG_OUTPUT )
+	if( libcnotify_verbose != 0 )
 	{
-		if( code_symbols[ symbol_index ].code_size > 0 )
+		for( code_symbol_index = 0;
+		     code_symbol_index < number_of_code_symbols;
+		     code_symbol_index++ )
 		{
-			break;
+			libcnotify_printf(
+			 "%s: symbol: %03d symbol\t\t\t: 0x%04" PRIx16 "\n",
+			 function,
+			 code_symbol_index,
+			 code_symbols[ code_symbol_index ].symbol );
+
+			libcnotify_printf(
+			 "%s: symbol: %03d code size\t\t: %" PRIu16 "\n",
+			 function,
+			 code_symbol_index,
+			 code_symbols[ code_symbol_index ].code_size );
 		}
+		libcnotify_printf(
+		 "\n" );
 	}
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 	bits           = 0;
 	number_of_bits = 1;
 
+#if defined( HAVE_DEBUG_OUTPUT )
+	tree_nodes[ tree_node_index ].symbol  = 0xffff;
+#endif
 	tree_nodes[ tree_node_index ].is_leaf = 0;
 
 	tree_node_index++;
 
-	while( symbol_index < 512 )
+	for( code_symbol_index = 0;
+	     code_symbol_index < number_of_code_symbols;
+	     code_symbol_index++ )
 	{
-		tree_nodes[ tree_node_index ].symbol  = code_symbols[ symbol_index ].symbol;
+		tree_nodes[ tree_node_index ].symbol  = code_symbols[ code_symbol_index ].symbol;
 		tree_nodes[ tree_node_index ].is_leaf = 1;
 
-		bits         <<= code_symbols[ symbol_index ].code_size - number_of_bits;
-		number_of_bits = (uint8_t) code_symbols[ symbol_index ].code_size;
+		bits         <<= code_symbols[ code_symbol_index ].code_size - number_of_bits;
+		number_of_bits = (uint8_t) code_symbols[ code_symbol_index ].code_size;
 
 		tree_node_index = libfwnt_lzxpress_huffman_tree_add_leaf(
 		                   tree_nodes,
@@ -628,13 +671,14 @@ int libfwnt_lzxpress_huffman_tree_read(
 		                   number_of_bits );
 
 		bits++;
-		symbol_index++;
 	}
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
 	{
+		number_of_tree_nodes = tree_node_index;
+
 		for( tree_node_index = 0;
-		     tree_node_index < 1024;
+		     tree_node_index < number_of_tree_nodes;
 		     tree_node_index++ )
 		{
 			libcnotify_printf(
@@ -660,25 +704,6 @@ int libfwnt_lzxpress_huffman_tree_read(
 			 function,
 			 tree_node_index,
 			 tree_nodes[ tree_node_index ].sub_tree_node_indexes[ 1 ] );
-		}
-		libcnotify_printf(
-		 "\n" );
-
-		for( symbol_index = 0;
-		     symbol_index < 512;
-		     symbol_index++ )
-		{
-			libcnotify_printf(
-			 "%s: symbol: %03d symbol\t\t\t: 0x%04" PRIx16 "\n",
-			 function,
-			 symbol_index,
-			 code_symbols[ symbol_index ].symbol );
-
-			libcnotify_printf(
-			 "%s: symbol: %03d code size\t\t: %" PRIu16 "\n",
-			 function,
-			 symbol_index,
-			 code_symbols[ symbol_index ].code_size );
 		}
 		libcnotify_printf(
 		 "\n" );
@@ -1183,9 +1208,10 @@ int libfwnt_lzxpress_huffman_decompress(
      size_t *uncompressed_data_size,
      libcerror_error_t **error )
 {
-	static char *function           = "libfwnt_lzxpress_huffman_decompress";
-	size_t compressed_data_offset   = 0;
-	size_t uncompressed_data_offset = 0;
+	static char *function              = "libfwnt_lzxpress_huffman_decompress";
+	size_t compressed_data_offset      = 0;
+	size_t safe_uncompressed_data_size = 0;
+	size_t uncompressed_data_offset    = 0;
 
 	if( uncompressed_data_size == NULL )
 	{
@@ -1198,9 +1224,11 @@ int libfwnt_lzxpress_huffman_decompress(
 
 		return( -1 );
 	}
+	safe_uncompressed_data_size = *uncompressed_data_size;
+
 	while( compressed_data_offset < compressed_data_size )
 	{
-		if( uncompressed_data_offset >= *uncompressed_data_size )
+		if( uncompressed_data_offset >= safe_uncompressed_data_size )
 		{
 			break;
 		}
@@ -1209,7 +1237,7 @@ int libfwnt_lzxpress_huffman_decompress(
 		     compressed_data_size,
 		     &compressed_data_offset,
 		     uncompressed_data,
-		     *uncompressed_data_size,
+		     safe_uncompressed_data_size,
 		     &uncompressed_data_offset,
 		     error ) != 1 )
 		{

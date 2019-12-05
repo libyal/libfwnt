@@ -212,7 +212,7 @@ int libfwnt_lznt1_decompress_chunk(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed data offset\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data offset\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
 			 *compressed_data_offset,
 			 *compressed_data_offset );

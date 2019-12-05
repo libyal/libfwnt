@@ -230,7 +230,7 @@ The LZXPRESS Huffman compressed data consists of multiple chunks. Each chunk
 consists of:
 
 * a Huffman (prefix) code table
-* Huffman encoded bit stream
+* encoded bit stream
 
 The LZXPRESS Huffman (prefix) code table 256 bytes of size and consists of:
 
@@ -241,15 +241,19 @@ The LZXPRESS Huffman (prefix) code table 256 bytes of size and consists of:
 |===
 
 The 4 least significant bits (LSB) of byte 0 contain the bit size for Huffman
-prefix code 0, the 4 most significant bits (MSB) the bit size for Huffman
-prefix code 1, etc.
+(prefix) code 0, the 4 most significant bits (MSB) the bit size for Huffman
+(prefix) code 1, etc.
 
-Where Huffman prefix codes:
+Where Huffman (prefix) codes:
 
 * 0 - 255 represent literals, which mapping to byte values;
 * 256 - 511 represent matches (or references), which map to compression tuples.
 
-[yellow-background]*TODO: describe how to create prefix code tree*
+Code sizes greater than 0 are used to build a binary tree that map the bits
+in the encoded bit stream to the Huffman (prefix) codes. The tree is build
+starting with the smallest code sizes and code values (symbols).
+
+[yellow-background]*TODO: complete section*
 
 A compression tuple symbol
 
