@@ -265,6 +265,7 @@ A compression tuple symbol
 | 1.0 | 1 bit | | Compression tuple flag
 |===
 
+[yellow-background]*TODO: describe compression size and extended compression size need to be read as byte values*
 [yellow-background]*TODO: describe extended compression size*
 
 [yellow-background]*TODO: decompress up to 65536 bytes of data*
@@ -274,7 +275,9 @@ data size for the last chunk.
 
 ==== Encoded bit-stream
 
-The encoded bit-stream is stored in 16-bit little-endian integers.
+The encoded bit-stream is stored in 16-bit little-endian integers, where bit
+values are stored front-to-back. So that the most-significant bit (MSB) of the
+first 16-bit integer is the first bit in the stream. 
 
 == External Links
 
