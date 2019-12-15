@@ -1,5 +1,5 @@
 /*
- * Bit stream functions
+ * Bit-stream functions
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -20,13 +20,11 @@
  */
 
 #include <common.h>
-#include <byte_stream.h>
 #include <memory.h>
 #include <types.h>
 
 #include "libfwnt_bit_stream.h"
 #include "libfwnt_libcerror.h"
-#include "libfwnt_libcnotify.h"
 
 /* Creates a bit stream
  * Make sure the value bit_stream is referencing, is set to NULL
@@ -58,6 +56,28 @@ int libfwnt_bit_stream_initialize(
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
 		 "%s: invalid bit stream value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( byte_stream == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid byte stream value.",
+		 function );
+
+		return( -1 );
+	}
+	if( byte_stream_size > (size_t) SSIZE_MAX )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: byte stream size value exceeds maximum.",
 		 function );
 
 		return( -1 );
@@ -137,16 +157,15 @@ int libfwnt_bit_stream_free(
 }
 
 /* Reads bits from the underlying byte stream
- * Returns the number of bytes read, 0 if no data available or -1 on error
+ * Returns 1 on success, 0 if no more bits are available or -1 on error
  */
-ssize_t libfwnt_bit_stream_read(
-         libfwnt_bit_stream_t *bit_stream,
-         size_t read_size,
-         libcerror_error_t **error )
+int libfwnt_bit_stream_read(
+     libfwnt_bit_stream_t *bit_stream,
+     uint8_t number_of_bits,
+     libcerror_error_t **error )
 {
-	uint32_t bits          = 0;
-	static char *function  = "libfwnt_bit_stream_read";
-	uint8_t number_of_bits = 0;
+	static char *function = "libfwnt_bit_stream_read";
+	int result            = 0;
 
 	if( bit_stream == NULL )
 	{
@@ -159,71 +178,124 @@ ssize_t libfwnt_bit_stream_read(
 
 		return( -1 );
 	}
-	if( read_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid read size value exceeds maximum.",
-		 function );
-
-		return( -1 );
-	}
-	if( ( read_size != 2 )
-	 && ( read_size != 4 ) )
+	if( ( number_of_bits == 0 )
+	 || ( number_of_bits > 32 ) )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: read size value out of bounds.",
-		 function );
-
-		return( -1 );
-	}
-	if( bit_stream->byte_stream_offset >= bit_stream->byte_stream_size )
-	{
-		return( 0 );
-	}
-	if( ( bit_stream->byte_stream_offset + read_size ) > bit_stream->byte_stream_size )
-	{
-		read_size = bit_stream->byte_stream_size - bit_stream->byte_stream_offset;
-	}
-	if( read_size == 0 )
-	{
-		return( 0 );
-	}
-	number_of_bits = (uint8_t) ( read_size << 3 );
-
-	if( ( number_of_bits + bit_stream->number_of_bits ) > 32 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
 		 "%s: number of bits value out of bounds.",
 		 function );
 
 		return( -1 );
 	}
-/* TODO optimize the read for the maximum number of available bytes. ? */
-/* TODO what about handling intermediate read size values ? */
-
-	while( number_of_bits >= 16 )
+	while( bit_stream->bit_buffer_size < number_of_bits )
 	{
-		bit_stream->bits <<= 16;
+		if( ( bit_stream->byte_stream_size < 2 )
+		 || ( bit_stream->byte_stream_offset > ( bit_stream->byte_stream_size - 2 ) ) )
+		{
+			break;
+		}
+		bit_stream->bit_buffer     <<= 8;
+		bit_stream->bit_buffer      |= bit_stream->byte_stream[ bit_stream->byte_stream_offset + 1 ];
+		bit_stream->bit_buffer     <<= 8;
+		bit_stream->bit_buffer      |= bit_stream->byte_stream[ bit_stream->byte_stream_offset ];
+		bit_stream->bit_buffer_size += 16;
 
-		byte_stream_copy_to_uint16_little_endian(
-		 &( bit_stream->byte_stream[ bit_stream->byte_stream_offset ] ),
-		 bits );
-
-		bit_stream->bits               |= bits;
 		bit_stream->byte_stream_offset += 2;
-		bit_stream->number_of_bits     += 16;
 
-		number_of_bits -= 16;
+		result = 1;
 	}
-	return( (ssize_t) read_size );
+	return( result );
+}
+
+/* Retrieves a value from the bit stream
+ * Returns 1 on success or -1 on error
+ */
+int libfwnt_bit_stream_get_value(
+     libfwnt_bit_stream_t *bit_stream,
+     uint8_t number_of_bits,
+     uint32_t *value_32bit,
+     libcerror_error_t **error )
+{
+	static char *function             = "libfwnt_bit_stream_get_value";
+	uint32_t safe_value_32bit         = 0;
+	uint8_t remaining_bit_buffer_size = 0;
+
+	if( bit_stream == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid bit stream.",
+		 function );
+
+		return( -1 );
+	}
+	if( number_of_bits > (uint8_t) 32 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: invalid number of bits value exceeds maximum.",
+		 function );
+
+		return( -1 );
+	}
+	if( value_32bit == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
+		 "%s: invalid 32-bit value.",
+		 function );
+
+		return( -1 );
+	}
+	if( number_of_bits == 0 )
+	{
+		*value_32bit = 0;
+
+		return( 1 );
+	}
+	if( bit_stream->bit_buffer_size < number_of_bits )
+	{
+		if( libfwnt_bit_stream_read(
+		     bit_stream,
+		     number_of_bits,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_IO,
+			 LIBCERROR_IO_ERROR_READ_FAILED,
+			 "%s: unable to read bits.",
+			 function );
+
+			return( -1 );
+		}
+	}
+	safe_value_32bit = bit_stream->bit_buffer;
+
+	if( number_of_bits < 32 )
+	{
+		safe_value_32bit >>= bit_stream->bit_buffer_size - number_of_bits;
+
+		bit_stream->bit_buffer_size -= number_of_bits;
+		remaining_bit_buffer_size    = 32 - bit_stream->bit_buffer_size;
+		bit_stream->bit_buffer      &= 0xffffffffUL >> remaining_bit_buffer_size;
+	}
+	else
+	{
+		bit_stream->bit_buffer      = 0;
+		bit_stream->bit_buffer_size = 0;
+	}
+	*value_32bit = safe_value_32bit;
+
+	return( 1 );
 }
 

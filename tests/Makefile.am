@@ -32,7 +32,9 @@ EXTRA_DIST = \
 check_PROGRAMS = \
 	fwnt_test_access_control_entry \
 	fwnt_test_access_control_list \
+	fwnt_test_bit_stream \
 	fwnt_test_error \
+	fwnt_test_huffman_tree \
 	fwnt_test_lznt1 \
 	fwnt_test_lzxpress \
 	fwnt_test_security_descriptor \
@@ -63,6 +65,18 @@ fwnt_test_access_control_list_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCERROR_LIBADD@
 
+fwnt_test_bit_stream_SOURCES = \
+	fwnt_test_bit_stream.c \
+	fwnt_test_libcerror.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_memory.c fwnt_test_memory.h \
+	fwnt_test_unused.h
+
+fwnt_test_bit_stream_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCERROR_LIBADD@
+
 fwnt_test_error_SOURCES = \
 	fwnt_test_error.c \
 	fwnt_test_libfwnt.h \
@@ -71,6 +85,18 @@ fwnt_test_error_SOURCES = \
 
 fwnt_test_error_LDADD = \
 	../libfwnt/libfwnt.la
+
+fwnt_test_huffman_tree_SOURCES = \
+	fwnt_test_huffman_tree.c \
+	fwnt_test_libcerror.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_memory.c fwnt_test_memory.h \
+	fwnt_test_unused.h
+
+fwnt_test_huffman_tree_LDADD = \
+	../libfwnt/libfwnt.la \
+	@LIBCERROR_LIBADD@
 
 fwnt_test_lznt1_SOURCES = \
 	fwnt_test_libcerror.h \

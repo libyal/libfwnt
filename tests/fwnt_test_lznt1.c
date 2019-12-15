@@ -34,6 +34,8 @@
 #include "fwnt_test_macros.h"
 #include "fwnt_test_unused.h"
 
+#include "../libfwnt/libfwnt_lznt1.h"
+
 /* Define to make fwnt_test_lznt1 generate verbose output
 #define FWNT_TEST_LZNT1
  */

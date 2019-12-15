@@ -19,6 +19,7 @@ libfwnt_la_SOURCES = \
 	libfwnt_definitions.h \
 	libfwnt_extern.h \
 	libfwnt_error.c libfwnt_error.h \
+	libfwnt_huffman_tree.c libfwnt_huffman_tree.h \
 	libfwnt_libcerror.h \
 	libfwnt_libcdata.h \
 	libfwnt_libcnotify.h \

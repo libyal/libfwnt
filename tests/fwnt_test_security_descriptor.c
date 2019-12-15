@@ -121,6 +121,8 @@ int fwnt_test_security_descriptor_initialize(
 	          &security_descriptor,
 	          &error );
 
+	security_descriptor = NULL;
+
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
@@ -132,8 +134,6 @@ int fwnt_test_security_descriptor_initialize(
 
 	libcerror_error_free(
 	 &error );
-
-	security_descriptor = NULL;
 
 #if defined( HAVE_FWNT_TEST_MEMORY )
 

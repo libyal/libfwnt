@@ -25,6 +25,7 @@
 #include <types.h>
 
 #include "libfwnt_bit_stream.h"
+#include "libfwnt_huffman_tree.h"
 #include "libfwnt_libcerror.h"
 #include "libfwnt_libcnotify.h"
 #include "libfwnt_lzxpress.h"
@@ -420,386 +421,6 @@ int libfwnt_lzxpress_decompress(
 	return( 1 );
 }
 
-/* Copmares two Huffman code symbols
- * Returns 1 if the first symbol is larger than the second, 0 if equal or -1 if smaller
- */
-int libfwnt_lzxpress_huffman_compare_symbols(
-     libfwnt_lzxpress_huffman_code_symbol_t *first_symbol,
-     libfwnt_lzxpress_huffman_code_symbol_t *second_symbol )
-{
-	if( first_symbol == NULL )
-	{
-		return( -1 );
-	}
-	if( second_symbol == NULL )
-	{
-		return( 1 );
-	}
-	if( first_symbol->code_size < second_symbol->code_size )
-	{
-		return( -1 );
-	}
-	else if( first_symbol->code_size > second_symbol->code_size )
-	{
-		return( 1 );
-	}
-	else if( first_symbol->symbol < second_symbol->symbol )
-	{
-		return( -1 );
-	}
-	else if( first_symbol->symbol > second_symbol->symbol )
-	{
-		return( 1 );
-	}
-	return( 0 );
-}
-
-/* Adds a leaf node to the Huffman tree
- * Returns the next tree node index
- */
-int libfwnt_lzxpress_huffman_tree_add_leaf(
-     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
-     int tree_node_index,
-     uint32_t bits,
-     uint8_t number_of_bits )
-{
-	libfwnt_lzxpress_huffman_tree_node_t *tree_node = NULL;
-	uint8_t sub_tree_node_index                     = 0;
-	int next_tree_node_index                        = 0;
-
-	tree_node            = &( tree_nodes[ 0 ] );
-	next_tree_node_index = tree_node_index + 1;
-
-	while( number_of_bits > 1 )
-	{
-		number_of_bits--;
-
-		sub_tree_node_index = (uint8_t) ( ( bits >> number_of_bits ) & 0x00000001UL );
-
-		if( tree_node->sub_tree_nodes[ sub_tree_node_index ] == NULL )
-		{
-			tree_node->sub_tree_nodes[ sub_tree_node_index ] = &( tree_nodes[ next_tree_node_index ] );
-
-#if defined( HAVE_DEBUG_OUTPUT )
-			tree_nodes[ next_tree_node_index ].symbol  = 0xffff;
-#endif
-			tree_nodes[ next_tree_node_index ].is_leaf = 0;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-			tree_node->sub_tree_node_indexes[ sub_tree_node_index ] = next_tree_node_index;
-#endif
-
-			next_tree_node_index++;
-		}
-		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
-	}
-/* TODO store index instead of pointer ? */
-	tree_node->sub_tree_nodes[ bits & 0x00000001UL ] = &( tree_nodes[ tree_node_index ] );
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	tree_node->sub_tree_node_indexes[ bits & 0x00000001UL ] = tree_node_index;
-#endif
-
-	return( next_tree_node_index );
-}
-
-/* Reads the Huffman tree
- * Returns 1 on success or -1 on error
- */
-int libfwnt_lzxpress_huffman_tree_read(
-     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     size_t compressed_data_offset,
-     libcerror_error_t **error )
-{
-	libfwnt_lzxpress_huffman_code_symbol_t code_symbols[ 512 ];
-
-	static char *function           = "libfwnt_lzxpress_huffman_tree_read";
-	size_t byte_index               = 0;
-	uint32_t bits                   = 0;
-	uint16_t code_size              = 0;
-	uint16_t code_symbol_index      = 0;
-	uint16_t number_of_code_symbols = 0;
-	uint16_t symbol_value           = 0;
-	uint8_t byte_value              = 0;
-	uint8_t number_of_bits          = 0;
-	int tree_node_index             = 0;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	int number_of_tree_nodes        = 0;
-#endif
-
-	if( compressed_data == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data.",
-		 function );
-
-		return( -1 );
-	}
-	if( compressed_data_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid compressed data size value exceeds maximum.",
-		 function );
-
-		return( -1 );
-	}
-	if( ( compressed_data_offset >= compressed_data_size )
-	 || ( ( compressed_data_size - compressed_data_offset ) < 256 ) )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: compressed data offset value out of bounds.",
-		 function );
-
-		return( -1 );
-	}
-	if( memory_set(
-	     tree_nodes,
-	     0,
-	     sizeof( libfwnt_lzxpress_huffman_tree_node_t ) * 1024 ) == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_SET_FAILED,
-		 "%s: unable to clear tree nodes.",
-		 function );
-
-		return( -1 );
-	}
-	/* The initial table contains a 4-bits code size per symbol
-	 */
-	for( byte_index = 0;
-	     byte_index < 256;
-	     byte_index++ )
-	{
-		byte_value = compressed_data[ compressed_data_offset++ ];
-		code_size  = byte_value & 0x0f;
-
-		/* Ignore symbols with a code size of 0 since they are not used
-		 * in the Huffman tree
-		 */
-		if( code_size > 0 )
-		{
-			code_symbols[ code_symbol_index ].symbol    = symbol_value;
-			code_symbols[ code_symbol_index ].code_size = code_size;
-
-			code_symbol_index++;
-		}
-		symbol_value++;
-
-		code_size = ( byte_value >> 4 ) & 0x0f;
-
-		if( code_size > 0 )
-		{
-			code_symbols[ code_symbol_index ].symbol    = symbol_value;
-			code_symbols[ code_symbol_index ].code_size = code_size;
-
-			code_symbol_index++;
-		}
-		symbol_value++;
-	}
-	number_of_code_symbols = code_symbol_index;
-
-	/* Sort the symbols
-	 */
-	qsort(
-	 code_symbols,
-	 number_of_code_symbols,
-	 sizeof( libfwnt_lzxpress_huffman_code_symbol_t ),
-	 (int (*)(const void *, const void *)) &libfwnt_lzxpress_huffman_compare_symbols );
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	if( libcnotify_verbose != 0 )
-	{
-		for( code_symbol_index = 0;
-		     code_symbol_index < number_of_code_symbols;
-		     code_symbol_index++ )
-		{
-			libcnotify_printf(
-			 "%s: symbol: %03d symbol\t\t\t: 0x%04" PRIx16 "\n",
-			 function,
-			 code_symbol_index,
-			 code_symbols[ code_symbol_index ].symbol );
-
-			libcnotify_printf(
-			 "%s: symbol: %03d code size\t\t: %" PRIu16 "\n",
-			 function,
-			 code_symbol_index,
-			 code_symbols[ code_symbol_index ].code_size );
-		}
-		libcnotify_printf(
-		 "\n" );
-	}
-#endif /* defined( HAVE_DEBUG_OUTPUT ) */
-
-	bits           = 0;
-	number_of_bits = 1;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-	tree_nodes[ tree_node_index ].symbol  = 0xffff;
-#endif
-	tree_nodes[ tree_node_index ].is_leaf = 0;
-
-	tree_node_index++;
-
-	for( code_symbol_index = 0;
-	     code_symbol_index < number_of_code_symbols;
-	     code_symbol_index++ )
-	{
-		tree_nodes[ tree_node_index ].symbol  = code_symbols[ code_symbol_index ].symbol;
-		tree_nodes[ tree_node_index ].is_leaf = 1;
-
-		bits         <<= code_symbols[ code_symbol_index ].code_size - number_of_bits;
-		number_of_bits = (uint8_t) code_symbols[ code_symbol_index ].code_size;
-
-		tree_node_index = libfwnt_lzxpress_huffman_tree_add_leaf(
-		                   tree_nodes,
-		                   tree_node_index,
-		                   bits,
-		                   number_of_bits );
-
-		bits++;
-	}
-#if defined( HAVE_DEBUG_OUTPUT )
-	if( libcnotify_verbose != 0 )
-	{
-		number_of_tree_nodes = tree_node_index;
-
-		for( tree_node_index = 0;
-		     tree_node_index < number_of_tree_nodes;
-		     tree_node_index++ )
-		{
-			libcnotify_printf(
-			 "%s: tree node: %04d symbol\t\t: 0x%04" PRIx16 "\n",
-			 function,
-			 tree_node_index,
-			 tree_nodes[ tree_node_index ].symbol );
-
-			libcnotify_printf(
-			 "%s: tree node: %04d is leaf\t\t: %" PRId8 "\n",
-			 function,
-			 tree_node_index,
-			 tree_nodes[ tree_node_index ].is_leaf );
-
-			libcnotify_printf(
-			 "%s: tree node: %04d sub node: 0\t\t: %" PRId16 "\n",
-			 function,
-			 tree_node_index,
-			 tree_nodes[ tree_node_index ].sub_tree_node_indexes[ 0 ] );
-
-			libcnotify_printf(
-			 "%s: tree node: %04d sub node: 1\t\t: %" PRId16 "\n",
-			 function,
-			 tree_node_index,
-			 tree_nodes[ tree_node_index ].sub_tree_node_indexes[ 1 ] );
-		}
-		libcnotify_printf(
-		 "\n" );
-	}
-#endif /* defined( HAVE_DEBUG_OUTPUT ) */
-
-	return( 1 );
-}
-
-/* Reads a Huffman tree symbol
- * Returns 1 on success or -1 on error
- */
-int libfwnt_lzxpress_huffman_tree_read_symbol(
-     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
-     libfwnt_bit_stream_t *compressed_data_bit_stream,
-     uint16_t *symbol,
-     libcerror_error_t **error )
-{
-	libfwnt_lzxpress_huffman_tree_node_t *tree_node = NULL;
-	static char *function                           = "libfwnt_lzxpress_huffman_tree_read_symbol";
-	uint16_t bits                                   = 0;
-	uint8_t sub_tree_node_index                     = 0;
-
-	if( compressed_data_bit_stream == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data bit stream.",
-		 function );
-
-		return( -1 );
-	}
-	if( symbol == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid symbol.",
-		 function );
-
-		return( -1 );
-	}
-	tree_node = &( tree_nodes[ 0 ] );
-
-	do
-	{
-/* TODO add a read number of bits function ? */
-		sub_tree_node_index = (uint8_t) ( ( compressed_data_bit_stream->bits >> 31 ) & 0x00000001UL );
-
-		compressed_data_bit_stream->bits          <<= 1;
-		compressed_data_bit_stream->number_of_bits -= 1;
-
-#if defined( HAVE_DEBUG_OUTPUT )
-		if( libcnotify_verbose != 0 )
-		{
-			libcnotify_printf(
-			 "%s: sub tree node index\t\t: 0x%02" PRIx8 "\n",
-			 function,
-			 sub_tree_node_index );
-		}
-#endif
-		if( ( compressed_data_bit_stream->number_of_bits < 16 )
-		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
-		{
-			byte_stream_copy_to_uint16_little_endian(
-			 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-			 bits );
-
-			compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
-			compressed_data_bit_stream->byte_stream_offset += 2;
-			compressed_data_bit_stream->number_of_bits     += 16;
-		}
-		tree_node = tree_node->sub_tree_nodes[ sub_tree_node_index ];
-
-		if( tree_node == NULL )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-			 "%s: missing tree node value.",
-			 function );
-
-			return( -1 );
-		}
-	}
-	while( tree_node->is_leaf == 0 );
-
-	*symbol = tree_node->symbol;
-
-	return( 1 );
-}
-
 /* Decompresses a LZXPRESS Huffman compressed chunk
  * Return 1 on success or -1 on error
  */
@@ -812,17 +433,19 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
      size_t *uncompressed_data_offset,
      libcerror_error_t **error )
 {
-	libfwnt_lzxpress_huffman_tree_node_t tree_nodes[ 1024 ];
+	uint8_t code_size_array[ 512 ];
 
-	libfwnt_bit_stream_t *compressed_data_bit_stream = NULL;
-	static char *function                            = "libfwnt_lzxpress_huffman_decompress_chunk";
-	size_t compression_uncompressed_data_offset      = 0;
-	size_t next_chunk_uncompressed_data_offset       = 0;
-	size_t safe_uncompressed_data_offset             = 0;
-	uint32_t compression_offset                      = 0;
-	uint16_t bits                                    = 0;
-	uint16_t compression_size                        = 0;
-	uint16_t symbol                                  = 0;
+	libfwnt_bit_stream_t *bit_stream            = NULL;
+	libfwnt_huffman_tree_t *huffman_tree        = NULL;
+	static char *function                       = "libfwnt_lzxpress_huffman_decompress_chunk";
+	size_t compression_uncompressed_data_offset = 0;
+	size_t next_chunk_uncompressed_data_offset  = 0;
+	size_t safe_compressed_data_offset          = 0;
+	size_t safe_uncompressed_data_offset        = 0;
+	uint32_t compression_offset                 = 0;
+	uint32_t compression_size                   = 0;
+	uint32_t symbol                             = 0;
+	uint8_t byte_value                          = 0;
 
 	if( compressed_data == NULL )
 	{
@@ -835,13 +458,14 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		return( -1 );
 	}
-	if( compressed_data_size > (size_t) SSIZE_MAX )
+	if( ( compressed_data_size < 260 )
+	 || ( compressed_data_size > (size_t) SSIZE_MAX ) )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid compressed data size value exceeds maximum.",
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: invalid compressed data size value out of bounds.",
 		 function );
 
 		return( -1 );
@@ -857,8 +481,7 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		return( -1 );
 	}
-	if( ( *compressed_data_offset >= compressed_data_size )
-	 || ( ( compressed_data_size - *compressed_data_offset ) < 260 ) )
+	if( *compressed_data_offset >= ( compressed_data_size - 260 ) )
 	{
 		libcerror_error_set(
 		 error,
@@ -913,44 +536,70 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		return( -1 );
 	}
-	if( libfwnt_lzxpress_huffman_tree_read(
-	     tree_nodes,
-	     compressed_data,
-	     compressed_data_size,
-	     *compressed_data_offset,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-		 "%s: unable to read Huffman tree.",
-		 function );
+	safe_compressed_data_offset   = *compressed_data_offset;
+	safe_uncompressed_data_offset = *uncompressed_data_offset;
 
-		goto on_error;
+	/* The table contains 4-bits code size per symbol
+	 */
+	while( symbol < 512 )
+	{
+		byte_value = compressed_data[ safe_compressed_data_offset++ ];
+
+		code_size_array[ symbol++ ] = byte_value & 0x0f;
+
+		byte_value >>= 4;
+
+		code_size_array[ symbol++ ] = byte_value & 0x0f;
 	}
-	if( libfwnt_bit_stream_initialize(
-	     &compressed_data_bit_stream,
-	     &( compressed_data[ *compressed_data_offset ] ),
-	     compressed_data_size,
+	if( libfwnt_huffman_tree_initialize(
+	     &huffman_tree,
+	     512,
+	     15,
 	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-		 "%s: unable to create compressed data bit stream.",
+		 "%s: unable to create Huffman tree.",
 		 function );
 
 		goto on_error;
 	}
-/* TODO add a bit stream seek function ? */
-	compressed_data_bit_stream->byte_stream_offset = 256;
+	if( libfwnt_huffman_tree_build(
+	     huffman_tree,
+	     code_size_array,
+	     512,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_SET_FAILED,
+		 "%s: unable to build Huffman tree.",
+		 function );
 
+		goto on_error;
+	}
+	if( libfwnt_bit_stream_initialize(
+	     &bit_stream,
+	     &( compressed_data[ safe_compressed_data_offset ] ),
+	     compressed_data_size - safe_compressed_data_offset,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+		 "%s: unable to create bit stream.",
+		 function );
+
+		goto on_error;
+	}
 	if( libfwnt_bit_stream_read(
-	     compressed_data_bit_stream,
-	     4,
-	     error ) != 4 )
+	     bit_stream,
+	     32,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -961,16 +610,14 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		goto on_error;
 	}
-	safe_uncompressed_data_offset = *uncompressed_data_offset;
-
 	next_chunk_uncompressed_data_offset = safe_uncompressed_data_offset + 65536;
 
 	if( next_chunk_uncompressed_data_offset > uncompressed_data_size )
 	{
 		next_chunk_uncompressed_data_offset = uncompressed_data_size;
 	}
-        while( ( compressed_data_bit_stream->byte_stream_offset < compressed_data_bit_stream->byte_stream_size )
-            || ( compressed_data_bit_stream->number_of_bits > 0 ) )
+        while( ( bit_stream->byte_stream_offset < bit_stream->byte_stream_size )
+            || ( bit_stream->bit_buffer_size > 0 ) )
 	{
 		if( safe_uncompressed_data_offset >= next_chunk_uncompressed_data_offset )
 		{
@@ -982,13 +629,13 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			libcnotify_printf(
 			 "%s: compressed data offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
-			 compressed_data_bit_stream->byte_stream_offset,
-			 compressed_data_bit_stream->byte_stream_offset );
+			 bit_stream->byte_stream_offset,
+			 bit_stream->byte_stream_offset );
 		}
 #endif
-		if( libfwnt_lzxpress_huffman_tree_read_symbol(
-		     tree_nodes,
-		     compressed_data_bit_stream,
+		if( libfwnt_huffman_tree_get_symbol_from_bit_stream(
+		     huffman_tree,
+		     bit_stream,
 		     &symbol,
 		     error ) != 1 )
 		{
@@ -1001,13 +648,33 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 			goto on_error;
 		}
+		/* Make sure the bit buffer contains at least 16-bit
+		 * to ensure compression size is read correctly
+		 */
+		if( bit_stream->bit_buffer_size < 16 )
+		{
+			if( libfwnt_bit_stream_read(
+			     bit_stream,
+			     16,
+			     error ) != 1 )
+			{
+				libcerror_error_set(
+				 error,
+				 LIBCERROR_ERROR_DOMAIN_IO,
+				 LIBCERROR_IO_ERROR_READ_FAILED,
+				 "%s: unable to read 16-bit from bit stream.",
+				 function );
+
+				goto on_error;
+			}
+		}
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
 			 "%s: number of bits\t\t: %" PRId8 "\n",
 			 function,
-			 compressed_data_bit_stream->number_of_bits );
+			 bit_stream->bit_buffer_size );
 
 			libcnotify_printf(
 			 "%s: huffman symbol\t\t: 0x%04" PRIx16 "\n",
@@ -1015,54 +682,50 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			 symbol );
 		}
 #endif
-		if( ( compressed_data_bit_stream->number_of_bits < 16 )
-		 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
-		{
-			byte_stream_copy_to_uint16_little_endian(
-			 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-			 bits );
-
-/* TODO bits read infront of the bit stream ? */
-			compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
-			compressed_data_bit_stream->byte_stream_offset += 2;
-			compressed_data_bit_stream->number_of_bits     += 16;
-		}
 		if( symbol < 256 )
 		{
 			uncompressed_data[ safe_uncompressed_data_offset++ ] = (uint8_t) symbol;
 		}
-		/* Check if we have an end-of-block marker (remaining bits are 0)
+		/* Check if we have an end-of-block marker (symbol 256) and the number of remaining bits are 0
 		 */
-		if( ( compressed_data_bit_stream->bits == 0 )
+/* TODO add ( symbol == 256 ) */
+		if( ( bit_stream->bit_buffer == 0 )
 		 && ( safe_uncompressed_data_offset >= uncompressed_data_size ) )
 		{
 			break;
 		}
 		if( symbol >= 256 )
 		{
-			symbol          -= 256;
-			compression_size = symbol & 0x000f;
-			symbol         >>= 4;
+			symbol            -= 256;
+			compression_offset = 0;
+			compression_size   = symbol & 0x000f;
+			symbol           >>= 4;
 
-			if( symbol == 0 )
+			if( symbol != 0 )
 			{
-				compression_offset = 0;
-			}
-			else
-			{
-/* TODO add a read number of bits function ? */
-				compression_offset = (uint32_t) ( compressed_data_bit_stream->bits >> ( 32 - symbol ) );
+				if( libfwnt_bit_stream_get_value(
+				     bit_stream,
+				     symbol,
+				     &compression_offset,
+				     error ) != 1 )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+					 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+					 "%s: unable to retrieve compression offset from bit stream.",
+					 function );
+
+					goto on_error;
+				}
 			}
 			compression_offset = (uint32_t) ( ( 1 << symbol ) | compression_offset );
-
-			compressed_data_bit_stream->bits          <<= symbol;
-			compressed_data_bit_stream->number_of_bits -= (uint8_t) symbol;
 
 			/* Ignore any data beyond the uncompressed block size
 			 */
 			if( compression_size == 15 )
 			{
-				if( compressed_data_bit_stream->byte_stream_offset > ( compressed_data_bit_stream->byte_stream_size - 1 ) )
+				if( bit_stream->byte_stream_offset > ( bit_stream->byte_stream_size - 1 ) )
 				{
 					libcerror_error_set(
 					 error,
@@ -1073,13 +736,13 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 					goto on_error;
 				}
-				compression_size = compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] + 15;
+				compression_size = bit_stream->byte_stream[ bit_stream->byte_stream_offset ] + 15;
 
-				compressed_data_bit_stream->byte_stream_offset += 1;
+				bit_stream->byte_stream_offset += 1;
 
 				if( compression_size == 270 )
 				{
-					if( compressed_data_bit_stream->byte_stream_offset > ( compressed_data_bit_stream->byte_stream_size - 2 ) )
+					if( bit_stream->byte_stream_offset > ( bit_stream->byte_stream_size - 2 ) )
 					{
 						libcerror_error_set(
 						 error,
@@ -1091,10 +754,10 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 						goto on_error;
 					}
 					byte_stream_copy_to_uint16_little_endian(
-					 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
+					 &( bit_stream->byte_stream[ bit_stream->byte_stream_offset ] ),
 					 compression_size );
 
-					compressed_data_bit_stream->byte_stream_offset += 2;
+					bit_stream->byte_stream_offset += 2;
 				}
 			}
 			compression_size += 3;
@@ -1103,12 +766,12 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			if( libcnotify_verbose != 0 )
 			{
 				libcnotify_printf(
-				 "%s: compression offset\t\t: %" PRIi16 "\n",
+				 "%s: compression offset\t\t: %" PRIu32 "\n",
 				 function,
 				 compression_offset );
 
 				libcnotify_printf(
-				 "%s: compression size\t\t: %" PRIu16 "\n",
+				 "%s: compression size\t\t: %" PRIu32 "\n",
 				 function,
 				 compression_size );
 
@@ -1148,18 +811,6 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 				compression_size--;
 			}
-			if( ( compressed_data_bit_stream->number_of_bits < 16 )
-			 && ( compressed_data_bit_stream->byte_stream_offset <= ( compressed_data_bit_stream->byte_stream_size - 2 ) ) )
-			{
-				byte_stream_copy_to_uint16_little_endian(
-				 &( compressed_data_bit_stream->byte_stream[ compressed_data_bit_stream->byte_stream_offset ] ),
-				 bits );
-
-/* TODO bits read infront of the bit stream ? */
-				compressed_data_bit_stream->bits               |= bits << ( 16 - compressed_data_bit_stream->number_of_bits );
-				compressed_data_bit_stream->byte_stream_offset += 2;
-				compressed_data_bit_stream->number_of_bits     += 16;
-			}
 		}
 #if defined( HAVE_DEBUG_OUTPUT )
 		if( libcnotify_verbose != 0 )
@@ -1169,30 +820,50 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 		}
 #endif
 	}
-	*compressed_data_offset += compressed_data_bit_stream->byte_stream_offset;
+	safe_compressed_data_offset += bit_stream->byte_stream_offset;
 
 	if( libfwnt_bit_stream_free(
-	     &compressed_data_bit_stream,
+	     &bit_stream,
 	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-		 "%s: unable to free compressed data bit stream.",
+		 "%s: unable to free bit stream.",
 		 function );
 
 		goto on_error;
 	}
+	if( libfwnt_huffman_tree_free(
+	     &huffman_tree,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+		 "%s: unable to free Huffman tree.",
+		 function );
+
+		goto on_error;
+	}
+	*compressed_data_offset   = safe_compressed_data_offset;
 	*uncompressed_data_offset = safe_uncompressed_data_offset;
 
 	return( 1 );
 
 on_error:
-	if( compressed_data_bit_stream != NULL )
+	if( bit_stream != NULL )
 	{
 		libfwnt_bit_stream_free(
-		 &compressed_data_bit_stream,
+		 &bit_stream,
+		 NULL );
+	}
+	if( huffman_tree != NULL )
+	{
+		libfwnt_huffman_tree_free(
+		 &huffman_tree,
 		 NULL );
 	}
 	return( -1 );

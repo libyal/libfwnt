@@ -26,36 +26,13 @@
 #include <types.h>
 
 #include "libfwnt_bit_stream.h"
+#include "libfwnt_huffman_tree.h"
 #include "libfwnt_extern.h"
 #include "libfwnt_libcerror.h"
 
 #if defined( __cplusplus )
 extern "C" {
 #endif
-
-typedef struct libfwnt_lzxpress_huffman_tree_node libfwnt_lzxpress_huffman_tree_node_t;
-
-struct libfwnt_lzxpress_huffman_tree_node 
-{
-	/* The symbol
-	 */
-	uint16_t symbol;
-
-	/* Value to indicate the tree node is a leaf node
-	 */
-	uint8_t is_leaf;
-
-	/* The sub tree nodes
-	 */
-	libfwnt_lzxpress_huffman_tree_node_t *sub_tree_nodes[ 2 ];
-
-#if defined( HAVE_DEBUG_OUTPUT )
-
-	/* The sub tree node indexes
-	 */
-	uint16_t sub_tree_node_indexes[ 2 ];
-#endif
-};
 
 typedef struct libfwnt_lzxpress_huffman_code_symbol libfwnt_lzxpress_huffman_code_symbol_t;
 
@@ -84,29 +61,6 @@ int libfwnt_lzxpress_decompress(
      size_t compressed_data_size,
      uint8_t *uncompressed_data,
      size_t *uncompressed_data_size,
-     libcerror_error_t **error );
-
-int libfwnt_lzxpress_huffman_compare_symbols(
-     libfwnt_lzxpress_huffman_code_symbol_t *first_symbol,
-     libfwnt_lzxpress_huffman_code_symbol_t *second_symbol );
-
-int libfwnt_lzxpress_huffman_tree_add_leaf(
-     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
-     int tree_node_index,
-     uint32_t bits,
-     uint8_t number_of_bits );
-
-int libfwnt_lzxpress_huffman_tree_read(
-     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     size_t compressed_data_offset,
-     libcerror_error_t **error );
-
-int libfwnt_lzxpress_huffman_tree_read_symbol(
-     libfwnt_lzxpress_huffman_tree_node_t *tree_nodes,
-     libfwnt_bit_stream_t *compressed_data_bit_stream,
-     uint16_t *symbol,
      libcerror_error_t **error );
 
 int libfwnt_lzxpress_huffman_decompress_chunk(

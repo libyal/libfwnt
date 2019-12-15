@@ -111,6 +111,8 @@ int fwnt_test_access_control_entry_initialize(
 	          &access_control_entry,
 	          &error );
 
+	access_control_entry = NULL;
+
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
@@ -122,8 +124,6 @@ int fwnt_test_access_control_entry_initialize(
 
 	libcerror_error_free(
 	 &error );
-
-	access_control_entry = NULL;
 
 #if defined( HAVE_FWNT_TEST_MEMORY )
 
@@ -221,7 +221,6 @@ on_error:
 }
 
 #endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
-
 
 /* Tests the libfwnt_access_control_entry_free function
  * Returns 1 if successful or 0 if not

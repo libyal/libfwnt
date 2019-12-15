@@ -119,6 +119,8 @@ int fwnt_test_access_control_list_initialize(
 	          &access_control_list,
 	          &error );
 
+	access_control_list = NULL;
+
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
@@ -130,8 +132,6 @@ int fwnt_test_access_control_list_initialize(
 
 	libcerror_error_free(
 	 &error );
-
-	access_control_list = NULL;
 
 #if defined( HAVE_FWNT_TEST_MEMORY )
 

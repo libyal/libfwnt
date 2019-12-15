@@ -1,5 +1,5 @@
 /*
- * Bit-stream functions
+ * Huffman tree functions
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,67 +19,61 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFWNT_BIT_STREAM_H )
-#define _LIBFWNT_BIT_STREAM_H
+#if !defined( _LIBFWNT_HUFFMAN_TREE_H )
+#define _LIBFWNT_HUFFMAN_TREE_H
 
 #include <common.h>
 #include <types.h>
 
+#include "libfwnt_bit_stream.h"
 #include "libfwnt_libcerror.h"
 
 #if defined( __cplusplus )
 extern "C" {
 #endif
 
-typedef struct libfwnt_bit_stream libfwnt_bit_stream_t;
+typedef struct libfwnt_huffman_tree libfwnt_huffman_tree_t;
 
-struct libfwnt_bit_stream
+struct libfwnt_huffman_tree
 {
-	/* The byte stream
+	/* The maximum number of bits allowed for a Huffman code
 	 */
-	const uint8_t *byte_stream;
+	uint8_t maximum_code_size;
 
-	/* The byte stream size
+	/* The symbols array
 	 */
-	size_t byte_stream_size;
+	int *symbols;
 
-	/* The byte stream offset
+	/* The code size counts array
 	 */
-	size_t byte_stream_offset;
-
-	/* The bit buffer
-	 */
-	uint32_t bit_buffer;
-
-	/* The number of bits in the bit buffer
-	 */
-	uint8_t bit_buffer_size;
+	int *code_size_counts;
 };
 
-int libfwnt_bit_stream_initialize(
-     libfwnt_bit_stream_t **bit_stream,
-     const uint8_t *byte_stream,
-     size_t byte_stream_size,
+int libfwnt_huffman_tree_initialize(
+     libfwnt_huffman_tree_t **huffman_tree,
+     int number_of_symbols,
+     uint8_t maximum_code_size,
      libcerror_error_t **error );
 
-int libfwnt_bit_stream_free(
-     libfwnt_bit_stream_t **bit_stream,
+int libfwnt_huffman_tree_free(
+     libfwnt_huffman_tree_t **huffman_tree,
      libcerror_error_t **error );
 
-int libfwnt_bit_stream_read(
+int libfwnt_huffman_tree_build(
+     libfwnt_huffman_tree_t *huffman_tree,
+     const uint8_t *code_sizes_array,
+     int number_of_code_sizes,
+     libcerror_error_t **error );
+
+int libfwnt_huffman_tree_get_symbol_from_bit_stream(
+     libfwnt_huffman_tree_t *huffman_tree,
      libfwnt_bit_stream_t *bit_stream,
-     uint8_t number_of_bits,
-     libcerror_error_t **error );
-
-int libfwnt_bit_stream_get_value(
-     libfwnt_bit_stream_t *bit_stream,
-     uint8_t number_of_bits,
-     uint32_t *value_32bit,
+     uint32_t *symbol,
      libcerror_error_t **error );
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif /* !defined( _LIBFWNT_BIT_STREAM_H ) */
+#endif /* !defined( _LIBFWNT_HUFFMAN_TREE_H ) */
 
