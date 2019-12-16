@@ -599,7 +599,7 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 	if( libfwnt_bit_stream_read(
 	     bit_stream,
 	     32,
-	     error ) != 1 )
+	     error ) == -1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -629,8 +629,8 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			libcnotify_printf(
 			 "%s: compressed data offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
-			 bit_stream->byte_stream_offset,
-			 bit_stream->byte_stream_offset );
+			 safe_compressed_data_offset + bit_stream->byte_stream_offset,
+			 safe_compressed_data_offset + bit_stream->byte_stream_offset );
 		}
 #endif
 		if( libfwnt_huffman_tree_get_symbol_from_bit_stream(
@@ -656,7 +656,7 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			if( libfwnt_bit_stream_read(
 			     bit_stream,
 			     16,
-			     error ) != 1 )
+			     error ) == -1 )
 			{
 				libcerror_error_set(
 				 error,

@@ -6,10 +6,15 @@ by the RtlCompressBuffer and RtlDecompressBuffer functions.
 [options="header"]
 |===
 | Identifier | Description
-| COMPRESSION_FORMAT_LZNT1 | LZNT1 compression (LZ77). Sometimes also referred to as NTFS compression.
+| COMPRESSION_FORMAT_LZNT1 | LZNT1 compression (LZ77). Sometimes also referred to as New Technologies File System (NTFS) compression.
 | COMPRESSION_FORMAT_XPRESS | LZXPRESS compression (LZ77 + DIRECT2).
 | COMPRESSION_FORMAT_XPRESS_HUFF | LZXPRESS with Huffman compression.
 |===
+
+Other compression methods used by Windows in various data formats are:
+
+* LZX compression
+* LZX DELTA compression
 
 === LZNT1
 
@@ -52,7 +57,7 @@ An LZNT1 chunk consists of:
 
 The chunk data (or compression block) consists of tagged compression groups.
 
-===== LZNT1 chunk header
+==== LZNT1 chunk header
 
 The LZNT1 chunk header is 2 bytes of size and consists of:
 
@@ -66,6 +71,12 @@ The value is stored as chunk data size - 1
 0 => uncompressed +
 1 => compressed
 |===
+
+==== LZNT1 chunk data
+
+The LZNT1 chunk data consists of:
+
+* tagged groups
 
 ==== LZNT1 tagged compression group
 
@@ -81,7 +92,7 @@ last
 * a tag bit of 0 indicates an uncompressed byte;
 * a tag bit of 1 indicates compressed data using a little-endian 16-bit (2-byte) compression tuple (meaning combination of two values).
 
-===== LZNT1 compression tuple
+==== LZNT1 compression tuple
 
 The compression tuple contains an offset (back reference) and a size value.
 
@@ -136,7 +147,7 @@ the end of the uncompressed data. However this means that for every increment
 of the size value the offset refers to another byte in the uncompressed data.
 Consider the following example.
 
-===== Example
+==== Example
 
 Consider the following tagged compression group:
 
@@ -220,6 +231,113 @@ This tuples refer to:
 (-18,10) => #include <
 ....
 
+=== LZX
+
+LZX compression is used in various data formats used on Windows, including:
+
+* Cabinet (CAB) file
+* Microsoft Compiled HTML Help (CHM) file
+* Windows Imaging (WIM) file
+* Windows Overlay Filter (WOF) compressed data in the New Technologies File System (NTFS)
+
+LZX compressed data consist of:
+
+* one or more LZX blocks stored as a bit-stream
+
+==== Bit-stream
+
+The bit-stream is stored in 16-bit little-endian integers, where bit values are
+stored front-to-back. So that the most-significant bit (MSB) of the first 16-bit
+integer is the first bit in the stream.
+
+==== LZX block
+
+A LZX block consists of:
+
+* block header
+* compressed or uncompressed block data
+
+==== LZX block header
+
+The LZX block header is variable of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 3 bits | | Block type +
+See section: <<lzx_block_type,Block type>>
+| 0.3 | 1 bit | | Has default block size +
+If set the block size is 32 KiB
+4+| _If has default block size is not set_
+| 0.4 | 16 bits | | Block size
+4+| _If has block size is set and compression window (unit) size > 32 KiB_
+| 2.4 | 8 bits | | [yellow-background]*Unknown (Extended block size?)*
+4+| _If has block type is LZX_BLOCKTYPE_ALIGNED_
+| ... | 8 x 3 bits | | Array of aligned offset code sizes
+4+| _If has block type is LZX_BLOCKTYPE_ALIGNED or LZX_BLOCKTYPE_VERBATIM_
+| ... | ... | | 256 literal symbol code sizes +
+See section: <<lzx_huffman_encoded_code_sizes,Huffman encoded code sizes>>
+| ... | ... | | 240 match header code sizes +
+See section: <<lzx_huffman_encoded_code_sizes,Huffman encoded code sizes>>
+| ... | ... | | 249 length code sizes +
+See section: <<lzx_huffman_encoded_code_sizes,Huffman encoded code sizes>>
+4+| _If has block type is LZX_BLOCKTYPE_UNCOMPRESSED_
+| ... | ... | 0 | 16-bit alignment padding, which is 16-bit if already aligned +
+This padding ensures the following data is byte aligned
+| ... | 4 | | Recent offset (R0) value
+| ... | 4 | | Recent offset (R1) value
+| ... | 4 | | Recent offset (R2) value
+|===
+
+[NOTE]
+Both `[LZXFMT]` and `[MS-PATCH]` indicate the block size is 24-bits of size
+where `[LZXFMT]` indicates it is only present when the block is compressed.
+
+==== [[lzx_block_type]]Block type
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0 | | Undefined
+| 1 | LZX_BLOCKTYPE_VERBATIM | Verbatim block
+| 2 | LZX_BLOCKTYPE_ALIGNED | Aligned block
+| 3 | LZX_BLOCKTYPE_UNCOMPRESSED | Uncompressed block
+| 4 - 7 | | Undefined
+|===
+
+==== [[lzx_huffman_encoded_code_sizes]]Huffman encoded code sizes
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 20 x 4 bits | | Array of bit sizes of the pre-tree Huffman (prefix) codes
+| ... | ... | | Encoded code sizes +
+Encoded with the pre-tree Huffman codes
+|===
+
+Where pre-tree Huffman (prefix) codes:
+
+[cols="1,5",options="header"]
+|===
+| Pre-tree code | Description
+| 0 - 16 | Directly encoded code size +
+Where `code size = ( previous code size - pre-tree symbol + 17 ) mod 17`
+| 17 | Run-length encoded code size of 0 +
+Where the pre-tree symbol is followed by a 4-bit times to repeat value, which `number of code sizes = 4 + times to repeat value` +
+| 18 | Run-length encoded code size of 0 +
+Where the pre-tree symbol is followed by a 5-bit times to repeat value, which `number of code sizes = 20 + times to repeat value`
+| 19 | Run-length encoded code size +
+Where the pre-tree symbol is followed by a 1-bit times to repeat value, which `number of code sizes = 4 + times to repeat value` +
+and a 4-bit second pre-tree symbol value, which `code size value = ( previous code size - second pre-tree symbol + 17 ) mod 17`
+|===
+
+==== CALL (0xe8) processing
+
+LZX converts Intel 80x86 CALL instructions, which begin with oppcode 0xe8, to
+improve the compression ratio on 32-bit Intel 80x86 code.
+
+[yellow-background]*TODO complete section*
+
 === LZXPRESS
 
 [yellow-background]*TODO*
@@ -284,6 +402,8 @@ first 16-bit integer is the first bit in the stream.
 * http://msdn.microsoft.com/en-us/Library/ff552127(v=vs.85).aspx[MSDN: RtlCompressBuffer function]
 * http://msdn.microsoft.com/en-us/Library/ff552191(v=VS.85).aspx[MSDN: RtlDecompressBuffer function]
 * http://msdn.microsoft.com/en-us/library/jj711990.aspx[MSDN: LZNT1]
+* https://encode.su/attachment.php?attachmentid=1675&d=1318245441[LZXFMT - Microsoft LZX Data Compression Format]
+* https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-patch/cc78752a-b4af-4eee-88cb-01f4d8a4c2bf[MSDN: MS-PATCH - LZX DELTA Compression and Decompression]
 * http://msdn.microsoft.com/library/hh554002(v=prot.10).aspx[MSDN: MS-XCA - Xpress Compression Algorithm]
 * https://msdn.microsoft.com/en-us/library/dd644731.aspx[MSDN: LZXPRESS Huffman]
 

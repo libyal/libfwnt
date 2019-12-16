@@ -1,5 +1,5 @@
 /*
- * Library LZNT1 decompression testing program
+ * Library LZXPRESS decompression testing program
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -2696,8 +2696,6 @@ int fwnt_test_lzxpress_huffman_decompress_chunk(
 	          &uncompressed_data_offset,
 	          &error );
 
-FWNT_TEST_FPRINT_ERROR( error );
-
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
@@ -2721,7 +2719,6 @@ FWNT_TEST_FPRINT_ERROR( error );
 	 "result",
 	 result,
 	 0 );
-
 
 	/* Test error cases
 	 */

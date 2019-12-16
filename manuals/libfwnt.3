@@ -1,4 +1,4 @@
-.Dd August 31, 2019
+.Dd December 15, 2019
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
@@ -84,6 +84,10 @@ Access control entry (ACE) functions
 LZNT1 functions
 .Ft int
 .Fn libfwnt_lznt1_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
+.Pp
+LZX functions
+.Ft int
+.Fn libfwnt_lzx_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
 .Pp
 LZXPRESS functions
 .Ft int

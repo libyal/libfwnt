@@ -1,5 +1,5 @@
 /*
- * LZXPRESS (de)compression functions
+ * LZX (un)compression functions
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,8 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBFWNT_LZXPRESS_H )
-#define _LIBFWNT_LZXPRESS_H
+#if !defined( _LIBFWNT_LZX_H )
+#define _LIBFWNT_LZX_H
 
 #include <common.h>
 #include <types.h>
@@ -34,46 +34,50 @@
 extern "C" {
 #endif
 
-typedef struct libfwnt_lzxpress_huffman_code_symbol libfwnt_lzxpress_huffman_code_symbol_t;
-
-struct libfwnt_lzxpress_huffman_code_symbol
+/* The block types
+ */
+enum LIBFWNT_LZX_BLOCK_TYPES
 {
-	/* The symbol
-	 */
-	uint16_t symbol;
-
-	/* The code size 
-	 */
-	uint16_t code_size;
+	LIBFWNT_LZX_BLOCK_TYPE_VERBATIM		= 0x01,
+	LIBFWNT_LZX_BLOCK_TYPE_ALIGNED		= 0x02,
+	LIBFWNT_LZX_BLOCK_TYPE_UNCOMPRESSED	= 0x03
 };
 
-LIBFWNT_EXTERN \
-int libfwnt_lzxpress_compress(
-     const uint8_t *uncompressed_data,
-     size_t uncompressed_data_size,
-     uint8_t *compressed_data,
-     size_t *compressed_data_size,
+int libfwnt_lzx_read_huffman_code_sizes(
+     libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
+     int number_of_code_sizes,
      libcerror_error_t **error );
 
-LIBFWNT_EXTERN \
-int libfwnt_lzxpress_decompress(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     uint8_t *uncompressed_data,
-     size_t *uncompressed_data_size,
+int libfwnt_lzx_build_main_huffman_tree(
+     libfwnt_bit_stream_t *bit_stream,
+     libfwnt_huffman_tree_t *main_huffman_tre,
      libcerror_error_t **error );
 
-int libfwnt_lzxpress_huffman_decompress_chunk(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     size_t *compressed_data_offset,
+int libfwnt_lzx_build_lengths_huffman_tree(
+     libfwnt_bit_stream_t *bit_stream,
+     libfwnt_huffman_tree_t *lengths_huffman_tre,
+     libcerror_error_t **error );
+
+int libfwnt_lzx_build_aligned_offsets_huffman_tree(
+     libfwnt_bit_stream_t *bit_stream,
+     libfwnt_huffman_tree_t *aligned_offsets_huffman_tre,
+     libcerror_error_t **error );
+
+int libfwnt_lzx_decode_huffman(
+     libfwnt_bit_stream_t *bit_stream,
+     uint32_t block_size,
+     libfwnt_huffman_tree_t *main_huffman_tree,
+     libfwnt_huffman_tree_t *lengths_huffman_tree,
+     libfwnt_huffman_tree_t *aligned_offsets_huffman_tree,
+     uint32_t *recent_compression_offsets,
      uint8_t *uncompressed_data,
      size_t uncompressed_data_size,
      size_t *uncompressed_data_offset,
      libcerror_error_t **error );
 
 LIBFWNT_EXTERN \
-int libfwnt_lzxpress_huffman_decompress(
+int libfwnt_lzx_decompress(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
      uint8_t *uncompressed_data,
@@ -84,5 +88,5 @@ int libfwnt_lzxpress_huffman_decompress(
 }
 #endif
 
-#endif /* !defined( _LIBFWNT_LZXPRESS_H ) */
+#endif /* !defined( _LIBFWNT_LZX_H ) */
 

@@ -284,15 +284,19 @@ int libfwnt_bit_stream_get_value(
 	if( number_of_bits < 32 )
 	{
 		safe_value_32bit >>= bit_stream->bit_buffer_size - number_of_bits;
+	}
+	bit_stream->bit_buffer_size -= number_of_bits;
 
-		bit_stream->bit_buffer_size -= number_of_bits;
-		remaining_bit_buffer_size    = 32 - bit_stream->bit_buffer_size;
-		bit_stream->bit_buffer      &= 0xffffffffUL >> remaining_bit_buffer_size;
+	/* The behavior of "bit_buffer & ( 0xfffffffUL >> 32 )" differs for some compilers.
+	 */
+	if( bit_stream->bit_buffer_size == 0 )
+	{
+		bit_stream->bit_buffer = 0;
 	}
 	else
 	{
-		bit_stream->bit_buffer      = 0;
-		bit_stream->bit_buffer_size = 0;
+		remaining_bit_buffer_size = 32 - bit_stream->bit_buffer_size;
+		bit_stream->bit_buffer   &= 0xffffffffUL >> remaining_bit_buffer_size;
 	}
 	*value_32bit = safe_value_32bit;
 
