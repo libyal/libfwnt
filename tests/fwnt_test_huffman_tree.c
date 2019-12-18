@@ -710,29 +710,6 @@ int fwnt_test_huffman_tree_get_symbol_from_bit_stream(
 	libcerror_error_free(
 	 &error );
 
-        bit_stream->byte_stream_offset = 2627;
-        bit_stream->bit_buffer_size    = 0;
-
-	result = libfwnt_huffman_tree_get_symbol_from_bit_stream(
-	          huffman_tree,
-	          bit_stream,
-	          &symbol,
-	          &error );
-
-        bit_stream->byte_stream_offset = 2;
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 -1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "error",
-	 error );
-
-	libcerror_error_free(
-	 &error );
-
 	/* Clean up
 	 */
 	result = libfwnt_huffman_tree_free(

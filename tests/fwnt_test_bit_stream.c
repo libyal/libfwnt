@@ -308,6 +308,144 @@ on_error:
 	return( 0 );
 }
 
+/* Tests the libfwnt_bit_stream_read function
+ * Returns 1 if successful or 0 if not
+ */
+int fwnt_test_bit_stream_read(
+     void )
+{
+	libcerror_error_t *error         = NULL;
+	libfwnt_bit_stream_t *bit_stream = NULL;
+	int result                       = 0;
+
+	/* Initialize test
+	 */
+	result = libfwnt_bit_stream_initialize(
+	          &bit_stream,
+	          fwnt_test_bit_stream_data,
+	          16,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test regular cases
+	 */
+	result = libfwnt_bit_stream_read(
+	          bit_stream,
+	          16,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	FWNT_TEST_ASSERT_EQUAL_SIZE(
+	 "bit_stream->byte_stream_offset",
+	 bit_stream->byte_stream_offset,
+	 (size_t) 2 );
+
+	FWNT_TEST_ASSERT_EQUAL_UINT32(
+	 "bit_stream->bit_buffer",
+	 bit_stream->bit_buffer,
+	 (uint32_t) 0x0000da78UL );
+
+	FWNT_TEST_ASSERT_EQUAL_UINT8(
+	 "bit_stream->bit_buffer_size",
+	 bit_stream->bit_buffer_size,
+	 (uint8_t) 16 );
+
+	/* Test error cases
+	 */
+	result = libfwnt_bit_stream_read(
+	          NULL,
+	          32,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libfwnt_bit_stream_read(
+	          bit_stream,
+	          0,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libfwnt_bit_stream_read(
+	          bit_stream,
+	          64,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Clean up
+	 */
+	result = libfwnt_bit_stream_free(
+	          &bit_stream,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	return( 1 );
+
+on_error:
+	if( bit_stream != NULL )
+	{
+		libfwnt_bit_stream_free(
+		 &bit_stream,
+		 NULL );
+	}
+	return( 0 );
+}
+
 /* Tests the libfwnt_bit_stream_get_value function
  * Returns 1 if successful or 0 if not
  */
@@ -534,29 +672,6 @@ int fwnt_test_bit_stream_get_value(
 	libcerror_error_free(
 	 &error );
 
-	bit_stream->byte_stream_offset = 16;
-        bit_stream->bit_buffer_size    = 0;
-
-	result = libfwnt_bit_stream_get_value(
-	          bit_stream,
-	          32,
-	          &value_32bit,
-	          &error );
-
-	bit_stream->byte_stream_offset = 0;
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 -1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "error",
-	 error );
-
-	libcerror_error_free(
-	 &error );
-
 	/* Clean up
 	 */
 	result = libfwnt_bit_stream_free(
@@ -619,7 +734,9 @@ int main(
 	 "libfwnt_bit_stream_free",
 	 fwnt_test_bit_stream_free );
 
-	/* TODO add tests for libfwnt_bit_stream_read */
+	FWNT_TEST_RUN(
+	 "libfwnt_bit_stream_read",
+	 fwnt_test_bit_stream_read );
 
 	FWNT_TEST_RUN(
 	 "libfwnt_bit_stream_get_value",

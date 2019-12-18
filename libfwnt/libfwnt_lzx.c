@@ -61,6 +61,8 @@ int libfwnt_lzx_read_huffman_code_sizes(
      int number_of_code_sizes,
      libcerror_error_t **error )
 {
+	uint8_t pre_code_size_array[ 20 ];
+
 	libfwnt_huffman_tree_t *pre_codes_huffman_tree = NULL;
 	static char *function                          = "libfwnt_lzx_read_huffman_code_sizes";
 	uint32_t symbol                                = 0;
@@ -104,12 +106,12 @@ int libfwnt_lzx_read_huffman_code_sizes(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: pre-code: % 2" PRIu8 " value\t\t\t\t: %" PRIu32 "\n",
+			 "%s: pre-code: % 2" PRIu8 " value\t\t\t: %" PRIu32 "\n",
 			 function,
 			 pre_code_index,
 			 value_32bit) ;
 		}
-		code_size_array[ pre_code_index ] = (uint8_t) value_32bit;
+		pre_code_size_array[ pre_code_index ] = (uint8_t) value_32bit;
 	}
 	if( libcnotify_verbose != 0 )
 	{
@@ -133,7 +135,7 @@ int libfwnt_lzx_read_huffman_code_sizes(
 	}
 	if( libfwnt_huffman_tree_build(
 	     pre_codes_huffman_tree,
-	     code_size_array,
+	     pre_code_size_array,
 	     20,
 	     error ) != 1 )
 	{
@@ -142,20 +144,6 @@ int libfwnt_lzx_read_huffman_code_sizes(
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
 		 "%s: unable to build pre-codes Huffman tree.",
-		 function );
-
-		goto on_error;
-	}
-	if( memory_set(
-	     code_size_array,
-	     0,
-	     sizeof( uint8_t ) * number_of_code_sizes ) == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_SET_FAILED,
-		 "%s: unable to clear code size array.",
 		 function );
 
 		goto on_error;
@@ -182,7 +170,7 @@ int libfwnt_lzx_read_huffman_code_sizes(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: code size: % 3" PRIu32 " symbol\t\t\t: %" PRIu32 "\n",
+			 "%s: code size: % 3" PRIu32 " symbol\t\t: %" PRIu32 "\n",
 			 function,
 			 code_size_index,
 			 symbol );
@@ -198,7 +186,7 @@ int libfwnt_lzx_read_huffman_code_sizes(
 			if( libcnotify_verbose != 0 )
 			{
 				libcnotify_printf(
-				 "%s: code size: % 3" PRIu32 " value\t\t\t: %" PRIi32 "\n",
+				 "%s: code size: % 3" PRIu32 " value\t\t: %" PRIi32 "\n",
 				 function,
 				 code_size_index,
 				 code_size );
@@ -313,7 +301,7 @@ int libfwnt_lzx_read_huffman_code_sizes(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: times to repeat\t\t\t\t: %" PRIu32 "\n",
+			 "%s: times to repeat\t\t\t: %" PRIu32 "\n",
 			 function,
 			 times_to_repeat );
 		}
@@ -332,7 +320,7 @@ int libfwnt_lzx_read_huffman_code_sizes(
 			if( libcnotify_verbose != 0 )
 			{
 				libcnotify_printf(
-				 "%s: code size: % 3" PRIu32 " value\t\t\t: %" PRIi32 "\n",
+				 "%s: code size: % 3" PRIu32 " value\t\t: %" PRIi32 "\n",
 				 function,
 				 code_size_index,
 				 code_size );
@@ -377,11 +365,10 @@ on_error:
  */
 int libfwnt_lzx_build_main_huffman_tree(
      libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
      libfwnt_huffman_tree_t *huffman_tree,
      libcerror_error_t **error )
 {
-	uint8_t code_size_array[ 256 + 240 ];
-
 	static char *function = "libfwnt_lzx_build_main_huffman_tree";
 
 	if( libfwnt_lzx_read_huffman_code_sizes(
@@ -437,11 +424,10 @@ int libfwnt_lzx_build_main_huffman_tree(
  */
 int libfwnt_lzx_build_lengths_huffman_tree(
      libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
      libfwnt_huffman_tree_t *huffman_tree,
      libcerror_error_t **error )
 {
-	uint8_t code_size_array[ 249 ];
-
 	static char *function = "libfwnt_lzx_build_lengths_huffman_tree";
 
 	if( libfwnt_lzx_read_huffman_code_sizes(
@@ -482,11 +468,10 @@ int libfwnt_lzx_build_lengths_huffman_tree(
  */
 int libfwnt_lzx_build_aligned_offsets_huffman_tree(
      libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
      libfwnt_huffman_tree_t *huffman_tree,
      libcerror_error_t **error )
 {
-	uint8_t code_size_array[ 8 ];
-
 	static char *function = "libfwnt_lzx_build_aligned_offsets_huffman_tree";
 	uint32_t code_size    = 0;
 	int code_size_index   = 0;
@@ -513,7 +498,7 @@ int libfwnt_lzx_build_aligned_offsets_huffman_tree(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: code size: % 2d value\t\t: %" PRIu32 "\n",
+			 "%s: code size: % 2d value\t: %" PRIu32 "\n",
 			 function,
 			 code_size_index,
 			 code_size );
@@ -630,7 +615,7 @@ int libfwnt_lzx_decode_huffman(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: symbol\t\t\t\t\t\t: %" PRIu32 "\n",
+			 "%s: symbol\t\t\t\t\t: %" PRIu32 "\n",
 			 function,
 			 symbol );
 		}
@@ -693,7 +678,7 @@ int libfwnt_lzx_decode_huffman(
 				if( libcnotify_verbose != 0 )
 				{
 					libcnotify_printf(
-					 "%s: number of footer bits\t\t\t\t: %" PRIu8 "\n",
+					 "%s: number of footer bits\t\t\t: %" PRIu8 "\n",
 					 function,
 					 number_of_bits );
 				}
@@ -733,7 +718,7 @@ int libfwnt_lzx_decode_huffman(
 					if( libcnotify_verbose != 0 )
 					{
 						libcnotify_printf(
-						 "%s: aligned offset\t\t\t\t\t: %" PRIu32 "\n",
+						 "%s: aligned offset\t\t\t\t: %" PRIu32 "\n",
 						 function,
 						 aligned_offset );
 					}
@@ -750,17 +735,17 @@ int libfwnt_lzx_decode_huffman(
 			if( libcnotify_verbose != 0 )
 			{
 				libcnotify_printf(
-				 "%s: compression size\t\t\t\t\t: %" PRIu32 "\n",
+				 "%s: compression size\t\t\t\t: %" PRIu32 "\n",
 				 function,
 				 compression_size );
 
 				libcnotify_printf(
-				 "%s: compression offset slot\t\t\t\t: %" PRIu32 "\n",
+				 "%s: compression offset slot\t\t\t: %" PRIu32 "\n",
 				 function,
 				 compression_offset_slot );
 
 				libcnotify_printf(
-				 "%s: compression offset\t\t\t\t\t: %" PRIu32 "\n",
+				 "%s: compression offset\t\t\t\t: %" PRIu32 "\n",
 				 function,
 				 compression_offset );
 			}
@@ -884,6 +869,10 @@ int libfwnt_lzx_decompress(
      size_t *uncompressed_data_size,
      libcerror_error_t **error )
 {
+	uint8_t aligned_offsets_code_size_array[ 8 ];
+	uint8_t lengths_code_size_array[ 249 ];
+	uint8_t main_code_size_array[ 256 + 240 ];
+
 	uint32_t recent_compression_offsets[ 3 ]             = { 1, 1, 1 };
 
 	libfwnt_bit_stream_t *bit_stream                     = NULL;
@@ -971,6 +960,10 @@ int libfwnt_lzx_decompress(
 /* TODO find optimized solution to read bit stream from bytes */
 	while( bit_stream->byte_stream_offset < bit_stream->byte_stream_size )
 	{
+		if( uncompressed_data_offset >= safe_uncompressed_data_size )
+		{
+			break;
+		}
 		if( libfwnt_bit_stream_get_value(
 		     bit_stream,
 		     3,
@@ -1027,7 +1020,7 @@ int libfwnt_lzx_decompress(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: block header block type\t\t\t\t\t: %" PRIu32 " (",
+			 "%s: block header block type\t\t\t\t: %" PRIu32 " (",
 			 function,
 			 block_type );
 
@@ -1057,7 +1050,7 @@ int libfwnt_lzx_decompress(
 			 ")\n" );
 
 			libcnotify_printf(
-			 "%s: block header block size\t\t\t\t\t: %" PRIu32 "\n",
+			 "%s: block header block size\t\t\t\t: %" PRIu32 "\n",
 			 function,
 			 block_size );
 
@@ -1067,6 +1060,23 @@ int libfwnt_lzx_decompress(
 		switch( block_type )
 		{
 			case LIBFWNT_LZX_BLOCK_TYPE_ALIGNED:
+				if( uncompressed_data_offset == 0 )
+				{
+					if( memory_set(
+					     aligned_offsets_code_size_array,
+					     0,
+					     sizeof( uint8_t ) * 8 ) == NULL )
+					{
+						libcerror_error_set(
+						 error,
+						 LIBCERROR_ERROR_DOMAIN_MEMORY,
+						 LIBCERROR_MEMORY_ERROR_SET_FAILED,
+						 "%s: unable to clear aligned offsets code size array.",
+						 function );
+
+						goto on_error;
+					}
+				}
 				if( libfwnt_huffman_tree_initialize(
 				     &aligned_offsets_huffman_tree,
 				     256,
@@ -1084,6 +1094,7 @@ int libfwnt_lzx_decompress(
 				}
 				if( libfwnt_lzx_build_aligned_offsets_huffman_tree(
 				     bit_stream,
+				     aligned_offsets_code_size_array,
 				     aligned_offsets_huffman_tree,
 				     error ) != 1 )
 				{
@@ -1099,6 +1110,37 @@ int libfwnt_lzx_decompress(
 
 			LIBFWNT_LZX_ATTRIBUTE_FALLTHROUGH;
 			case LIBFWNT_LZX_BLOCK_TYPE_VERBATIM:
+				if( uncompressed_data_offset == 0 )
+				{
+					if( memory_set(
+					     main_code_size_array,
+					     0,
+					     sizeof( uint8_t ) * ( 256 + 240 ) ) == NULL )
+					{
+						libcerror_error_set(
+						 error,
+						 LIBCERROR_ERROR_DOMAIN_MEMORY,
+						 LIBCERROR_MEMORY_ERROR_SET_FAILED,
+						 "%s: unable to clear main code size array.",
+						 function );
+
+						goto on_error;
+					}
+					if( memory_set(
+					     lengths_code_size_array,
+					     0,
+					     sizeof( uint8_t ) * 249 ) == NULL )
+					{
+						libcerror_error_set(
+						 error,
+						 LIBCERROR_ERROR_DOMAIN_MEMORY,
+						 LIBCERROR_MEMORY_ERROR_SET_FAILED,
+						 "%s: unable to clear lengths code size array.",
+						 function );
+
+						goto on_error;
+					}
+				}
 				if( libfwnt_huffman_tree_initialize(
 				     &main_huffman_tree,
 				     256 + 240,
@@ -1116,6 +1158,7 @@ int libfwnt_lzx_decompress(
 				}
 				if( libfwnt_lzx_build_main_huffman_tree(
 				     bit_stream,
+				     main_code_size_array,
 				     main_huffman_tree,
 				     error ) != 1 )
 				{
@@ -1145,6 +1188,7 @@ int libfwnt_lzx_decompress(
 				}
 				if( libfwnt_lzx_build_lengths_huffman_tree(
 				     bit_stream,
+				     lengths_code_size_array,
 				     lengths_huffman_tree,
 				     error ) != 1 )
 				{
@@ -1289,17 +1333,17 @@ int libfwnt_lzx_decompress(
 				if( libcnotify_verbose != 0 )
 				{
 					libcnotify_printf(
-					 "%s: R0 value\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
+					 "%s: R0 value\t\t\t\t\t: 0x%08" PRIx32 "\n",
 					 function,
 					 recent_compression_offsets[ 0 ] );
 
 					libcnotify_printf(
-					 "%s: R1 value\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
+					 "%s: R1 value\t\t\t\t\t: 0x%08" PRIx32 "\n",
 					 function,
 					 recent_compression_offsets[ 1 ] );
 
 					libcnotify_printf(
-					 "%s: R2 value\t\t\t\t\t\t: 0x%08" PRIx32 "\n",
+					 "%s: R2 value\t\t\t\t\t: 0x%08" PRIx32 "\n",
 					 function,
 					 recent_compression_offsets[ 2 ] );
 
@@ -1355,7 +1399,6 @@ int libfwnt_lzx_decompress(
 
 				return( -1 );
 		}
-		break;
 	}
 	if( libfwnt_bit_stream_free(
 	     &bit_stream,

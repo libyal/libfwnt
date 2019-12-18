@@ -51,16 +51,19 @@ int libfwnt_lzx_read_huffman_code_sizes(
 
 int libfwnt_lzx_build_main_huffman_tree(
      libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
      libfwnt_huffman_tree_t *main_huffman_tre,
      libcerror_error_t **error );
 
 int libfwnt_lzx_build_lengths_huffman_tree(
      libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
      libfwnt_huffman_tree_t *lengths_huffman_tre,
      libcerror_error_t **error );
 
 int libfwnt_lzx_build_aligned_offsets_huffman_tree(
      libfwnt_bit_stream_t *bit_stream,
+     uint8_t *code_size_array,
      libfwnt_huffman_tree_t *aligned_offsets_huffman_tre,
      libcerror_error_t **error );
 
