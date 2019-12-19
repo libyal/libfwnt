@@ -340,7 +340,10 @@ improve the compression ratio on 32-bit Intel 80x86 code.
 
 === LZXPRESS
 
-[yellow-background]*TODO*
+The LZXPRESS compression method uses a combination of the LZ77 and DIRECT2
+algorithms.
+
+[yellow-background]*TODO complete section*
 
 === LZXPRESS Huffman
 

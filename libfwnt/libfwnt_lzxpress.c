@@ -104,6 +104,7 @@ int libfwnt_lzxpress_decompress(
 	size_t compressed_data_offset          = 0;
 	size_t compression_index               = 0;
 	size_t compression_shared_byte_index   = 0;
+	size_t safe_uncompressed_data_size     = 0;
 	size_t uncompressed_data_offset        = 0;
 	uint32_t compression_indicator         = 0;
 	uint32_t compression_indicator_bitmask = 0;
@@ -122,13 +123,14 @@ int libfwnt_lzxpress_decompress(
 
 		return( -1 );
 	}
-	if( compressed_data_size > (size_t) SSIZE_MAX )
+	if( ( compressed_data_size <= 1 )
+	 || ( compressed_data_size > (size_t) SSIZE_MAX ) )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid compressed data size value exceeds maximum.",
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: invalid compressed data size value out of bounds.",
 		 function );
 
 		return( -1 );
@@ -155,22 +157,35 @@ int libfwnt_lzxpress_decompress(
 
 		return( -1 );
 	}
-	if( compressed_data_size <= 1 )
+	if( *uncompressed_data_size > (size_t) SSIZE_MAX )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: compressed data size value too small.",
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
+		 "%s: invalid uncompressed data size value exceeds maximum.",
 		 function );
 
 		return( -1 );
 	}
+	safe_uncompressed_data_size = *uncompressed_data_size;
+
 	while( compressed_data_offset < compressed_data_size )
 	{
-		if( uncompressed_data_offset >= *uncompressed_data_size )
+		if( uncompressed_data_offset >= safe_uncompressed_data_size )
 		{
 			break;
+		}
+		if( compressed_data_offset >= ( compressed_data_size - 3 ) )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+			 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
+			 "%s: compressed data too small.",
+			 function );
+
+			return( -1 );
 		}
 		byte_stream_copy_to_uint32_little_endian(
 		 &( compressed_data[ compressed_data_offset ] ),
@@ -200,7 +215,7 @@ int libfwnt_lzxpress_decompress(
 		     compression_indicator_bitmask > 0;
 		     compression_indicator_bitmask >>= 1 )
 		{
-			if( uncompressed_data_offset >= *uncompressed_data_size )
+			if( uncompressed_data_offset >= safe_uncompressed_data_size )
 			{
 				break;
 			}
@@ -372,7 +387,7 @@ int libfwnt_lzxpress_decompress(
 
 						return( -1 );
 					}
-					if( uncompressed_data_offset > *uncompressed_data_size )
+					if( uncompressed_data_offset > safe_uncompressed_data_size )
 					{
 						libcerror_error_set(
 						 error,
@@ -401,7 +416,7 @@ int libfwnt_lzxpress_decompress(
 
 					return( -1 );
 				}
-				if( uncompressed_data_offset > *uncompressed_data_size )
+				if( uncompressed_data_offset > safe_uncompressed_data_size )
 				{
 					libcerror_error_set(
 					 error,
