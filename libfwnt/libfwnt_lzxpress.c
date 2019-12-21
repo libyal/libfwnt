@@ -450,17 +450,16 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 {
 	uint8_t code_size_array[ 512 ];
 
-	libfwnt_bit_stream_t *bit_stream            = NULL;
-	libfwnt_huffman_tree_t *huffman_tree        = NULL;
-	static char *function                       = "libfwnt_lzxpress_huffman_decompress_chunk";
-	size_t compression_uncompressed_data_offset = 0;
-	size_t next_chunk_uncompressed_data_offset  = 0;
-	size_t safe_compressed_data_offset          = 0;
-	size_t safe_uncompressed_data_offset        = 0;
-	uint32_t compression_offset                 = 0;
-	uint32_t compression_size                   = 0;
-	uint32_t symbol                             = 0;
-	uint8_t byte_value                          = 0;
+	libfwnt_bit_stream_t *bit_stream           = NULL;
+	libfwnt_huffman_tree_t *huffman_tree       = NULL;
+	static char *function                      = "libfwnt_lzxpress_huffman_decompress_chunk";
+	size_t next_chunk_uncompressed_data_offset = 0;
+	size_t safe_compressed_data_offset         = 0;
+	size_t safe_uncompressed_data_offset       = 0;
+	uint32_t compression_offset                = 0;
+	uint32_t compression_size                  = 0;
+	uint32_t symbol                            = 0;
+	uint8_t byte_value                         = 0;
 
 	if( compressed_data == NULL )
 	{
@@ -818,11 +817,11 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 				goto on_error;
 			}
-			compression_uncompressed_data_offset = safe_uncompressed_data_offset - compression_offset;
+			compression_offset = safe_uncompressed_data_offset - compression_offset;
 
 			while( compression_size > 0 )
 			{
-				uncompressed_data[ safe_uncompressed_data_offset++ ] = uncompressed_data[ compression_uncompressed_data_offset++ ];
+				uncompressed_data[ safe_uncompressed_data_offset++ ] = uncompressed_data[ compression_offset++ ];
 
 				compression_size--;
 			}
