@@ -35,7 +35,7 @@
 
 #include "../libfwnt/libfwnt_access_control_list.h"
 
-uint8_t fwnt_test_access_control_list_byte_stream[ 52 ] = {
+uint8_t fwnt_test_access_control_list_data1[ 52 ] = {
 	0x02, 0x00, 0x34, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00, 0x9f, 0x01, 0x12, 0x00,
 	0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x00,
 	0x9f, 0x01, 0x12, 0x00, 0x01, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x20, 0x00, 0x00, 0x00,
@@ -313,7 +313,7 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 */
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
+	          fwnt_test_access_control_list_data1,
 	          52,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -331,7 +331,7 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 	 */
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          NULL,
-	          fwnt_test_access_control_list_byte_stream,
+	          fwnt_test_access_control_list_data1,
 	          52,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -369,7 +369,7 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
+	          fwnt_test_access_control_list_data1,
 	          0,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -385,7 +385,7 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
+	          fwnt_test_access_control_list_data1,
 	          (size_t) SSIZE_MAX + 1,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -401,7 +401,7 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
+	          fwnt_test_access_control_list_data1,
 	          8,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -420,7 +420,7 @@ int fwnt_test_access_control_list_copy_from_byte_stream(
 
 	result = libfwnt_access_control_list_copy_from_byte_stream(
 	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
+	          fwnt_test_access_control_list_data1,
 	          52,
 	          (uint8_t) 'X',
 	          &error );
@@ -477,48 +477,11 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_access_control_list_get_number_of_entries(
-     void )
+     libfwnt_access_control_list_t *access_control_list )
 {
-	libcerror_error_t *error                           = NULL;
-	libfwnt_access_control_list_t *access_control_list = NULL;
-	int number_of_entries                              = 0;
-	int number_of_entries_is_set                       = 0;
-	int result                                         = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_access_control_list_initialize(
-	          &access_control_list,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "access_control_list",
-	 access_control_list );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
-	result = libfwnt_access_control_list_copy_from_byte_stream(
-	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
-	          52,
-	          LIBFWNT_ENDIAN_LITTLE,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
+	libcerror_error_t *error = NULL;
+	int number_of_entries    = 0;
+	int result               = 0;
 
 	/* Test regular cases
 	 */
@@ -535,8 +498,6 @@ int fwnt_test_access_control_list_get_number_of_entries(
 	FWNT_TEST_ASSERT_IS_NULL(
 	 "error",
 	 error );
-
-	number_of_entries_is_set = result;
 
 	/* Test error cases
 	 */
@@ -557,43 +518,22 @@ int fwnt_test_access_control_list_get_number_of_entries(
 	libcerror_error_free(
 	 &error );
 
-	if( number_of_entries_is_set != 0 )
-	{
-		result = libfwnt_access_control_list_get_number_of_entries(
-		          access_control_list,
-		          NULL,
-		          &error );
-
-		FWNT_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
-
-		FWNT_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
-
-		libcerror_error_free(
-		 &error );
-	}
-	/* Clean up
-	 */
-	result = libfwnt_internal_access_control_list_free(
-	          (libfwnt_internal_access_control_list_t **) &access_control_list,
+	result = libfwnt_access_control_list_get_number_of_entries(
+	          access_control_list,
+	          NULL,
 	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
-	 1 );
+	 -1 );
 
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "access_control_list",
-	 access_control_list );
-
-	FWNT_TEST_ASSERT_IS_NULL(
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
 	 "error",
 	 error );
+
+	libcerror_error_free(
+	 &error );
 
 	return( 1 );
 
@@ -603,12 +543,6 @@ on_error:
 		libcerror_error_free(
 		 &error );
 	}
-	if( access_control_list != NULL )
-	{
-		libfwnt_internal_access_control_list_free(
-		 (libfwnt_internal_access_control_list_t **) &access_control_list,
-		 NULL );
-	}
 	return( 0 );
 }
 
@@ -616,47 +550,11 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_access_control_list_get_entry_by_index(
-     void )
+     libfwnt_access_control_list_t *access_control_list )
 {
 	libcerror_error_t *error                             = NULL;
-	libfwnt_access_control_list_t *access_control_list   = NULL;
 	libfwnt_access_control_entry_t *access_control_entry = NULL;
 	int result                                           = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_access_control_list_initialize(
-	          &access_control_list,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "access_control_list",
-	 access_control_list );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
-	result = libfwnt_access_control_list_copy_from_byte_stream(
-	          access_control_list,
-	          fwnt_test_access_control_list_byte_stream,
-	          52,
-	          LIBFWNT_ENDIAN_LITTLE,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
 
 	/* Test retrieve entry by index
 	 */
@@ -728,6 +626,107 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	libcerror_error_free(
 	 &error );
 
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	return( 0 );
+}
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+
+/* The main program
+ */
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+int wmain(
+     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
+     wchar_t * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
+#else
+int main(
+     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
+     char * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
+#endif
+{
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
+
+	libcerror_error_t *error                           = NULL;
+	libfwnt_access_control_list_t *access_control_list = NULL;
+	int result                                         = 0;
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+
+	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
+	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
+
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
+
+	FWNT_TEST_RUN(
+	 "libfwnt_access_control_list_initialize",
+	 fwnt_test_access_control_list_initialize );
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+
+	FWNT_TEST_RUN(
+	 "libfwnt_access_control_list_free",
+	 fwnt_test_access_control_list_free );
+
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
+
+#if !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 )
+
+	FWNT_TEST_RUN(
+	 "libfwnt_access_control_list_copy_from_byte_stream",
+	 fwnt_test_access_control_list_copy_from_byte_stream );
+
+	/* Initialize access_control_list for tests
+	 */
+	result = libfwnt_access_control_list_initialize(
+	          &access_control_list,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "access_control_list",
+	 access_control_list );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libfwnt_access_control_list_copy_from_byte_stream(
+	          access_control_list,
+	          fwnt_test_access_control_list_data1,
+	          52,
+	          LIBFWNT_ENDIAN_LITTLE,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_access_control_list_get_number_of_entries",
+	 fwnt_test_access_control_list_get_number_of_entries,
+	 access_control_list );
+
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_access_control_list_get_entry_by_index",
+	 fwnt_test_access_control_list_get_entry_by_index,
+	 access_control_list );
+
 	/* Clean up
 	 */
 	result = libfwnt_internal_access_control_list_free(
@@ -747,9 +746,14 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 "error",
 	 error );
 
-	return( 1 );
+#endif /* !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 ) */
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+
+	return( EXIT_SUCCESS );
 
 on_error:
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
+
 	if( error != NULL )
 	{
 		libcerror_error_free(
@@ -761,57 +765,8 @@ on_error:
 		 (libfwnt_internal_access_control_list_t **) &access_control_list,
 		 NULL );
 	}
-	return( 0 );
-}
-
 #endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
-/* The main program
- */
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-int wmain(
-     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
-     wchar_t * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
-#else
-int main(
-     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
-     char * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
-#endif
-{
-	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
-	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
-
-#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
-
-	FWNT_TEST_RUN(
-	 "libfwnt_access_control_list_initialize",
-	 fwnt_test_access_control_list_initialize );
-
-#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
-
-	FWNT_TEST_RUN(
-	 "libfwnt_access_control_list_free",
-	 fwnt_test_access_control_list_free );
-
-#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
-
-	FWNT_TEST_RUN(
-	 "libfwnt_access_control_list_copy_from_byte_stream",
-	 fwnt_test_access_control_list_copy_from_byte_stream );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_access_control_list_get_number_of_entries",
-	 fwnt_test_access_control_list_get_number_of_entries );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_access_control_list_get_entry_by_index",
-	 fwnt_test_access_control_list_get_entry_by_index );
-
-#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
-
-	return( EXIT_SUCCESS );
-
-on_error:
 	return( EXIT_FAILURE );
 }
 

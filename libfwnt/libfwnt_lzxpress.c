@@ -662,8 +662,20 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 			goto on_error;
 		}
-		/* Make sure the bit buffer contains at least 16-bit
-		 * to ensure compression size is read correctly
+#if defined( HAVE_DEBUG_OUTPUT )
+		if( libcnotify_verbose != 0 )
+		{
+			libcnotify_printf(
+			 "%s: huffman symbol\t\t: 0x%04" PRIx16 "\n",
+			 function,
+			 symbol );
+		}
+#endif
+		if( symbol < 256 )
+		{
+			uncompressed_data[ safe_uncompressed_data_offset++ ] = (uint8_t) symbol;
+		}
+		/* Make sure the bit buffer contains at least 16-bit to ensure end-of-block marker is read correctly
 		 */
 		if( bit_stream->bit_buffer_size < 16 )
 		{
@@ -689,17 +701,8 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			 "%s: number of bits\t\t: %" PRId8 "\n",
 			 function,
 			 bit_stream->bit_buffer_size );
-
-			libcnotify_printf(
-			 "%s: huffman symbol\t\t: 0x%04" PRIx16 "\n",
-			 function,
-			 symbol );
 		}
 #endif
-		if( symbol < 256 )
-		{
-			uncompressed_data[ safe_uncompressed_data_offset++ ] = (uint8_t) symbol;
-		}
 		/* Check if we have an end-of-block marker (symbol 256) and the number of remaining bits are 0
 		 */
 /* TODO add ( symbol == 256 ) */
@@ -824,6 +827,25 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 				uncompressed_data[ safe_uncompressed_data_offset++ ] = uncompressed_data[ compression_offset++ ];
 
 				compression_size--;
+			}
+			/* Make sure the bit buffer contains at least 16-bit to ensure successive chunks in a stream are read correctly
+			 */
+			if( bit_stream->bit_buffer_size < 16 )
+			{
+				if( libfwnt_bit_stream_read(
+				     bit_stream,
+				     16,
+				     error ) == -1 )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_IO,
+					 LIBCERROR_IO_ERROR_READ_FAILED,
+					 "%s: unable to read 16-bit from bit stream.",
+					 function );
+
+					goto on_error;
+				}
 			}
 		}
 #if defined( HAVE_DEBUG_OUTPUT )

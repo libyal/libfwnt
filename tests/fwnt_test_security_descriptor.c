@@ -35,7 +35,7 @@
 
 #include "../libfwnt/libfwnt_security_descriptor.h"
 
-uint8_t fwnt_test_security_descriptor_byte_stream[ 116 ] = {
+uint8_t fwnt_test_security_descriptor_data1[ 116 ] = {
 	0x01, 0x00, 0x04, 0x80, 0x48, 0x00, 0x00, 0x00, 0x64, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x14, 0x00, 0x00, 0x00, 0x02, 0x00, 0x34, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x14, 0x00,
 	0x9f, 0x01, 0x12, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x12, 0x00, 0x00, 0x00,
@@ -311,7 +311,7 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 */
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
+	          fwnt_test_security_descriptor_data1,
 	          116,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -329,7 +329,7 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 	 */
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          NULL,
-	          fwnt_test_security_descriptor_byte_stream,
+	          fwnt_test_security_descriptor_data1,
 	          116,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -367,7 +367,7 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
+	          fwnt_test_security_descriptor_data1,
 	          0,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -383,7 +383,7 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
+	          fwnt_test_security_descriptor_data1,
 	          (size_t) SSIZE_MAX + 1,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -399,7 +399,7 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
+	          fwnt_test_security_descriptor_data1,
 	          20,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
@@ -418,7 +418,7 @@ int fwnt_test_security_descriptor_copy_from_byte_stream(
 
 	result = libfwnt_security_descriptor_copy_from_byte_stream(
 	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
+	          fwnt_test_security_descriptor_data1,
 	          116,
 	          (uint8_t) 'X',
 	          &error );
@@ -475,48 +475,12 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_security_descriptor_get_owner(
-     void )
+     libfwnt_security_descriptor_t *security_descriptor )
 {
-	libcerror_error_t *error                           = NULL;
-	libfwnt_security_descriptor_t *security_descriptor = NULL;
-	libfwnt_security_identifier_t *owner               = NULL;
-	int owner_is_set                                   = 0;
-	int result                                         = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_security_descriptor_initialize(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
-	result = libfwnt_security_descriptor_copy_from_byte_stream(
-	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
-	          116,
-	          LIBFWNT_ENDIAN_LITTLE,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
+	libcerror_error_t *error             = NULL;
+	libfwnt_security_identifier_t *owner = NULL;
+	int owner_is_set                     = 0;
+	int result                           = 0;
 
 	/* Test regular cases
 	 */
@@ -601,25 +565,6 @@ int fwnt_test_security_descriptor_get_owner(
 		libcerror_error_free(
 		 &error );
 	}
-	/* Clean up
-	 */
-	result = libfwnt_security_descriptor_free(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
 	return( 1 );
 
 on_error:
@@ -634,12 +579,6 @@ on_error:
 		 &owner,
 		 NULL );
 	}
-	if( security_descriptor != NULL )
-	{
-		libfwnt_security_descriptor_free(
-		 &security_descriptor,
-		 NULL );
-	}
 	return( 0 );
 }
 
@@ -647,48 +586,12 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_security_descriptor_get_group(
-     void )
+     libfwnt_security_descriptor_t *security_descriptor )
 {
-	libcerror_error_t *error                           = NULL;
-	libfwnt_security_descriptor_t *security_descriptor = NULL;
-	libfwnt_security_identifier_t *group               = NULL;
-	int group_is_set                                   = 0;
-	int result                                         = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_security_descriptor_initialize(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
-	result = libfwnt_security_descriptor_copy_from_byte_stream(
-	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
-	          116,
-	          LIBFWNT_ENDIAN_LITTLE,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
+	libcerror_error_t *error             = NULL;
+	libfwnt_security_identifier_t *group = NULL;
+	int group_is_set                     = 0;
+	int result                           = 0;
 
 	/* Test regular cases
 	 */
@@ -773,25 +676,6 @@ int fwnt_test_security_descriptor_get_group(
 		libcerror_error_free(
 		 &error );
 	}
-	/* Clean up
-	 */
-	result = libfwnt_security_descriptor_free(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
 	return( 1 );
 
 on_error:
@@ -806,12 +690,6 @@ on_error:
 		 &group,
 		 NULL );
 	}
-	if( security_descriptor != NULL )
-	{
-		libfwnt_security_descriptor_free(
-		 &security_descriptor,
-		 NULL );
-	}
 	return( 0 );
 }
 
@@ -819,48 +697,12 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_security_descriptor_get_discretionary_acl(
-     void )
+     libfwnt_security_descriptor_t *security_descriptor )
 {
-	libcerror_error_t *error                           = NULL;
-	libfwnt_access_control_list_t *discretionary_acl   = NULL;
-	libfwnt_security_descriptor_t *security_descriptor = NULL;
-	int discretionary_acl_is_set                       = 0;
-	int result                                         = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_security_descriptor_initialize(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
-	result = libfwnt_security_descriptor_copy_from_byte_stream(
-	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
-	          116,
-	          LIBFWNT_ENDIAN_LITTLE,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
+	libcerror_error_t *error                         = NULL;
+	libfwnt_access_control_list_t *discretionary_acl = NULL;
+	int discretionary_acl_is_set                     = 0;
+	int result                                       = 0;
 
 	/* Test regular cases
 	 */
@@ -945,25 +787,6 @@ int fwnt_test_security_descriptor_get_discretionary_acl(
 		libcerror_error_free(
 		 &error );
 	}
-	/* Clean up
-	 */
-	result = libfwnt_security_descriptor_free(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
 	return( 1 );
 
 on_error:
@@ -978,12 +801,6 @@ on_error:
 		 &discretionary_acl,
 		 NULL );
 	}
-	if( security_descriptor != NULL )
-	{
-		libfwnt_security_descriptor_free(
-		 &security_descriptor,
-		 NULL );
-	}
 	return( 0 );
 }
 
@@ -991,48 +808,12 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_security_descriptor_get_system_acl(
-     void )
+     libfwnt_security_descriptor_t *security_descriptor )
 {
-	libcerror_error_t *error                           = NULL;
-	libfwnt_access_control_list_t *system_acl          = NULL;
-	libfwnt_security_descriptor_t *security_descriptor = NULL;
-	int result                                         = 0;
-	int system_acl_is_set                              = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_security_descriptor_initialize(
-	          &security_descriptor,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "security_descriptor",
-	 security_descriptor );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
-	result = libfwnt_security_descriptor_copy_from_byte_stream(
-	          security_descriptor,
-	          fwnt_test_security_descriptor_byte_stream,
-	          116,
-	          LIBFWNT_ENDIAN_LITTLE,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
+	libcerror_error_t *error                  = NULL;
+	libfwnt_access_control_list_t *system_acl = NULL;
+	int result                                = 0;
+	int system_acl_is_set                     = 0;
 
 	/* Test regular cases
 	 */
@@ -1117,6 +898,111 @@ int fwnt_test_security_descriptor_get_system_acl(
 		libcerror_error_free(
 		 &error );
 	}
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	if( system_acl != NULL )
+	{
+		libfwnt_access_control_list_free(
+		 &system_acl,
+		 NULL );
+	}
+	return( 0 );
+}
+
+/* The main program
+ */
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+int wmain(
+     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
+     wchar_t * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
+#else
+int main(
+     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
+     char * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
+#endif
+{
+	libcerror_error_t *error                           = NULL;
+	libfwnt_security_descriptor_t *security_descriptor = NULL;
+	int result                                         = 0;
+
+	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
+	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
+
+	FWNT_TEST_RUN(
+	 "libfwnt_security_descriptor_initialize",
+	 fwnt_test_security_descriptor_initialize );
+
+	FWNT_TEST_RUN(
+	 "libfwnt_security_descriptor_free",
+	 fwnt_test_security_descriptor_free );
+
+	FWNT_TEST_RUN(
+	 "libfwnt_security_descriptor_copy_from_byte_stream",
+	 fwnt_test_security_descriptor_copy_from_byte_stream );
+
+#if !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 )
+
+	/* Initialize security_descriptor for tests
+	 */
+	result = libfwnt_security_descriptor_initialize(
+	          &security_descriptor,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "security_descriptor",
+	 security_descriptor );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libfwnt_security_descriptor_copy_from_byte_stream(
+	          security_descriptor,
+	          fwnt_test_security_descriptor_data1,
+	          116,
+	          LIBFWNT_ENDIAN_LITTLE,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_security_descriptor_get_owner",
+	 fwnt_test_security_descriptor_get_owner,
+	 security_descriptor );
+
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_security_descriptor_get_group",
+	 fwnt_test_security_descriptor_get_group,
+	 security_descriptor );
+
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_security_descriptor_get_discretionary_acl",
+	 fwnt_test_security_descriptor_get_discretionary_acl,
+	 security_descriptor );
+
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_security_descriptor_get_system_acl",
+	 fwnt_test_security_descriptor_get_system_acl,
+	 security_descriptor );
+
 	/* Clean up
 	 */
 	result = libfwnt_security_descriptor_free(
@@ -1136,7 +1022,9 @@ int fwnt_test_security_descriptor_get_system_acl(
 	 "error",
 	 error );
 
-	return( 1 );
+#endif /* !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 ) */
+
+	return( EXIT_SUCCESS );
 
 on_error:
 	if( error != NULL )
@@ -1144,67 +1032,12 @@ on_error:
 		libcerror_error_free(
 		 &error );
 	}
-	if( system_acl != NULL )
-	{
-		libfwnt_access_control_list_free(
-		 &system_acl,
-		 NULL );
-	}
 	if( security_descriptor != NULL )
 	{
 		libfwnt_security_descriptor_free(
 		 &security_descriptor,
 		 NULL );
 	}
-	return( 0 );
-}
-
-/* The main program
- */
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-int wmain(
-     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
-     wchar_t * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
-#else
-int main(
-     int argc FWNT_TEST_ATTRIBUTE_UNUSED,
-     char * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
-#endif
-{
-	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
-	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_initialize",
-	 fwnt_test_security_descriptor_initialize );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_free",
-	 fwnt_test_security_descriptor_free );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_copy_from_byte_stream",
-	 fwnt_test_security_descriptor_copy_from_byte_stream );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_get_owner",
-	 fwnt_test_security_descriptor_get_owner );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_get_group",
-	 fwnt_test_security_descriptor_get_group );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_get_discretionary_acl",
-	 fwnt_test_security_descriptor_get_discretionary_acl );
-
-	FWNT_TEST_RUN(
-	 "libfwnt_security_descriptor_get_system_acl",
-	 fwnt_test_security_descriptor_get_system_acl );
-
-	return( EXIT_SUCCESS );
-
-on_error:
 	return( EXIT_FAILURE );
 }
 
