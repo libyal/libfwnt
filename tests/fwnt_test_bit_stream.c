@@ -1,5 +1,5 @@
 /*
- * Bit-stream testing program
+ * Library bit_stream type test program
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -20,7 +20,6 @@
  */
 
 #include <common.h>
-#include <memory.h>
 #include <file_stream.h>
 #include <types.h>
 
@@ -30,6 +29,7 @@
 
 #include "fwnt_test_libcerror.h"
 #include "fwnt_test_libcnotify.h"
+#include "fwnt_test_libfwnt.h"
 #include "fwnt_test_macros.h"
 #include "fwnt_test_memory.h"
 #include "fwnt_test_unused.h"
@@ -40,7 +40,7 @@
 #define FWNT_TEST_BIT_STREAM_VERBOSE
  */
 
-uint8_t fwnt_test_bit_stream_data[ 16 ] = {
+uint8_t fwnt_test_bit_stream_data1[ 16 ] = {
 	0x78, 0xda, 0xbd, 0x59, 0x6d, 0x8f, 0xdb, 0xb8, 0x11, 0xfe, 0x7c, 0xfa, 0x15, 0xc4, 0x7e, 0xb9 };
 
 #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
@@ -59,7 +59,7 @@ int fwnt_test_bit_stream_initialize(
 	 */
 	result = libfwnt_bit_stream_initialize(
 	          &bit_stream,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          16,
 	          &error );
 
@@ -97,7 +97,7 @@ int fwnt_test_bit_stream_initialize(
 	 */
 	result = libfwnt_bit_stream_initialize(
 	          NULL,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          16,
 	          &error );
 
@@ -117,7 +117,7 @@ int fwnt_test_bit_stream_initialize(
 
 	result = libfwnt_bit_stream_initialize(
 	          &bit_stream,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          16,
 	          &error );
 
@@ -155,7 +155,7 @@ int fwnt_test_bit_stream_initialize(
 
 	result = libfwnt_bit_stream_initialize(
 	          &bit_stream,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          (size_t) SSIZE_MAX + 1,
 	          &error );
 
@@ -179,7 +179,7 @@ int fwnt_test_bit_stream_initialize(
 
 	result = libfwnt_bit_stream_initialize(
 	          &bit_stream,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          16,
 	          &error );
 
@@ -218,7 +218,7 @@ int fwnt_test_bit_stream_initialize(
 
 	result = libfwnt_bit_stream_initialize(
 	          &bit_stream,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          16,
 	          &error );
 
@@ -322,7 +322,7 @@ int fwnt_test_bit_stream_read(
 	 */
 	result = libfwnt_bit_stream_initialize(
 	          &bit_stream,
-	          fwnt_test_bit_stream_data,
+	          fwnt_test_bit_stream_data1,
 	          16,
 	          &error );
 
@@ -450,29 +450,11 @@ on_error:
  * Returns 1 if successful or 0 if not
  */
 int fwnt_test_bit_stream_get_value(
-     void )
+     libfwnt_bit_stream_t *bit_stream )
 {
-	libcerror_error_t *error         = NULL;
-	libfwnt_bit_stream_t *bit_stream = NULL;
-	uint32_t value_32bit             = 0;
-	int result                       = 0;
-
-	/* Initialize test
-	 */
-	result = libfwnt_bit_stream_initialize(
-	          &bit_stream,
-	          fwnt_test_bit_stream_data,
-	          16,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
+	libcerror_error_t *error = NULL;
+	uint32_t value_32bit     = 0;
+	int result               = 0;
 
 	/* Test regular cases
 	 */
@@ -672,30 +654,9 @@ int fwnt_test_bit_stream_get_value(
 	libcerror_error_free(
 	 &error );
 
-	/* Clean up
-	 */
-	result = libfwnt_bit_stream_free(
-	          &bit_stream,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 1 );
-
-	FWNT_TEST_ASSERT_IS_NULL(
-	 "error",
-	 error );
-
 	return( 1 );
 
 on_error:
-	if( bit_stream != NULL )
-	{
-		libfwnt_bit_stream_free(
-		 &bit_stream,
-		 NULL );
-	}
 	return( 0 );
 }
 
@@ -713,6 +674,14 @@ int main(
      char * const argv[] FWNT_TEST_ATTRIBUTE_UNUSED )
 #endif
 {
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
+
+	libcerror_error_t *error         = NULL;
+	libfwnt_bit_stream_t *bit_stream = NULL;
+	int result                       = 0;
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
+
 	FWNT_TEST_UNREFERENCED_PARAMETER( argc )
 	FWNT_TEST_UNREFERENCED_PARAMETER( argv )
 
@@ -738,15 +707,75 @@ int main(
 	 "libfwnt_bit_stream_read",
 	 fwnt_test_bit_stream_read );
 
-	FWNT_TEST_RUN(
-	 "libfwnt_bit_stream_get_value",
-	 fwnt_test_bit_stream_get_value );
+#if !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 )
 
+	/* Initialize bit_stream for tests
+	 */
+	result = libfwnt_bit_stream_initialize(
+	          &bit_stream,
+	          fwnt_test_bit_stream_data1,
+	          16,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "bit_stream",
+	 bit_stream );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Run tests
+	 */
+	FWNT_TEST_RUN_WITH_ARGS(
+	 "libfwnt_bit_stream_get_value",
+	 fwnt_test_bit_stream_get_value,
+	 bit_stream );
+
+	/* Clean up
+	 */
+	result = libfwnt_bit_stream_free(
+	          &bit_stream,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "bit_stream",
+	 bit_stream );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+#endif /* !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 ) */
 #endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 
 	return( EXIT_SUCCESS );
 
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	if( bit_stream != NULL )
+	{
+		libfwnt_bit_stream_free(
+		 &bit_stream,
+		 NULL );
+	}
 	return( EXIT_FAILURE );
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 }
 

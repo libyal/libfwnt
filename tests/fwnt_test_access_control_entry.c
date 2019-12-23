@@ -1,5 +1,5 @@
 /*
- * Library access_control_entry type testing program
+ * Library access_control_entry type test program
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -51,7 +51,13 @@ int fwnt_test_access_control_entry_initialize(
 	libfwnt_access_control_entry_t *access_control_entry = NULL;
 	int result                                           = 0;
 
-	/* Test libfwnt_access_control_entry_initialize
+#if defined( HAVE_FWNT_TEST_MEMORY )
+	int number_of_malloc_fail_tests                      = 1;
+	int number_of_memset_fail_tests                      = 1;
+	int test_number                                      = 0;
+#endif
+
+	/* Test regular cases
 	 */
 	result = libfwnt_access_control_entry_initialize(
 	          &access_control_entry,
@@ -127,79 +133,89 @@ int fwnt_test_access_control_entry_initialize(
 
 #if defined( HAVE_FWNT_TEST_MEMORY )
 
-	/* Test libfwnt_access_control_entry_initialize with malloc failing
-	 */
-	fwnt_test_malloc_attempts_before_fail = 0;
-
-	result = libfwnt_access_control_entry_initialize(
-	          &access_control_entry,
-	          &error );
-
-	if( fwnt_test_malloc_attempts_before_fail != -1 )
+	for( test_number = 0;
+	     test_number < number_of_malloc_fail_tests;
+	     test_number++ )
 	{
-		fwnt_test_malloc_attempts_before_fail = -1;
+		/* Test libfwnt_access_control_entry_initialize with malloc failing
+		 */
+		fwnt_test_malloc_attempts_before_fail = test_number;
 
-		if( access_control_entry != NULL )
+		result = libfwnt_access_control_entry_initialize(
+		          &access_control_entry,
+		          &error );
+
+		if( fwnt_test_malloc_attempts_before_fail != -1 )
 		{
-			libfwnt_internal_access_control_entry_free(
-			 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
-			 NULL );
+			fwnt_test_malloc_attempts_before_fail = -1;
+
+			if( access_control_entry != NULL )
+			{
+				libfwnt_internal_access_control_entry_free(
+				 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
+				 NULL );
+			}
+		}
+		else
+		{
+			FWNT_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
+
+			FWNT_TEST_ASSERT_IS_NULL(
+			 "access_control_entry",
+			 access_control_entry );
+
+			FWNT_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
+
+			libcerror_error_free(
+			 &error );
 		}
 	}
-	else
+	for( test_number = 0;
+	     test_number < number_of_memset_fail_tests;
+	     test_number++ )
 	{
-		FWNT_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+		/* Test libfwnt_access_control_entry_initialize with memset failing
+		 */
+		fwnt_test_memset_attempts_before_fail = test_number;
 
-		FWNT_TEST_ASSERT_IS_NULL(
-		 "access_control_entry",
-		 access_control_entry );
+		result = libfwnt_access_control_entry_initialize(
+		          &access_control_entry,
+		          &error );
 
-		FWNT_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
-
-		libcerror_error_free(
-		 &error );
-	}
-	/* Test libfwnt_access_control_entry_initialize with memset failing
-	 */
-	fwnt_test_memset_attempts_before_fail = 0;
-
-	result = libfwnt_access_control_entry_initialize(
-	          &access_control_entry,
-	          &error );
-
-	if( fwnt_test_memset_attempts_before_fail != -1 )
-	{
-		fwnt_test_memset_attempts_before_fail = -1;
-
-		if( access_control_entry != NULL )
+		if( fwnt_test_memset_attempts_before_fail != -1 )
 		{
-			libfwnt_internal_access_control_entry_free(
-			 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
-			 NULL );
+			fwnt_test_memset_attempts_before_fail = -1;
+
+			if( access_control_entry != NULL )
+			{
+				libfwnt_internal_access_control_entry_free(
+				 (libfwnt_internal_access_control_entry_t **) &access_control_entry,
+				 NULL );
+			}
 		}
-	}
-	else
-	{
-		FWNT_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+		else
+		{
+			FWNT_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
 
-		FWNT_TEST_ASSERT_IS_NULL(
-		 "access_control_entry",
-		 access_control_entry );
+			FWNT_TEST_ASSERT_IS_NULL(
+			 "access_control_entry",
+			 access_control_entry );
 
-		FWNT_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
+			FWNT_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
 
-		libcerror_error_free(
-		 &error );
+			libcerror_error_free(
+			 &error );
+		}
 	}
 #endif /* defined( HAVE_FWNT_TEST_MEMORY ) */
 
@@ -503,7 +519,7 @@ int fwnt_test_access_control_entry_get_type(
 	uint8_t type             = 0;
 	int result               = 0;
 
-	/* Test retrieve number of entries
+	/* Test regular cases
 	 */
 	result = libfwnt_access_control_entry_get_type(
 	          access_control_entry,
@@ -576,7 +592,7 @@ int fwnt_test_access_control_entry_get_flags(
 	uint8_t flags            = 0;
 	int result               = 0;
 
-	/* Test retrieve number of entries
+	/* Test regular cases
 	 */
 	result = libfwnt_access_control_entry_get_flags(
 	          access_control_entry,
@@ -647,23 +663,26 @@ int fwnt_test_access_control_entry_get_access_mask(
 {
 	libcerror_error_t *error = NULL;
 	uint32_t access_mask     = 0;
+	int access_mask_is_set   = 0;
 	int result               = 0;
 
-	/* Test retrieve number of entries
+	/* Test regular cases
 	 */
 	result = libfwnt_access_control_entry_get_access_mask(
 	          access_control_entry,
 	          &access_mask,
 	          &error );
 
-	FWNT_TEST_ASSERT_EQUAL_INT(
+	FWNT_TEST_ASSERT_NOT_EQUAL_INT(
 	 "result",
 	 result,
-	 1 );
+	 -1 );
 
 	FWNT_TEST_ASSERT_IS_NULL(
 	 "error",
 	 error );
+
+	access_mask_is_set = result;
 
 	/* Test error cases
 	 */
@@ -684,23 +703,25 @@ int fwnt_test_access_control_entry_get_access_mask(
 	libcerror_error_free(
 	 &error );
 
-	result = libfwnt_access_control_entry_get_access_mask(
-	          access_control_entry,
-	          NULL,
-	          &error );
+	if( access_mask_is_set != 0 )
+	{
+		result = libfwnt_access_control_entry_get_access_mask(
+		          access_control_entry,
+		          NULL,
+		          &error );
 
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 -1 );
+		FWNT_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 -1 );
 
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "error",
-	 error );
+		FWNT_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
 
-	libcerror_error_free(
-	 &error );
-
+		libcerror_error_free(
+		 &error );
+	}
 	return( 1 );
 
 on_error:
@@ -718,34 +739,64 @@ on_error:
 int fwnt_test_access_control_entry_get_security_identifier(
      libfwnt_access_control_entry_t *access_control_entry )
 {
-	libcerror_error_t *error                           = NULL;
-	libfwnt_security_identifier_t *security_identifier = NULL;
-	int result                                         = 0;
+	libcerror_error_t *error                                  = NULL;
+	libfwnt_security_identifier_t *backup_security_identifier = 0;
+	libfwnt_security_identifier_t *security_identifier        = 0;
+	int result                                                = 0;
+	int security_identifier_is_set                            = 0;
 
-	/* Test retrieve entry by index
+	/* Test regular cases
 	 */
 	result = libfwnt_access_control_entry_get_security_identifier(
 	          access_control_entry,
 	          &security_identifier,
 	          &error );
 
-	FWNT_TEST_ASSERT_EQUAL_INT(
+	FWNT_TEST_ASSERT_NOT_EQUAL_INT(
 	 "result",
 	 result,
-	 1 );
+	 -1 );
 
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "security_identifier",
-	 security_identifier );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
-	result = libfwnt_security_identifier_free(
+	security_identifier_is_set = result;
+
+	if( security_identifier_is_set != 0 )
+	{
+		FWNT_TEST_ASSERT_IS_NOT_NULL(
+		 "security_identifier",
+		 security_identifier );
+
+		result = libfwnt_security_identifier_free(
+		          &security_identifier,
+		          &error );
+
+		FWNT_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 1 );
+
+		FWNT_TEST_ASSERT_IS_NULL(
+		 "error",
+		 error );
+	}
+	backup_security_identifier = ( (libfwnt_internal_access_control_entry_t *) access_control_entry )->security_identifier;
+
+	( (libfwnt_internal_access_control_entry_t *) access_control_entry )->security_identifier = NULL;
+
+	result = libfwnt_access_control_entry_get_security_identifier(
+	          access_control_entry,
 	          &security_identifier,
-	          NULL );
+	          &error );
+
+	( (libfwnt_internal_access_control_entry_t *) access_control_entry )->security_identifier = backup_security_identifier;
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
-	 1 );
+	 0 );
 
 	FWNT_TEST_ASSERT_IS_NULL(
 	 "error",
@@ -763,22 +814,9 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	 result,
 	 -1 );
 
-	FWNT_TEST_ASSERT_IS_NOT_NULL(
-	 "error",
-	 error );
-
-	libcerror_error_free(
-	 &error );
-
-	result = libfwnt_access_control_entry_get_security_identifier(
-	          access_control_entry,
-	          NULL,
-	          &error );
-
-	FWNT_TEST_ASSERT_EQUAL_INT(
-	 "result",
-	 result,
-	 -1 );
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "security_identifier",
+	 security_identifier );
 
 	FWNT_TEST_ASSERT_IS_NOT_NULL(
 	 "error",
@@ -787,6 +825,54 @@ int fwnt_test_access_control_entry_get_security_identifier(
 	libcerror_error_free(
 	 &error );
 
+	if( security_identifier_is_set != 0 )
+	{
+		result = libfwnt_access_control_entry_get_security_identifier(
+		          access_control_entry,
+		          NULL,
+		          &error );
+
+		FWNT_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 -1 );
+
+		FWNT_TEST_ASSERT_IS_NULL(
+		 "security_identifier",
+		 security_identifier );
+
+		FWNT_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
+
+		libcerror_error_free(
+		 &error );
+
+		security_identifier = (libfwnt_security_identifier_t *) 0x12345678UL;
+
+		result = libfwnt_access_control_entry_get_security_identifier(
+		          access_control_entry,
+		          &security_identifier,
+		          &error );
+
+		security_identifier = NULL;
+
+		FWNT_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 -1 );
+
+		FWNT_TEST_ASSERT_IS_NULL(
+		 "security_identifier",
+		 security_identifier );
+
+		FWNT_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
+
+		libcerror_error_free(
+		 &error );
+	}
 	return( 1 );
 
 on_error:
@@ -794,6 +880,12 @@ on_error:
 	{
 		libcerror_error_free(
 		 &error );
+	}
+	if( security_identifier != NULL )
+	{
+		libfwnt_security_identifier_free(
+		 &security_identifier,
+		 NULL );
 	}
 	return( 0 );
 }
@@ -869,7 +961,7 @@ int main(
 	result = libfwnt_access_control_entry_copy_from_byte_stream(
 	          access_control_entry,
 	          fwnt_test_access_control_entry_data1,
-	          52,
+	          20,
 	          LIBFWNT_ENDIAN_LITTLE,
 	          &error );
 
@@ -882,6 +974,8 @@ int main(
 	 "error",
 	 error );
 
+	/* Run tests
+	 */
 	FWNT_TEST_RUN_WITH_ARGS(
 	 "libfwnt_access_control_entry_get_type",
 	 fwnt_test_access_control_entry_get_type,
@@ -906,7 +1000,7 @@ int main(
 	 */
 	result = libfwnt_internal_access_control_entry_free(
 	          (libfwnt_internal_access_control_entry_t **) &access_control_entry,
-	          NULL );
+	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
@@ -928,7 +1022,6 @@ int main(
 
 on_error:
 #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
-
 	if( error != NULL )
 	{
 		libcerror_error_free(

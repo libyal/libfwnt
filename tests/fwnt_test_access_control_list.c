@@ -280,6 +280,44 @@ on_error:
 
 #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 
+/* Tests the libfwnt_internal_access_control_list_free function
+ * Returns 1 if successful or 0 if not
+ */
+int fwnt_test_internal_access_control_list_free(
+     void )
+{
+	libcerror_error_t *error = NULL;
+	int result               = 0;
+
+	/* Test error cases
+	 */
+	result = libfwnt_internal_access_control_list_free(
+	          NULL,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	return( 0 );
+}
+
 /* Tests the libfwnt_access_control_list_copy_from_byte_stream function
  * Returns 1 if successful or 0 if not
  */
@@ -490,10 +528,10 @@ int fwnt_test_access_control_list_get_number_of_entries(
 	          &number_of_entries,
 	          &error );
 
-	FWNT_TEST_ASSERT_NOT_EQUAL_INT(
+	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
-	 -1 );
+	 1 );
 
 	FWNT_TEST_ASSERT_IS_NULL(
 	 "error",
@@ -556,7 +594,7 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	libfwnt_access_control_entry_t *access_control_entry = NULL;
 	int result                                           = 0;
 
-	/* Test retrieve entry by index
+	/* Test regular cases
 	 */
 	result = libfwnt_access_control_list_get_entry_by_index(
 	          access_control_list,
@@ -569,13 +607,17 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 1 );
 
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	FWNT_TEST_ASSERT_IS_NOT_NULL(
 	 "access_control_entry",
 	 access_control_entry );
 
 	result = libfwnt_access_control_entry_free(
 	          &access_control_entry,
-	          NULL );
+	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
@@ -599,6 +641,10 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 result,
 	 -1 );
 
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
+
 	FWNT_TEST_ASSERT_IS_NOT_NULL(
 	 "error",
 	 error );
@@ -606,7 +652,27 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	libcerror_error_free(
 	 &error );
 
-/* TODO test out of bounds */
+	result = libfwnt_access_control_list_get_entry_by_index(
+	          access_control_list,
+	          -1,
+	          &access_control_entry,
+	          &error );
+
+	FWNT_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
+
+	FWNT_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
 
 	result = libfwnt_access_control_list_get_entry_by_index(
 	          access_control_list,
@@ -618,6 +684,10 @@ int fwnt_test_access_control_list_get_entry_by_index(
 	 "result",
 	 result,
 	 -1 );
+
+	FWNT_TEST_ASSERT_IS_NULL(
+	 "access_control_entry",
+	 access_control_entry );
 
 	FWNT_TEST_ASSERT_IS_NOT_NULL(
 	 "error",
@@ -633,6 +703,12 @@ on_error:
 	{
 		libcerror_error_free(
 		 &error );
+	}
+	if( access_control_entry != NULL )
+	{
+		libfwnt_access_control_entry_free(
+		 &access_control_entry,
+		 NULL );
 	}
 	return( 0 );
 }
@@ -676,11 +752,15 @@ int main(
 
 #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 
-#if !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 )
+	FWNT_TEST_RUN(
+	 "libfwnt_internal_access_control_list_free",
+	 fwnt_test_internal_access_control_list_free );
 
 	FWNT_TEST_RUN(
 	 "libfwnt_access_control_list_copy_from_byte_stream",
 	 fwnt_test_access_control_list_copy_from_byte_stream );
+
+#if !defined( __BORLANDC__ ) || ( __BORLANDC__ >= 0x0560 )
 
 	/* Initialize access_control_list for tests
 	 */
@@ -717,6 +797,8 @@ int main(
 	 "error",
 	 error );
 
+	/* Run tests
+	 */
 	FWNT_TEST_RUN_WITH_ARGS(
 	 "libfwnt_access_control_list_get_number_of_entries",
 	 fwnt_test_access_control_list_get_number_of_entries,
@@ -731,7 +813,7 @@ int main(
 	 */
 	result = libfwnt_internal_access_control_list_free(
 	          (libfwnt_internal_access_control_list_t **) &access_control_list,
-	          NULL );
+	          &error );
 
 	FWNT_TEST_ASSERT_EQUAL_INT(
 	 "result",
@@ -753,7 +835,6 @@ int main(
 
 on_error:
 #if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
-
 	if( error != NULL )
 	{
 		libcerror_error_free(

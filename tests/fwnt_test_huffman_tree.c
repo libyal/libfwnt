@@ -1,5 +1,5 @@
 /*
- * Huffman tree testing program
+ * Library huffman_tree type test program
  *
  * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -20,7 +20,6 @@
  */
 
 #include <common.h>
-#include <memory.h>
 #include <file_stream.h>
 #include <types.h>
 
@@ -30,6 +29,7 @@
 
 #include "fwnt_test_libcerror.h"
 #include "fwnt_test_libcnotify.h"
+#include "fwnt_test_libfwnt.h"
 #include "fwnt_test_macros.h"
 #include "fwnt_test_memory.h"
 #include "fwnt_test_unused.h"
@@ -43,7 +43,7 @@
 
 /* The sequence: abcdefghijklmnopqrstuvwxyz compressed in LZXpress-Huffman
  */
-uint8_t fwnt_test_huffman_tree_data1[ 277 ] = {
+uint8_t fwnt_test_huffman_tree_data1[ 276 ] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -811,7 +811,10 @@ int main(
 
 	return( EXIT_SUCCESS );
 
+#if defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT )
 on_error:
 	return( EXIT_FAILURE );
+
+#endif /* defined( __GNUC__ ) && !defined( LIBFWNT_DLL_IMPORT ) */
 }
 
