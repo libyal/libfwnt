@@ -1,7 +1,7 @@
 /*
  * LZNT1 (de)compression functions
  *
- * Copyright (C) 2009-2019, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2020, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -212,7 +212,7 @@ int libfwnt_lznt1_decompress_chunk(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed data offset\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data offset\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
 			 *compressed_data_offset,
 			 *compressed_data_offset );
@@ -459,7 +459,7 @@ int libfwnt_lznt1_decompress(
 		if( libcnotify_verbose != 0 )
 		{
 			libcnotify_printf(
-			 "%s: compressed data offset\t\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
+			 "%s: compressed data offset\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
 			 compressed_data_offset,
 			 compressed_data_offset );
@@ -487,7 +487,8 @@ int libfwnt_lznt1_decompress(
 			libcnotify_printf(
 			 "\n" );
 		}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 		compressed_data_offset += 2;
 
 		if( compression_chunk_header == 0 )
