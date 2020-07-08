@@ -255,19 +255,6 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 	internal_security_identifier->revision_number           = byte_stream[ 0 ];
 	internal_security_identifier->number_of_sub_authorities = byte_stream[ 1 ];
 
-	security_identifier_size = 8 + ( internal_security_identifier->number_of_sub_authorities * 4 );
-
-	if( byte_stream_size < (size_t) security_identifier_size )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-		 "%s: byte stream too small.",
-		 function );
-
-		return( -1 );
-	}
 	if( internal_security_identifier->number_of_sub_authorities > 15 )
 	{
 		libcerror_error_set(
@@ -275,6 +262,19 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
 		 "%s: unsupported security identifier contains more than 15 sub authoritites.",
+		 function );
+
+		return( -1 );
+	}
+	security_identifier_size = 8 + ( (size_t) internal_security_identifier->number_of_sub_authorities * 4 );
+
+	if( (size_t) security_identifier_size > byte_stream_size )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
+		 "%s: byte stream too small.",
 		 function );
 
 		return( -1 );

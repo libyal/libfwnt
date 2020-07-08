@@ -27,7 +27,6 @@
 #include <stdlib.h>
 #endif
 
-#include "fwnt_test_libcerror.h"
 #include "fwnt_test_libfwnt.h"
 #include "fwnt_test_macros.h"
 #include "fwnt_test_unused.h"
