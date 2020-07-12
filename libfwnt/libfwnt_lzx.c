@@ -1397,7 +1397,7 @@ int libfwnt_lzx_decompress(
 				 "%s: unsupported block type.",
 				 function );
 
-				return( -1 );
+				goto on_error;
 		}
 	}
 	if( libfwnt_bit_stream_free(

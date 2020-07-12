@@ -123,7 +123,7 @@ int libfwnt_lzxpress_decompress(
 
 		return( -1 );
 	}
-	if( ( compressed_data_size <= 1 )
+	if( ( compressed_data_size < 2 )
 	 || ( compressed_data_size > (size_t) SSIZE_MAX ) )
 	{
 		libcerror_error_set(
@@ -176,7 +176,8 @@ int libfwnt_lzxpress_decompress(
 		{
 			break;
 		}
-		if( compressed_data_offset >= ( compressed_data_size - 3 ) )
+		if( ( compressed_data_size < 4 )
+		 || ( compressed_data_offset > ( compressed_data_size - 4 ) ) )
 		{
 			libcerror_error_set(
 			 error,
@@ -228,7 +229,7 @@ int libfwnt_lzxpress_decompress(
 			 */
 			if( ( compression_indicator & compression_indicator_bitmask ) != 0 )
 			{
-				if( compressed_data_offset >= ( compressed_data_size - 1 ) )
+				if( compressed_data_offset > ( compressed_data_size - 2 ) )
 				{
 					libcerror_error_set(
 					 error,
@@ -307,7 +308,7 @@ int libfwnt_lzxpress_decompress(
 				 */
 				if( compression_tuple_size == ( 0x07 + 0x0f + 0xff ) )
 				{
-					if( compressed_data_offset >= ( compressed_data_size - 1 ) )
+					if( compressed_data_offset > ( compressed_data_size - 2 ) )
 					{
 						libcerror_error_set(
 						 error,
