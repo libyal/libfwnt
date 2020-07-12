@@ -30,9 +30,7 @@ class SupportFunctionsTests(unittest.TestCase):
   def test_get_version(self):
     """Tests the get_version function."""
     version = pyfwnt.get_version()
-
-    # TODO: check version.
-    # self.assertEqual(version, "00000000")
+    self.assertIsNotNone(version)
 
 
 if __name__ == "__main__":

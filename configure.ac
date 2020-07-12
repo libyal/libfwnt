@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libfwnt],
- [20200708],
+ [20200712],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -74,6 +74,7 @@ AX_LIBCNOTIFY_CHECK_ENABLE
 
 dnl Check if libfwnt required headers and functions are available
 AX_LIBFWNT_CHECK_LOCAL
+AX_LIBFWNT_CHECK_DLL_SUPPORT
 
 dnl Check if libfwnt Python bindings (pyfwnt) required headers and functions are available
 AX_PYTHON_CHECK_ENABLE
@@ -93,30 +94,7 @@ AS_IF(
 
 dnl Check if tests required headers and functions are available
 AX_TESTS_CHECK_LOCAL
-
-dnl Check if DLL support is needed
-AS_IF(
- [test "x$enable_shared" = xyes],
- [AS_CASE(
-  [$host],
-  [*cygwin* | *mingw* | *msys*],
-  [AC_DEFINE(
-   [HAVE_DLLMAIN],
-   [1],
-   [Define to 1 to enable the DllMain function.])
-  AC_SUBST(
-   [HAVE_DLLMAIN],
-   [1])
-
-  AC_SUBST(
-   [LIBFWNT_DLL_EXPORT],
-   ["-DLIBFWNT_DLL_EXPORT"])
-
-  AC_SUBST(
-   [LIBFWNT_DLL_IMPORT],
-   ["-DLIBFWNT_DLL_IMPORT"])
-  ])
- ])
+AX_TESTS_CHECK_OSSFUZZ
 
 dnl Set additional compiler flags
 CFLAGS="$CFLAGS -Wall";
@@ -155,6 +133,7 @@ AC_CONFIG_FILES([po/Makefile.in])
 AC_CONFIG_FILES([po/Makevars])
 AC_CONFIG_FILES([manuals/Makefile])
 AC_CONFIG_FILES([tests/Makefile])
+AC_CONFIG_FILES([ossfuzz/Makefile])
 AC_CONFIG_FILES([msvscpp/Makefile])
 dnl Generate header files
 AC_CONFIG_FILES([include/libfwnt.h])
