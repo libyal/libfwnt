@@ -2,7 +2,7 @@ AC_PREREQ( 2.59 )
 
 AC_INIT(
  [libfwnt],
- [20200712],
+ [20200717],
  [joachim.metz@gmail.com])
 
 AC_CONFIG_SRCDIR(
@@ -21,6 +21,7 @@ AC_LIBTOOL_WIN32_DLL
 dnl Checks for programs
 AC_PROG_CC
 AC_PROG_GCC_TRADITIONAL
+AC_PROG_CXX
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 
@@ -74,7 +75,6 @@ AX_LIBCNOTIFY_CHECK_ENABLE
 
 dnl Check if libfwnt required headers and functions are available
 AX_LIBFWNT_CHECK_LOCAL
-AX_LIBFWNT_CHECK_DLL_SUPPORT
 
 dnl Check if libfwnt Python bindings (pyfwnt) required headers and functions are available
 AX_PYTHON_CHECK_ENABLE
@@ -91,6 +91,9 @@ AS_IF(
       [1])
     ])
   ])
+
+dnl Check if DLL support is needed
+AX_LIBFWNT_CHECK_DLL_SUPPORT
 
 dnl Check if tests required headers and functions are available
 AX_TESTS_CHECK_LOCAL

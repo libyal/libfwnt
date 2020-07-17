@@ -1,5 +1,5 @@
 /*
- * OSS-Fuzz target for libfwnt LZXPRESS (LZ77 + DIRECT2) decompress function
+ * OSS-Fuzz target for libfwnt LZNT1 decompress function
  *
  * Copyright (C) 2009-2020, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -22,6 +22,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Note that some of the OSS-Fuzz engines use C++
+ */
+extern "C" {
+
 #include "ossfuzz_libfwnt.h"
 
 int LLVMFuzzerTestOneInput(
@@ -32,7 +36,7 @@ int LLVMFuzzerTestOneInput(
 
 	size_t uncompressed_data_size = 64 * 1024;
 
-	libfwnt_lzxpress_decompress(
+	libfwnt_lznt1_decompress(
 	 data,
 	 size,
 	 uncompressed_data,
@@ -41,4 +45,6 @@ int LLVMFuzzerTestOneInput(
 
 	return( 0 );
 }
+
+} /* extern "C" */
 

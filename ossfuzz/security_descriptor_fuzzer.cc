@@ -1,5 +1,5 @@
 /*
- * OSS-Fuzz target for libfwnt LZNT1 decompress function
+ * OSS-Fuzz target for libfwnt security descriptor type
  *
  * Copyright (C) 2009-2020, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -22,23 +22,37 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Note that some of the OSS-Fuzz engines use C++
+ */
+extern "C" {
+
 #include "ossfuzz_libfwnt.h"
 
 int LLVMFuzzerTestOneInput(
      const uint8_t *data,
      size_t size )
 {
-	uint8_t uncompressed_data[ 64 * 1024 ];
+	libfwnt_security_descriptor_t *security_descriptor = NULL;
 
-	size_t uncompressed_data_size = 64 * 1024;
-
-	libfwnt_lznt1_decompress(
+	if( libfwnt_security_descriptor_initialize(
+	     &security_descriptor,
+	     NULL ) != 1 )
+	{
+		return( 0 );
+	}
+	libfwnt_security_descriptor_copy_from_byte_stream(
+	 security_descriptor,
 	 data,
 	 size,
-	 uncompressed_data,
-	 &uncompressed_data_size,
+	 LIBFWNT_ENDIAN_LITTLE,
+	 NULL );
+
+	libfwnt_security_descriptor_free(
+	 &security_descriptor,
 	 NULL );
 
 	return( 0 );
 }
+
+} /* extern "C" */
 

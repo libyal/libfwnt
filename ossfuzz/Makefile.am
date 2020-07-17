@@ -12,7 +12,7 @@ bin_PROGRAMS = \
 	security_identifier_fuzzer
 
 lznt1_fuzzer_SOURCES = \
-	lznt1_fuzzer.c \
+	lznt1_fuzzer.cc \
 	ossfuzz_libfwnt.h
 
 lznt1_fuzzer_LDADD = \
@@ -20,7 +20,7 @@ lznt1_fuzzer_LDADD = \
 	../libfwnt/libfwnt.la
 
 lzx_fuzzer_SOURCES = \
-	lzx_fuzzer.c \
+	lzx_fuzzer.cc \
 	ossfuzz_libfwnt.h
 
 lzx_fuzzer_LDADD = \
@@ -28,7 +28,7 @@ lzx_fuzzer_LDADD = \
 	../libfwnt/libfwnt.la
 
 lzxpress_fuzzer_SOURCES = \
-	lzxpress_fuzzer.c \
+	lzxpress_fuzzer.cc \
 	ossfuzz_libfwnt.h
 
 lzxpress_fuzzer_LDADD = \
@@ -36,7 +36,7 @@ lzxpress_fuzzer_LDADD = \
 	../libfwnt/libfwnt.la
 
 lzxpress_huffman_fuzzer_SOURCES = \
-	lzxpress_huffman_fuzzer.c \
+	lzxpress_huffman_fuzzer.cc \
 	ossfuzz_libfwnt.h
 
 lzxpress_huffman_fuzzer_LDADD = \
@@ -45,7 +45,7 @@ lzxpress_huffman_fuzzer_LDADD = \
 
 security_descriptor_fuzzer_SOURCES = \
 	ossfuzz_libfwnt.h \
-	security_descriptor_fuzzer.c
+	security_descriptor_fuzzer.cc
 
 security_descriptor_fuzzer_LDADD = \
 	@LIB_FUZZING_ENGINE@ \
@@ -53,7 +53,7 @@ security_descriptor_fuzzer_LDADD = \
 
 security_identifier_fuzzer_SOURCES = \
 	ossfuzz_libfwnt.h \
-	security_identifier_fuzzer.c
+	security_identifier_fuzzer.cc
 
 security_identifier_fuzzer_LDADD = \
 	@LIB_FUZZING_ENGINE@ \

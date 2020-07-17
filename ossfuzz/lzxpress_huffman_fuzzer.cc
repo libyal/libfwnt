@@ -1,5 +1,5 @@
 /*
- * OSS-Fuzz target for libfwnt security identifier type
+ * OSS-Fuzz target for libfwnt LZXPRESS Huffman decompress function
  *
  * Copyright (C) 2009-2020, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -22,31 +22,29 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/* Note that some of the OSS-Fuzz engines use C++
+ */
+extern "C" {
+
 #include "ossfuzz_libfwnt.h"
 
 int LLVMFuzzerTestOneInput(
      const uint8_t *data,
      size_t size )
 {
-	libfwnt_security_identifier_t *security_identifier = NULL;
+	uint8_t uncompressed_data[ 64 * 1024 ];
 
-	if( libfwnt_security_identifier_initialize(
-	     &security_identifier,
-	     NULL ) != 1 )
-	{
-		return( 0 );
-	}
-	libfwnt_security_identifier_copy_from_byte_stream(
-	 security_identifier,
+	size_t uncompressed_data_size = 64 * 1024;
+
+	libfwnt_lzxpress_huffman_decompress(
 	 data,
 	 size,
-	 LIBFWNT_ENDIAN_LITTLE,
-	 NULL );
-
-	libfwnt_security_identifier_free(
-	 &security_identifier,
+	 uncompressed_data,
+	 &uncompressed_data_size,
 	 NULL );
 
 	return( 0 );
 }
+
+} /* extern "C" */
 
