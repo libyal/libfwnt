@@ -374,7 +374,7 @@ int libfwnt_lzxpress_decompress(
 
 				while( compression_tuple_size > 0 )
 				{
-					if( compression_index > uncompressed_data_offset )
+					if( compression_index >= uncompressed_data_offset )
 					{
 						libcerror_error_set(
 						 error,
@@ -388,7 +388,7 @@ int libfwnt_lzxpress_decompress(
 
 						return( -1 );
 					}
-					if( uncompressed_data_offset > safe_uncompressed_data_size )
+					if( uncompressed_data_offset >= safe_uncompressed_data_size )
 					{
 						libcerror_error_set(
 						 error,

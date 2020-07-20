@@ -1268,13 +1268,13 @@ int libfwnt_lzx_decompress(
 
 			case LIBFWNT_LZX_BLOCK_TYPE_UNCOMPRESSED:
 /* TODO align byte stream */
-				if( (size_t) 12 > ( safe_uncompressed_data_size - uncompressed_data_offset ) )
+				if( ( bit_stream->byte_stream_size - bit_stream->byte_stream_offset ) < 12 )
 				{
 					libcerror_error_set(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 					 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-					 "%s: invalid uncompressed data value too small.",
+					 "%s: invalid compressed data value too small.",
 					 function );
 
 					goto on_error;
