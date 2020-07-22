@@ -795,7 +795,7 @@ int libfwnt_lzx_decompress_adjust_call_instructions(
 {
 	static char *function           = "libfwnt_lzx_decompress_adjust_call_instructions";
 	size_t uncompressed_data_offset = 0;
-	int32_t address                 = 0;
+	uint32_t address                = 0;
 
 	if( uncompressed_data == NULL )
 	{
@@ -832,11 +832,11 @@ int libfwnt_lzx_decompress_adjust_call_instructions(
 		 &( uncompressed_data[ uncompressed_data_offset + 1 ] ),
 		 address );
 
-		if( address >= 0 )
+		if( address > (uint32_t) INT32_MAX )
 		{
-			if( address < 12000000 )
+			if( (int32_t) address > ( -1 * (int32_t) uncompressed_data_offset ) )
 			{
-				address -= uncompressed_data_offset;
+				address = (uint32_t) ( (int32_t) address + 12000000 );
 
 				byte_stream_copy_from_uint32_little_endian(
 				 &( uncompressed_data[ uncompressed_data_offset + 1 ] ),
@@ -845,9 +845,9 @@ int libfwnt_lzx_decompress_adjust_call_instructions(
 		}
 		else
 		{
-			if( address > ( -1 * (int32_t) uncompressed_data_offset ) )
+			if( address < 12000000 )
 			{
-				address += 12000000;
+				address = (uint32_t) ( (int32_t) address - uncompressed_data_offset );
 
 				byte_stream_copy_from_uint32_little_endian(
 				 &( uncompressed_data[ uncompressed_data_offset + 1 ] ),

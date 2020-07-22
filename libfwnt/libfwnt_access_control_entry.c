@@ -307,7 +307,8 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 		libcnotify_printf(
 		 "\n" );
 	}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 	if( ( internal_access_control_entry->size < 4 )
 	 || ( (size_t) internal_access_control_entry->size > byte_stream_size ) )
 
@@ -369,6 +370,18 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 	}
 	if( access_mask_offset > 0 )
 	{
+		if( access_mask_offset > ( internal_access_control_entry->size - 4 ) )
+
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+			 "%s: access control mask offset value out of bounds.",
+			 function );
+
+			goto on_error;
+		}
 		byte_stream_copy_to_uint32_little_endian(
 		 &( byte_stream[ access_mask_offset ] ),
 		 internal_access_control_entry->access_mask );
@@ -389,8 +402,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 	}
 	if( sid_offset > 0 )
 	{
-		if( sid_offset > byte_stream_size )
-
+		if( sid_offset > internal_access_control_entry->size )
 		{
 			libcerror_error_set(
 			 error,
@@ -519,7 +531,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 			libcnotify_printf(
 			 "\n" );
 		}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
 	}
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )

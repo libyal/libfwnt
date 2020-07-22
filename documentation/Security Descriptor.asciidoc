@@ -4,6 +4,7 @@
 :toclevels: 4
 
 == Security Descriptor structure
+
 The Windows NT security descriptor consist of:
 
 * the security descriptor header
@@ -20,6 +21,7 @@ contiguous block.
 *TODO Is a security descriptor in a byte stream always self-relative?*
 
 === Security descriptor header
+
 The security descriptor header is 20 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -74,6 +76,7 @@ Indicates a self-relative security descriptor.
 |===
 
 == Security identifier
+
 The security identifier (SID) is used throughout Windows NT-based software. A SID is normally represented like a string e.g.:
 ....
 S-1-5-21-7623811015-3361044348-030300820-1013
@@ -97,6 +100,7 @@ These values corresponds with the remaining values in the SID string
 The 'S' in the string representation is not stored in the binary representation.
 
 == Access control list (ACL)
+
 Both the DACL and the SACL are stored in the same data structure, referred to 
 as the Access Control List (ACL).
 
@@ -116,6 +120,7 @@ The value includes the size of the access control list header.
 The access control list header is followed by access control entries (ACE).
 
 == Access control entry (ACE)
+
 The access control entry header (ACE_HEADER) is 4 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -182,11 +187,13 @@ Maximum number of ACE types supported in an ACL revision number 5
 |===
 
 ==== Notes
+
 ....
 ACCESS_MAX_MS_V3_ACE_TYPE
 ....
 
 ==== Basic ACE data structure
+
 The basic ACE data structure is variable of size and consists of:
 
 [cols="1,1,1,5",options="header"]
@@ -198,6 +205,7 @@ See section: <<access_rights_flags,Access rights flags (ACCESS_MASK)>>
 |===
 
 ==== Object ACE data structure
+
 The object ACE data structure is variable of size and consists of:
 
 [cols="1,1,1,5",options="header"]
