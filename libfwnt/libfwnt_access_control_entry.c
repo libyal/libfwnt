@@ -370,7 +370,7 @@ int libfwnt_access_control_entry_copy_from_byte_stream(
 	}
 	if( access_mask_offset > 0 )
 	{
-		if( access_mask_offset > ( internal_access_control_entry->size - 4 ) )
+		if( access_mask_offset > (size_t) ( internal_access_control_entry->size - 4 ) )
 
 		{
 			libcerror_error_set(

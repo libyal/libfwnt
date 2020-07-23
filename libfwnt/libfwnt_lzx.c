@@ -884,6 +884,8 @@ int libfwnt_lzx_decompress(
 	size_t uncompressed_data_offset                      = 0;
 	uint32_t block_size                                  = 0;
 	uint32_t block_type                                  = 0;
+	int initialized_aligned_offsets_code_size_array      = 0;
+	int initialized_main_and_length_code_size_arrays     = 0;
 
 	if( compressed_data == NULL )
 	{
@@ -1060,7 +1062,7 @@ int libfwnt_lzx_decompress(
 		switch( block_type )
 		{
 			case LIBFWNT_LZX_BLOCK_TYPE_ALIGNED:
-				if( uncompressed_data_offset == 0 )
+				if( initialized_aligned_offsets_code_size_array == 0 )
 				{
 					if( memory_set(
 					     aligned_offsets_code_size_array,
@@ -1076,6 +1078,7 @@ int libfwnt_lzx_decompress(
 
 						goto on_error;
 					}
+					initialized_aligned_offsets_code_size_array = 1;
 				}
 				if( libfwnt_huffman_tree_initialize(
 				     &aligned_offsets_huffman_tree,
@@ -1110,7 +1113,7 @@ int libfwnt_lzx_decompress(
 
 			LIBFWNT_LZX_ATTRIBUTE_FALLTHROUGH;
 			case LIBFWNT_LZX_BLOCK_TYPE_VERBATIM:
-				if( uncompressed_data_offset == 0 )
+				if( initialized_main_and_length_code_size_arrays == 0 )
 				{
 					if( memory_set(
 					     main_code_size_array,
@@ -1140,6 +1143,7 @@ int libfwnt_lzx_decompress(
 
 						goto on_error;
 					}
+					initialized_main_and_length_code_size_arrays = 1;
 				}
 				if( libfwnt_huffman_tree_initialize(
 				     &main_huffman_tree,

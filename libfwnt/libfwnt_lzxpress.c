@@ -351,8 +351,9 @@ int libfwnt_lzxpress_decompress(
 					 compression_tuple_size );
 
 					libcnotify_printf(
-					 "%s: uncompressed data offset\t\t\t: %" PRIzd "\n",
+					 "%s: uncompressed data offset\t\t\t: %" PRIzd " (0x%08" PRIzx ")\n",
 					 function,
+					 uncompressed_data_offset,
 					 uncompressed_data_offset );
 
 					libcnotify_printf(
@@ -441,9 +442,7 @@ int libfwnt_lzxpress_decompress(
  * Return 1 on success or -1 on error
  */
 int libfwnt_lzxpress_huffman_decompress_chunk(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     size_t *compressed_data_offset,
+     libfwnt_bit_stream_t *bit_stream,
      uint8_t *uncompressed_data,
      size_t uncompressed_data_size,
      size_t *uncompressed_data_offset,
@@ -451,58 +450,33 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 {
 	uint8_t code_size_array[ 512 ];
 
-	libfwnt_bit_stream_t *bit_stream           = NULL;
 	libfwnt_huffman_tree_t *huffman_tree       = NULL;
 	static char *function                      = "libfwnt_lzxpress_huffman_decompress_chunk";
 	size_t next_chunk_uncompressed_data_offset = 0;
-	size_t safe_compressed_data_offset         = 0;
 	size_t safe_uncompressed_data_offset       = 0;
 	uint32_t compression_offset                = 0;
 	uint32_t compression_size                  = 0;
 	uint32_t symbol                            = 0;
 	uint8_t byte_value                         = 0;
 
-	if( compressed_data == NULL )
+	if( bit_stream == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
 		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data.",
+		 "%s: invalid bit stream.",
 		 function );
 
 		return( -1 );
 	}
-	if( ( compressed_data_size < 260 )
-	 || ( compressed_data_size > (size_t) SSIZE_MAX ) )
+	if( ( bit_stream->byte_stream_size - bit_stream->byte_stream_offset ) < 260 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: invalid compressed data size value out of bounds.",
-		 function );
-
-		return( -1 );
-	}
-	if( compressed_data_offset == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data offset.",
-		 function );
-
-		return( -1 );
-	}
-	if( *compressed_data_offset >= ( compressed_data_size - 260 ) )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_OUT_OF_BOUNDS,
-		 "%s: compressed data offset value out of bounds.",
+		 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
+		 "%s: invalid bit stream - byte stream value too small.",
 		 function );
 
 		return( -1 );
@@ -540,7 +514,9 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		return( -1 );
 	}
-	if( *uncompressed_data_offset > uncompressed_data_size )
+	safe_uncompressed_data_offset = *uncompressed_data_offset;
+
+	if( safe_uncompressed_data_offset >= uncompressed_data_size )
 	{
 		libcerror_error_set(
 		 error,
@@ -551,20 +527,19 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		return( -1 );
 	}
-	safe_compressed_data_offset   = *compressed_data_offset;
-	safe_uncompressed_data_offset = *uncompressed_data_offset;
-
 	/* The table contains 4-bits code size per symbol
 	 */
 	while( symbol < 512 )
 	{
-		byte_value = compressed_data[ safe_compressed_data_offset++ ];
+		byte_value = bit_stream->byte_stream[ bit_stream->byte_stream_offset ];
 
 		code_size_array[ symbol++ ] = byte_value & 0x0f;
 
 		byte_value >>= 4;
 
 		code_size_array[ symbol++ ] = byte_value & 0x0f;
+
+		bit_stream->byte_stream_offset += 1;
 	}
 	if( libfwnt_huffman_tree_initialize(
 	     &huffman_tree,
@@ -596,21 +571,6 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		goto on_error;
 	}
-	if( libfwnt_bit_stream_initialize(
-	     &bit_stream,
-	     &( compressed_data[ safe_compressed_data_offset ] ),
-	     compressed_data_size - safe_compressed_data_offset,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-		 "%s: unable to create bit stream.",
-		 function );
-
-		goto on_error;
-	}
 	if( libfwnt_bit_stream_read(
 	     bit_stream,
 	     32,
@@ -636,6 +596,23 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 	{
 		if( safe_uncompressed_data_offset >= next_chunk_uncompressed_data_offset )
 		{
+#if defined( HAVE_DEBUG_OUTPUT )
+			if( libcnotify_verbose != 0 )
+			{
+				libcnotify_printf(
+				 "%s: end of chunk at compressed data offset: %" PRIzd " (0x%08" PRIzx "), uncompressed data offset: %" PRIzd " (0x%08" PRIzx ")\n",
+				 function,
+				 bit_stream->byte_stream_offset,
+				 bit_stream->byte_stream_offset,
+				 safe_uncompressed_data_offset,
+				 safe_uncompressed_data_offset );
+
+				libcnotify_printf(
+				 "\n" );
+			}
+#endif
+			bit_stream->bit_buffer_size = 0;
+
 			break;
 		}
 #if defined( HAVE_DEBUG_OUTPUT )
@@ -644,8 +621,8 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			libcnotify_printf(
 			 "%s: compressed data offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
 			 function,
-			 safe_compressed_data_offset + bit_stream->byte_stream_offset,
-			 safe_compressed_data_offset + bit_stream->byte_stream_offset );
+			 bit_stream->byte_stream_offset,
+			 bit_stream->byte_stream_offset );
 		}
 #endif
 		if( libfwnt_huffman_tree_get_symbol_from_bit_stream(
@@ -736,9 +713,27 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 					goto on_error;
 				}
+#if defined( HAVE_DEBUG_OUTPUT )
+				if( libcnotify_verbose != 0 )
+				{
+					libcnotify_printf(
+					 "%s: compression offset\t\t: %" PRIu32 "\n",
+					 function,
+					 compression_offset );
+				}
+#endif
 			}
 			compression_offset = (uint32_t) ( ( 1 << symbol ) | compression_offset );
 
+#if defined( HAVE_DEBUG_OUTPUT )
+			if( libcnotify_verbose != 0 )
+			{
+				libcnotify_printf(
+				 "%s: compression size\t\t: %" PRIu32 "\n",
+				 function,
+				 compression_size );
+			}
+#endif
 			/* Ignore any data beyond the uncompressed block size
 			 */
 			if( compression_size == 15 )
@@ -756,6 +751,21 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 				}
 				compression_size = bit_stream->byte_stream[ bit_stream->byte_stream_offset ] + 15;
 
+#if defined( HAVE_DEBUG_OUTPUT )
+				if( libcnotify_verbose != 0 )
+				{
+					libcnotify_printf(
+					 "%s: extended compression offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
+					 function,
+					 bit_stream->byte_stream_offset,
+					 bit_stream->byte_stream_offset );
+
+					libcnotify_printf(
+					 "%s: extended compression size\t: %" PRIu32 "\n",
+					 function,
+					 compression_size );
+				}
+#endif
 				bit_stream->byte_stream_offset += 1;
 
 				if( compression_size == 270 )
@@ -775,7 +785,58 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 					 &( bit_stream->byte_stream[ bit_stream->byte_stream_offset ] ),
 					 compression_size );
 
+#if defined( HAVE_DEBUG_OUTPUT )
+					if( libcnotify_verbose != 0 )
+					{
+						libcnotify_printf(
+						 "%s: extended compression offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
+						 function,
+						 bit_stream->byte_stream_offset,
+						 bit_stream->byte_stream_offset );
+
+						libcnotify_printf(
+						 "%s: extended compression size\t: %" PRIu32 "\n",
+						 function,
+						 compression_size );
+					}
+#endif
 					bit_stream->byte_stream_offset += 2;
+
+					if( compression_size == 0 )
+					{
+						if( bit_stream->byte_stream_offset > ( bit_stream->byte_stream_size - 4 ) )
+						{
+							libcerror_error_set(
+							 error,
+							 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+							 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+							 "%s: compressed data size value too small.",
+							 function );
+
+							goto on_error;
+						}
+						byte_stream_copy_to_uint32_little_endian(
+						 &( bit_stream->byte_stream[ bit_stream->byte_stream_offset ] ),
+						 compression_size );
+
+#if defined( HAVE_DEBUG_OUTPUT )
+						if( libcnotify_verbose != 0 )
+						{
+							libcnotify_printf(
+							 "%s: extended compression offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
+							 function,
+							 bit_stream->byte_stream_offset,
+							 bit_stream->byte_stream_offset );
+
+							libcnotify_printf(
+							 "%s: extended compression size\t: %" PRIu32 "\n",
+							 function,
+							 compression_size );
+						}
+#endif
+						bit_stream->byte_stream_offset += 4;
+
+					}
 				}
 			}
 			compression_size += 3;
@@ -794,8 +855,9 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 				 compression_size );
 
 				libcnotify_printf(
-				 "%s: uncompressed data offset\t: %" PRIzd "\n",
+				 "%s: uncompressed data offset\t: %" PRIzd " (0x%08" PRIzx ")\n",
 				 function,
+				 safe_uncompressed_data_offset,
 				 safe_uncompressed_data_offset );
 			}
 #endif
@@ -857,21 +919,6 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 		}
 #endif
 	}
-	safe_compressed_data_offset += bit_stream->byte_stream_offset;
-
-	if( libfwnt_bit_stream_free(
-	     &bit_stream,
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-		 "%s: unable to free bit stream.",
-		 function );
-
-		goto on_error;
-	}
 	if( libfwnt_huffman_tree_free(
 	     &huffman_tree,
 	     error ) != 1 )
@@ -885,18 +932,11 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 
 		goto on_error;
 	}
-	*compressed_data_offset   = safe_compressed_data_offset;
 	*uncompressed_data_offset = safe_uncompressed_data_offset;
 
 	return( 1 );
 
 on_error:
-	if( bit_stream != NULL )
-	{
-		libfwnt_bit_stream_free(
-		 &bit_stream,
-		 NULL );
-	}
 	if( huffman_tree != NULL )
 	{
 		libfwnt_huffman_tree_free(
@@ -916,8 +956,8 @@ int libfwnt_lzxpress_huffman_decompress(
      size_t *uncompressed_data_size,
      libcerror_error_t **error )
 {
+	libfwnt_bit_stream_t *bit_stream   = NULL;
 	static char *function              = "libfwnt_lzxpress_huffman_decompress";
-	size_t compressed_data_offset      = 0;
 	size_t safe_uncompressed_data_size = 0;
 	size_t uncompressed_data_offset    = 0;
 
@@ -932,18 +972,31 @@ int libfwnt_lzxpress_huffman_decompress(
 
 		return( -1 );
 	}
+	if( libfwnt_bit_stream_initialize(
+	     &bit_stream,
+	     compressed_data,
+	     compressed_data_size,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+		 "%s: unable to create bit stream.",
+		 function );
+
+		goto on_error;
+	}
 	safe_uncompressed_data_size = *uncompressed_data_size;
 
-	while( compressed_data_offset < compressed_data_size )
+	while( bit_stream->byte_stream_offset < bit_stream->byte_stream_size )
 	{
 		if( uncompressed_data_offset >= safe_uncompressed_data_size )
 		{
 			break;
 		}
 		if( libfwnt_lzxpress_huffman_decompress_chunk(
-		     compressed_data,
-		     compressed_data_size,
-		     &compressed_data_offset,
+		     bit_stream,
 		     uncompressed_data,
 		     safe_uncompressed_data_size,
 		     &uncompressed_data_offset,
@@ -956,11 +1009,33 @@ int libfwnt_lzxpress_huffman_decompress(
 			 "%s: unable to decompress chunk.",
 			 function );
 
-			return( -1 );
+			goto on_error;
 		}
+	}
+	if( libfwnt_bit_stream_free(
+	     &bit_stream,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+		 "%s: unable to free bit stream.",
+		 function );
+
+		goto on_error;
 	}
 	*uncompressed_data_size = uncompressed_data_offset;
 
 	return( 1 );
+
+on_error:
+	if( bit_stream != NULL )
+	{
+		libfwnt_bit_stream_free(
+		 &bit_stream,
+		 NULL );
+	}
+	return( -1 );
 }
 

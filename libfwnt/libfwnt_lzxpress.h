@@ -64,9 +64,7 @@ int libfwnt_lzxpress_decompress(
      libcerror_error_t **error );
 
 int libfwnt_lzxpress_huffman_decompress_chunk(
-     const uint8_t *compressed_data,
-     size_t compressed_data_size,
-     size_t *compressed_data_offset,
+     libfwnt_bit_stream_t *bit_stream,
      uint8_t *uncompressed_data,
      size_t uncompressed_data_size,
      size_t *uncompressed_data_offset,
