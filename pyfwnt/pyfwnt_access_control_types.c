@@ -438,7 +438,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes an access control types object
+/* Initializes an access control types object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_types_init(

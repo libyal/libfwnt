@@ -224,7 +224,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes an access control entries sequence and iterator object
+/* Initializes an access control entries sequence and iterator object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_entries_init(

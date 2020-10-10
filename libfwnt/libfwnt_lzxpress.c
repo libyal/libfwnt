@@ -700,7 +700,7 @@ int libfwnt_lzxpress_huffman_decompress_chunk(
 			{
 				if( libfwnt_bit_stream_get_value(
 				     bit_stream,
-				     symbol,
+				     (uint8_t) symbol,
 				     &compression_offset,
 				     error ) != 1 )
 				{

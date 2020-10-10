@@ -246,7 +246,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes an access control entry object
+/* Initializes an access control entry object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_entry_init(

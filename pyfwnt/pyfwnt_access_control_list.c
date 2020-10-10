@@ -221,7 +221,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes an access control list object
+/* Initializes an access control list object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_access_control_list_init(

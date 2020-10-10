@@ -213,7 +213,7 @@ on_error:
 	return( NULL );
 }
 
-/* Intializes a security identifier object
+/* Initializes a security identifier object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_security_identifier_init(

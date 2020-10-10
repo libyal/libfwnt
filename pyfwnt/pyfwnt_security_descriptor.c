@@ -201,7 +201,7 @@ PyTypeObject pyfwnt_security_descriptor_type_object = {
 	0
 };
 
-/* Intializes a security descriptor object
+/* Initializes a security descriptor object
  * Returns 0 if successful or -1 on error
  */
 int pyfwnt_security_descriptor_init(
