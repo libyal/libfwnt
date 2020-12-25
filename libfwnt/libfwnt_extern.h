@@ -30,7 +30,7 @@
 
 #include <libfwnt/extern.h>
 
-#if defined( __CYGWIN__ )
+#if defined( __CYGWIN__ ) || defined( __MINGW32__ )
 #define LIBFWNT_EXTERN_VARIABLE	extern
 #else
 #define LIBFWNT_EXTERN_VARIABLE	LIBFWNT_EXTERN
