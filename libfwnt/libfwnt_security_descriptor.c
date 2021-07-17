@@ -360,11 +360,11 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 	byte_stream_copy_to_uint32_little_endian(
 	 &( byte_stream[ 12 ] ),
-	 discretionary_acl_offset );
+	 system_acl_offset );
 
 	byte_stream_copy_to_uint32_little_endian(
 	 &( byte_stream[ 16 ] ),
-	 system_acl_offset );
+	 discretionary_acl_offset );
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
