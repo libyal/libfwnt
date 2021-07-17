@@ -128,10 +128,10 @@ PyMODINIT_FUNC initpyfwnt(
 	PyGILState_STATE gil_state = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
-	libfwnt_notify_set_stream(
+	libcnotify_stream_set(
 	 stderr,
 	 NULL );
-	libfwnt_notify_set_verbose(
+	libcnotify_verbose_set(
 	 1 );
 #endif
 
