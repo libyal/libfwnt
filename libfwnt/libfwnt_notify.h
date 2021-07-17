@@ -1,5 +1,5 @@
 /*
- * OSS-Fuzz target for libfwnt LZXPRESS (LZ77 + DIRECT2) decompress function
+ * Notification functions
  *
  * Copyright (C) 2009-2021, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -19,32 +19,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <stddef.h>
-#include <stdint.h>
+#if !defined( _LIBFWNT_NOTIFY_H )
+#define _LIBFWNT_NOTIFY_H
 
-/* Note that some of the OSS-Fuzz engines use C++
- */
+#include <common.h>
+#include <file_stream.h>
+#include <types.h>
+
+#include "libfwnt_extern.h"
+#include "libfwnt_libcerror.h"
+
+#if defined( __cplusplus )
 extern "C" {
+#endif
 
-#include "ossfuzz_libfwnt.h"
+#if !defined( HAVE_LOCAL_LIBFWNT )
 
-int LLVMFuzzerTestOneInput(
-     const uint8_t *data,
-     size_t size )
-{
-	uint8_t uncompressed_data[ 64 * 1024 ];
+LIBFWNT_EXTERN \
+void libfwnt_notify_set_verbose(
+      int verbose );
 
-	size_t uncompressed_data_size = 64 * 1024;
+LIBFWNT_EXTERN \
+int libfwnt_notify_set_stream(
+     FILE *stream,
+     libcerror_error_t **error );
 
-	libfwnt_lzxpress_decompress(
-	 data,
-	 size,
-	 uncompressed_data,
-	 &uncompressed_data_size,
-	 NULL );
+LIBFWNT_EXTERN \
+int libfwnt_notify_stream_open(
+     const char *filename,
+     libcerror_error_t **error );
 
-	return( 0 );
+LIBFWNT_EXTERN \
+int libfwnt_notify_stream_close(
+     libcerror_error_t **error );
+
+#endif /* !defined( HAVE_LOCAL_LIBFWNT ) */
+
+#if defined( __cplusplus )
 }
+#endif
 
-} /* extern "C" */
+#endif /* !defined( _LIBFWNT_NOTIFY_H ) */
 

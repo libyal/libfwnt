@@ -6,7 +6,7 @@ $ExitSuccess = 0
 $ExitFailure = 1
 $ExitIgnore = 77
 
-$LibraryTests = "access_control_entry access_control_list bit_stream error huffman_tree lznt1 lzx lzxpress security_descriptor security_identifier support"
+$LibraryTests = "access_control_entry access_control_list bit_stream error huffman_tree lznt1 lzx lzxpress notify security_descriptor security_identifier support"
 $LibraryTestsWithInput = ""
 $OptionSets = ""
 

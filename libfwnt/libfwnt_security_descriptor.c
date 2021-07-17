@@ -169,22 +169,6 @@ int libfwnt_security_descriptor_free(
 				result = -1;
 			}
 		}
-		if( internal_security_descriptor->discretionary_acl != NULL )
-		{
-			if( libfwnt_internal_access_control_list_free(
-			     (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->discretionary_acl ),
-			     error ) != 1 )
-			{
-				libcerror_error_set(
-				 error,
-				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-				 "%s: unable to free discretionary ACL.",
-				 function );
-
-				result = -1;
-			}
-		}
 		if( internal_security_descriptor->system_acl != NULL )
 		{
 			if( libfwnt_internal_access_control_list_free(
@@ -196,6 +180,22 @@ int libfwnt_security_descriptor_free(
 				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
 				 "%s: unable to free system ACL.",
+				 function );
+
+				result = -1;
+			}
+		}
+		if( internal_security_descriptor->discretionary_acl != NULL )
+		{
+			if( libfwnt_internal_access_control_list_free(
+			     (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->discretionary_acl ),
+			     error ) != 1 )
+			{
+				libcerror_error_set(
+				 error,
+				 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+				 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
+				 "%s: unable to free discretionary ACL.",
 				 function );
 
 				result = -1;
@@ -266,17 +266,6 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 		return( -1 );
 	}
-	if( internal_security_descriptor->discretionary_acl != NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid security descriptor - discretionary ACL value already set.",
-		 function );
-
-		return( -1 );
-	}
 	if( internal_security_descriptor->system_acl != NULL )
 	{
 		libcerror_error_set(
@@ -284,6 +273,17 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
 		 "%s: invalid security descriptor - system ACL value already set.",
+		 function );
+
+		return( -1 );
+	}
+	if( internal_security_descriptor->discretionary_acl != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid security descriptor - discretionary ACL value already set.",
 		 function );
 
 		return( -1 );
@@ -360,11 +360,11 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 
 	byte_stream_copy_to_uint32_little_endian(
 	 &( byte_stream[ 12 ] ),
-	 discretionary_acl_offset );
+	 system_acl_offset );
 
 	byte_stream_copy_to_uint32_little_endian(
 	 &( byte_stream[ 16 ] ),
-	 system_acl_offset );
+	 discretionary_acl_offset );
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	if( libcnotify_verbose != 0 )
@@ -399,19 +399,20 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 group_sid_offset );
 
 		libcnotify_printf(
-		 "%s: discretionary ACL offset\t: 0x%08" PRIx32 "\n",
-		 function,
-		 discretionary_acl_offset );
-
-		libcnotify_printf(
 		 "%s: system ACL offset\t\t: 0x%08" PRIx32 "\n",
 		 function,
 		 system_acl_offset );
 
 		libcnotify_printf(
+		 "%s: discretionary ACL offset\t: 0x%08" PRIx32 "\n",
+		 function,
+		 discretionary_acl_offset );
+
+		libcnotify_printf(
 		 "\n" );
 	}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 	if( owner_sid_offset != 0 )
 	{
 		if( ( owner_sid_offset < 20 )
@@ -680,50 +681,6 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		}
 #endif
 	}
-	if( discretionary_acl_offset != 0 )
-	{
-		if( ( discretionary_acl_offset < 20 )
-		 || ( (size_t) discretionary_acl_offset > byte_stream_size ) )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-			 "%s: discretionary ACL offset value out of bounds.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfwnt_access_control_list_initialize(
-		     &( internal_security_descriptor->discretionary_acl ),
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-			 "%s: unable to create discretionary ACL.",
-			 function );
-
-			goto on_error;
-		}
-		if( libfwnt_access_control_list_copy_from_byte_stream(
-		     internal_security_descriptor->discretionary_acl,
-		     &( byte_stream[ discretionary_acl_offset ] ),
-		     byte_stream_size - discretionary_acl_offset,
-		     LIBFWNT_ENDIAN_LITTLE,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
-			 "%s: unable to copy discretionary ACL from byte stream.",
-			 function );
-
-			goto on_error;
-		}
-	}
 	if( system_acl_offset != 0 )
 	{
 		if( ( system_acl_offset < 20 )
@@ -768,6 +725,50 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 			goto on_error;
 		}
 	}
+	if( discretionary_acl_offset != 0 )
+	{
+		if( ( discretionary_acl_offset < 20 )
+		 || ( (size_t) discretionary_acl_offset > byte_stream_size ) )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+			 "%s: discretionary ACL offset value out of bounds.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfwnt_access_control_list_initialize(
+		     &( internal_security_descriptor->discretionary_acl ),
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
+			 "%s: unable to create discretionary ACL.",
+			 function );
+
+			goto on_error;
+		}
+		if( libfwnt_access_control_list_copy_from_byte_stream(
+		     internal_security_descriptor->discretionary_acl,
+		     &( byte_stream[ discretionary_acl_offset ] ),
+		     byte_stream_size - discretionary_acl_offset,
+		     LIBFWNT_ENDIAN_LITTLE,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_COPY_FAILED,
+			 "%s: unable to copy discretionary ACL from byte stream.",
+			 function );
+
+			goto on_error;
+		}
+	}
 	return( 1 );
 
 on_error:
@@ -778,16 +779,16 @@ on_error:
 		 sid_string );
 	}
 #endif
-	if( internal_security_descriptor->system_acl != NULL )
-	{
-		libfwnt_internal_access_control_list_free(
-		 (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->system_acl ),
-		 NULL );
-	}
 	if( internal_security_descriptor->discretionary_acl != NULL )
 	{
 		libfwnt_internal_access_control_list_free(
 		 (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->discretionary_acl ),
+		 NULL );
+	}
+	if( internal_security_descriptor->system_acl != NULL )
+	{
+		libfwnt_internal_access_control_list_free(
+		 (libfwnt_internal_access_control_list_t ** ) &( internal_security_descriptor->system_acl ),
 		 NULL );
 	}
 	if( internal_security_descriptor->group_sid != NULL )

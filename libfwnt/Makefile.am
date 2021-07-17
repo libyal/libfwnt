@@ -27,6 +27,7 @@ libfwnt_la_SOURCES = \
 	libfwnt_lznt1.c libfwnt_lznt1.h \
 	libfwnt_lzx.c libfwnt_lzx.h \
 	libfwnt_lzxpress.c libfwnt_lzxpress.h \
+	libfwnt_notify.c libfwnt_notify.h \
 	libfwnt_security_descriptor.c libfwnt_security_descriptor.h \
 	libfwnt_security_identifier.c libfwnt_security_identifier.h \
 	libfwnt_support.c libfwnt_support.h \

@@ -57,13 +57,13 @@ struct libfwnt_internal_security_descriptor
 	 */
 	libfwnt_security_identifier_t *group_sid;
 
-	/* The discretionary ACL
-	 */
-	libfwnt_access_control_list_t *discretionary_acl;
-
 	/* The system ACL
 	 */
 	libfwnt_access_control_list_t *system_acl;
+
+	/* The discretionary ACL
+	 */
+	libfwnt_access_control_list_t *discretionary_acl;
 };
 
 LIBFWNT_EXTERN \

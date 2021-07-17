@@ -51,6 +51,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fwnt_test_lzxpress", "fwnt_
 		{BD3A95FA-A3DE-4B79-A889-A7E5ECA4B69C} = {BD3A95FA-A3DE-4B79-A889-A7E5ECA4B69C}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fwnt_test_notify", "fwnt_test_notify\fwnt_test_notify.vcproj", "{9C7A986F-E486-4D11-B3EE-1663C3CE7F38}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A643F7B5-DCC2-4D9D-A424-DABD357F9DCA} = {A643F7B5-DCC2-4D9D-A424-DABD357F9DCA}
+		{BD3A95FA-A3DE-4B79-A889-A7E5ECA4B69C} = {BD3A95FA-A3DE-4B79-A889-A7E5ECA4B69C}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fwnt_test_security_descriptor", "fwnt_test_security_descriptor\fwnt_test_security_descriptor.vcproj", "{8C0F2FED-FAE3-40AB-8203-7326C6B09AE4}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A643F7B5-DCC2-4D9D-A424-DABD357F9DCA} = {A643F7B5-DCC2-4D9D-A424-DABD357F9DCA}
@@ -139,6 +145,10 @@ Global
 		{9E02099F-A54D-4A2D-9E73-92234F60EC8D}.Release|Win32.Build.0 = Release|Win32
 		{9E02099F-A54D-4A2D-9E73-92234F60EC8D}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
 		{9E02099F-A54D-4A2D-9E73-92234F60EC8D}.VSDebug|Win32.Build.0 = VSDebug|Win32
+		{9C7A986F-E486-4D11-B3EE-1663C3CE7F38}.Release|Win32.ActiveCfg = Release|Win32
+		{9C7A986F-E486-4D11-B3EE-1663C3CE7F38}.Release|Win32.Build.0 = Release|Win32
+		{9C7A986F-E486-4D11-B3EE-1663C3CE7F38}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{9C7A986F-E486-4D11-B3EE-1663C3CE7F38}.VSDebug|Win32.Build.0 = VSDebug|Win32
 		{8C0F2FED-FAE3-40AB-8203-7326C6B09AE4}.Release|Win32.ActiveCfg = Release|Win32
 		{8C0F2FED-FAE3-40AB-8203-7326C6B09AE4}.Release|Win32.Build.0 = Release|Win32
 		{8C0F2FED-FAE3-40AB-8203-7326C6B09AE4}.VSDebug|Win32.ActiveCfg = VSDebug|Win32

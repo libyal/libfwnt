@@ -45,6 +45,40 @@ const char *libfwnt_get_version(
              void );
 
 /* -------------------------------------------------------------------------
+ * Notify functions
+ * ------------------------------------------------------------------------- */
+
+/* Sets the verbose notification
+ */
+LIBFWNT_EXTERN \
+void libfwnt_notify_set_verbose(
+      int verbose );
+
+/* Sets the notification stream
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_notify_set_stream(
+     FILE *stream,
+     libfwnt_error_t **error );
+
+/* Opens the notification stream using a filename
+ * The stream is opened in append mode
+ * Returns 1 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_notify_stream_open(
+     const char *filename,
+     libfwnt_error_t **error );
+
+/* Closes the notification stream if opened using a filename
+ * Returns 0 if successful or -1 on error
+ */
+LIBFWNT_EXTERN \
+int libfwnt_notify_stream_close(
+     libfwnt_error_t **error );
+
+/* -------------------------------------------------------------------------
  * Error functions
  * ------------------------------------------------------------------------- */
 

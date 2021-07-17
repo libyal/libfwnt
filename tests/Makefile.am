@@ -38,6 +38,7 @@ check_PROGRAMS = \
 	fwnt_test_lznt1 \
 	fwnt_test_lzx \
 	fwnt_test_lzxpress \
+	fwnt_test_notify \
 	fwnt_test_security_descriptor \
 	fwnt_test_security_identifier \
 	fwnt_test_support
@@ -136,6 +137,17 @@ fwnt_test_lzxpress_SOURCES = \
 fwnt_test_lzxpress_LDADD = \
 	../libfwnt/libfwnt.la \
 	@LIBCNOTIFY_LIBADD@ \
+	@LIBCERROR_LIBADD@
+
+fwnt_test_notify_SOURCES = \
+	fwnt_test_libcerror.h \
+	fwnt_test_libfwnt.h \
+	fwnt_test_macros.h \
+	fwnt_test_notify.c \
+	fwnt_test_unused.h
+
+fwnt_test_notify_LDADD = \
+	../libfwnt/libfwnt.la \
 	@LIBCERROR_LIBADD@
 
 fwnt_test_security_descriptor_SOURCES = \

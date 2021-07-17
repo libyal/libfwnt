@@ -80,7 +80,7 @@ class SecurityDescriptorTypeTests(unittest.TestCase):
     security_descriptor.copy_from_byte_stream(self._TEST_DATA)
 
     access_control_list = security_descriptor.get_discretionary_acl()
-    self.assertIsNone(access_control_list)
+    self.assertIsNotNone(access_control_list)
 
   def test_get_system_acl(self):
     """Tests the get_system_acl function."""
@@ -88,7 +88,7 @@ class SecurityDescriptorTypeTests(unittest.TestCase):
     security_descriptor.copy_from_byte_stream(self._TEST_DATA)
 
     access_control_list = security_descriptor.get_system_acl()
-    self.assertIsNotNone(access_control_list)
+    self.assertIsNone(access_control_list)
 
 
 if __name__ == "__main__":

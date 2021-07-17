@@ -133,6 +133,7 @@ stamp-h[1-9]
 /tests/fwnt_test_lznt1
 /tests/fwnt_test_lzx
 /tests/fwnt_test_lzxpress
+/tests/fwnt_test_notify
 /tests/fwnt_test_security_descriptor
 /tests/fwnt_test_security_identifier
 /tests/fwnt_test_support

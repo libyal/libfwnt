@@ -7,7 +7,7 @@ EXIT_SUCCESS=0;
 EXIT_FAILURE=1;
 EXIT_IGNORE=77;
 
-LIBRARY_TESTS="access_control_entry access_control_list bit_stream error huffman_tree lznt1 lzx lzxpress security_descriptor security_identifier support";
+LIBRARY_TESTS="access_control_entry access_control_list bit_stream error huffman_tree lznt1 lzx lzxpress notify security_descriptor security_identifier support";
 LIBRARY_TESTS_WITH_INPUT="";
 OPTION_SETS="";
 
