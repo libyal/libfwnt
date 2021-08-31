@@ -10,15 +10,19 @@ The Windows NT security descriptor consist of:
 * the security descriptor header
 * an owner security identifier (SID)
 * a group security identifier (SID)
-* a discretionary access control list (DACL)
 * a system access control list (SACL)
+* a discretionary access control list (DACL)
 
 In absolute format, a Windows NT security descriptor contains pointers to its 
 information, not the information itself. In self-relative format, a security 
 descriptor stores both the security descriptor and associated information in a 
 contiguous block.
 
-*TODO Is a security descriptor in a byte stream always self-relative?*
+The self-relative form of the security descriptor is required if one wants to 
+transmit the SECURITY_DESCRIPTOR structure as an opaque data structure for 
+transmission in communication protocols over a wire, or for storage on secondary 
+media; the absolute form cannot be transmitted because it contains pointers to 
+objects that are generally not accessible to the recipient.
 
 === Security descriptor header
 
@@ -34,9 +38,9 @@ The security descriptor header is 20 bytes of size and consists of:
 Contains an offset relative from the start of the security descriptor header
 | 8 | 4 | | Reference to the group SID +
 Contains an offset relative from the start of the security descriptor header
-| 12 | 4 | | Reference to the DACL +
+| 12 | 4 | | Reference to the SACL +
 Contains an offset relative from the start of the security descriptor header
-| 16 | 4 | | Reference to the SACL +
+| 16 | 4 | | Reference to the DACL +
 Contains an offset relative from the start of the security descriptor header
 |===
 
@@ -213,12 +217,23 @@ The object ACE data structure is variable of size and consists of:
 | Offset | Size | Value | Description
 | 0 | 4 | | Access rights flags (ACCESS_MASK) +
 See section: <<access_rights_flags,Access rights flags (ACCESS_MASK)>>
-| 4 | 4 | | Flags
-| 8 | 16 | | Object type class identifier +
-Contains a GUID
-| 24 | 16 | | Inherited object type class identifier +
-Contains a GUID
+| 4 | 4 | | Object flags
+| 8 | 16 (opt.) | | Object type class identifier +
+Contains a GUID. This field is only present if the ACE_OBJECT_TYPE_PRESENT object flag is set.
+| 24 | 16 (opt.) | | Inherited object type class identifier +
+Contains a GUID. This field is only present if the ACE_INHERITED_OBJECT_TYPE_PRESENT object flag is set.
 | 40 | ... | | SID
+|===
+
+The object flags are only used to determine whether the "Object Type"
+and "Inherited Object Type" are present.
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00000000 | NULL | The data structure contains neither ObjectType nor InheritedObjectType. The SID starts right after the Object flags.
+| 0x00000001 | ACE_OBJECT_TYPE_PRESENT | The data structure contains the ObjectType field.
+| 0x00000002 | ACE_INHERITED_OBJECT_TYPE_PRESENT | The data structure contains the InheritedObjectType field.
 |===
 
 === [[access_control_entry_flags]]Access control entry (ACE) flags
@@ -359,6 +374,8 @@ All folder access rights: 0x00000fbf
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379563(v=vs.85).aspx[MSDN: Security Descriptors]
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379571(v=vs.85).aspx[MSDN: Security Identifiers]
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379561(v=vs.85).aspx[SECURITY_DESCRIPTOR structure]
+* https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/7d4dac05-9cef-4563-a058-f108abecce1d[SECURITY_DESCRIPTOR protocol reference]
+* https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/c79a383c-2b3f-4655-abe7-dcbb7ce0cfbe[ACCESS_ALLOWED_OBJECT_ACE protocol reference]
 * https://msdn.microsoft.com/en-us/library/windows/desktop/aa374919(v=vs.85).aspx[ACE_HEADER structure]
 * https://msdn.microsoft.com/en-us/library/windows/desktop/aa374847(v=vs.85).aspx[ACCESS_MASK]
 
