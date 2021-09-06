@@ -10,15 +10,25 @@ The Windows NT security descriptor consist of:
 * the security descriptor header
 * an owner security identifier (SID)
 * a group security identifier (SID)
-* a discretionary access control list (DACL)
 * a system access control list (SACL)
+* a discretionary access control list (DACL)
 
-In absolute format, a Windows NT security descriptor contains pointers to its 
-information, not the information itself. In self-relative format, a security 
-descriptor stores both the security descriptor and associated information in a 
+In absolute format, a Windows NT security descriptor contains pointers to its
+information, not the information itself. In self-relative format, a security
+descriptor stores both the security descriptor and associated information in a
 contiguous block.
 
 *TODO Is a security descriptor in a byte stream always self-relative?*
+
+....
+TODO: confirm and reword
+
+The self-relative form of the security descriptor is required if one wants to
+transmit the SECURITY_DESCRIPTOR structure as an opaque data structure for
+transmission in communication protocols over a wire, or for storage on secondary
+media; the absolute form cannot be transmitted because it contains pointers to
+objects that are generally not accessible to the recipient.
+....
 
 === Security descriptor header
 
@@ -34,9 +44,9 @@ The security descriptor header is 20 bytes of size and consists of:
 Contains an offset relative from the start of the security descriptor header
 | 8 | 4 | | Reference to the group SID +
 Contains an offset relative from the start of the security descriptor header
-| 12 | 4 | | Reference to the DACL +
+| 12 | 4 | | Reference to the SACL +
 Contains an offset relative from the start of the security descriptor header
-| 16 | 4 | | Reference to the SACL +
+| 16 | 4 | | Reference to the DACL +
 Contains an offset relative from the start of the security descriptor header
 |===
 
@@ -101,7 +111,7 @@ The 'S' in the string representation is not stored in the binary representation.
 
 == Access control list (ACL)
 
-Both the DACL and the SACL are stored in the same data structure, referred to 
+Both the DACL and the SACL are stored in the same data structure, referred to
 as the Access Control List (ACL).
 
 The access control list header is 8 bytes of size and consists of:
@@ -134,7 +144,7 @@ See section: <<access_control_entry_flags,Access control entry (ACE) flags>>
 The value includes the size of the access control entry header.
 |===
 
-The access control entry (ACE) header is followed by access entry data. The 
+The access control entry (ACE) header is followed by access entry data. The
 size and format of the ACE data is dependent on the flags.
 
 === [[access_control_entry_types]]Access control entry (ACE) types
@@ -213,12 +223,24 @@ The object ACE data structure is variable of size and consists of:
 | Offset | Size | Value | Description
 | 0 | 4 | | Access rights flags (ACCESS_MASK) +
 See section: <<access_rights_flags,Access rights flags (ACCESS_MASK)>>
-| 4 | 4 | | Flags
+| 4 | 4 | | Object flags
+4+| _Present if ACE_OBJECT_TYPE_PRESENT object flag is set_
 | 8 | 16 | | Object type class identifier +
 Contains a GUID
-| 24 | 16 | | Inherited object type class identifier +
+4+| _Present if ACE_INHERITED_OBJECT_TYPE_PRESENT object flag is set_
+| ... | 16 | | Inherited object type class identifier +
 Contains a GUID
+4+| _Common_
 | 40 | ... | | SID
+|===
+
+===== Object flags
+
+[cols="1,1,5",options="header"]
+|===
+| Value | Identifier | Description
+| 0x00000001 | ACE_OBJECT_TYPE_PRESENT | Has object type class identifier
+| 0x00000002 | ACE_INHERITED_OBJECT_TYPE_PRESENT | Has inherited object type class identifier
 |===
 
 === [[access_control_entry_flags]]Access control entry (ACE) flags
@@ -361,4 +383,6 @@ All folder access rights: 0x00000fbf
 * http://msdn.microsoft.com/en-us/library/windows/desktop/aa379561(v=vs.85).aspx[SECURITY_DESCRIPTOR structure]
 * https://msdn.microsoft.com/en-us/library/windows/desktop/aa374919(v=vs.85).aspx[ACE_HEADER structure]
 * https://msdn.microsoft.com/en-us/library/windows/desktop/aa374847(v=vs.85).aspx[ACCESS_MASK]
+* https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/7d4dac05-9cef-4563-a058-f108abecce1d[SECURITY_DESCRIPTOR protocol reference]
+* https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-dtyp/c79a383c-2b3f-4655-abe7-dcbb7ce0cfbe[ACCESS_ALLOWED_OBJECT_ACE protocol reference]
 
