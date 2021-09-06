@@ -254,7 +254,7 @@ int libfwnt_lznt1_decompress_chunk(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compressed data offset value out of bounds.",
+					 "%s: invalid compressed data offset value out of bounds.",
 					 function );
 
 					return( -1 );
@@ -315,7 +315,7 @@ int libfwnt_lznt1_decompress_chunk(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compression tuple offset value out of bounds.",
+					 "%s: invalid compression tuple offset value out of bounds.",
 					 function );
 
 					return( -1 );
@@ -330,7 +330,7 @@ int libfwnt_lznt1_decompress_chunk(
 						 error,
 						 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 						 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-						 "%s: compression tuple index value out of bounds.",
+						 "%s: invalid compression tuple index value out of bounds.",
 						 function );
 
 						return( -1 );
@@ -339,9 +339,9 @@ int libfwnt_lznt1_decompress_chunk(
 					{
 						libcerror_error_set(
 						 error,
-						 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-						 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-						 "%s: uncompressed data too small.",
+						 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+						 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+						 "%s: invalid uncompressed data offset value out of bounds.",
 						 function );
 
 						return( -1 );
@@ -357,9 +357,9 @@ int libfwnt_lznt1_decompress_chunk(
 				{
 					libcerror_error_set(
 					 error,
-					 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-					 LIBCERROR_ARGUMENT_ERROR_VALUE_TOO_SMALL,
-					 "%s: uncompressed data too small.",
+					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+					 "%s: invalid uncompressed data offset value out of bounds.",
 					 function );
 
 					return( -1 );
@@ -370,7 +370,7 @@ int libfwnt_lznt1_decompress_chunk(
 					 error,
 					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
-					 "%s: compressed data offset value out of bounds.",
+					 "%s: invalid compressed data offset value out of bounds.",
 					 function );
 
 					return( -1 );
@@ -390,6 +390,17 @@ int libfwnt_lznt1_decompress_chunk(
 			 */
 			while( uncompressed_data_offset > compression_tuple_threshold )
 			{
+				if( compression_tuple_offset_shift == 0 )
+				{
+					libcerror_error_set(
+					 error,
+					 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+					 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+					 "%s: invalid compression tuple offset shift value out of bounds.",
+					 function );
+
+					return( -1 );
+				}
 				compression_tuple_offset_shift -= 1;
 				compression_tuple_size_mask   >>= 1;
 				compression_tuple_threshold   <<= 1;
