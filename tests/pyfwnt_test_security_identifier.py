@@ -2,7 +2,7 @@
 #
 # Python-bindings security_identifier type test script
 #
-# Copyright (C) 2009-2021, Joachim Metz <joachim.metz@gmail.com>
+# Copyright (C) 2009-2022, Joachim Metz <joachim.metz@gmail.com>
 #
 # Refer to AUTHORS for acknowledgements.
 #
@@ -43,7 +43,7 @@ class SecurityIdentifierTypeTests(unittest.TestCase):
       security_identifier.copy_from_byte_stream(None)
 
     with self.assertRaises(IOError):
-      security_identifier.copy_from_byte_stream(self._TEST_DATA[:4])
+      security_identifier.copy_from_byte_stream(b'')
 
   def test_get_string(self):
     """Tests the get_string function."""
