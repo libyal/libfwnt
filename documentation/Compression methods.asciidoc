@@ -345,6 +345,75 @@ algorithms.
 
 [yellow-background]*TODO complete section*
 
+==== LZXPRESS chunk
+
+A LZXPRESS chunk consists of:
+
+* compression indicator (or bitmask)
+* compressed data
+
+==== LZXPRESS compression indictor
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0 | 4 | | Compression indicator, stored in little-endian
+|===
+
+The MSB of the compression indicator represents the first value (not bytes) in
+the chunk, the LSB the last.
+
+* a compression indicator bit of 0 indicates an uncompressed byte;
+* a compression indicator bit of 1 indicates compressed data using a compression tuple (meaning combination of two values).
+
+==== LZXPRESS compression tuple
+
+The LZXPRESS compression tuple is variable of size and consists of:
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 0.0 | 3 bits | | Compression size (length)
+| 0.3 | 12 bits | | Compression offset (distance) +
+Stored as offset - 1
+|===
+
+If the compression size is 7 a first level extended compression size should
+be added to the previous compression size.
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 2.0 | 4 bits | | First level extended compression size (length)
+| 2.4 | 4 bits | | See note.
+|===
+
+[NOTE]
+The first level extended compression size is stored in a byte that is shared
+with other compression tuples, where the first compression tuple uses the lower
+4 bits and the second compression tuple the upper 4 bits.
+
+If the compression size is 22 a second level extended compression size should
+be added to the previous compression size.
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 3.0 | 8 bits | | Second level extended compression size (length)
+|===
+
+If the compression size is 277 a third level extended compression size should
+be added to the previous compression size.
+
+[cols="1,1,1,5",options="header"]
+|===
+| Offset | Size | Value | Description
+| 4.0 | 32 bits | | Third level extended compression size (length), stored in little-endian
+|===
+
+[NOTE]
+The size is stored as size - 3
+
 === LZXPRESS Huffman
 
 The LZXPRESS Huffman compressed data consists of multiple chunks. Each chunk
@@ -353,7 +422,7 @@ consists of:
 * a Huffman (prefix) code table
 * encoded bit-stream
 
-The LZXPRESS Huffman (prefix) code table 256 bytes of size and consists of:
+The LZXPRESS Huffman (prefix) code table is 256 bytes of size and consists of:
 
 [cols="1,1,1,5",options="header"]
 |===

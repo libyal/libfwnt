@@ -359,7 +359,8 @@ int libfwnt_lzxpress_decompress(
 					libcnotify_printf(
 					 "\n" );
 				}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 				if( compression_tuple_size > 32771 )
 				{
 					libcerror_error_set(
