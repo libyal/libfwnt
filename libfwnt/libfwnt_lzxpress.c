@@ -324,7 +324,6 @@ int libfwnt_lzxpress_decompress(
 			                 compression_tuple_size );
 		
 					compressed_data_offset += 2;
-
 				}
 				/* The size value is stored as
 				 * size - 3
