@@ -26,7 +26,6 @@ DPKG_FILES = \
 	dpkg/rules \
 	dpkg/libfwnt.install \
 	dpkg/libfwnt-dev.install \
-	dpkg/libfwnt-python.install \
 	dpkg/libfwnt-python3.install \
 	dpkg/source/format
 
