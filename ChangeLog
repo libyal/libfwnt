@@ -1,23 +1,10 @@
 TODO
-* lzx
-  - add decompression support
-  - add compression support
-* lznt1
-  - add compression support
-* lzxpress
-  - add compression support
-* lzxpress huffman
-  - add compression support
 * update include header
   - locale identifier functions
-  - lznt1 functions
-  - lzxpress functions
 * add tests
   - locale identifier functions
-  - compression
 * Python bindings
   - add locale identifier support
-  - add compression support
 
 * locale identifier:
   - currently debug functions only

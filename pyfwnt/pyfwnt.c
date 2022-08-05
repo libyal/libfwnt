@@ -35,6 +35,9 @@
 #include "pyfwnt_error.h"
 #include "pyfwnt_libcerror.h"
 #include "pyfwnt_libfwnt.h"
+#include "pyfwnt_lznt1.h"
+#include "pyfwnt_lzx.h"
+#include "pyfwnt_lzxpress.h"
 #include "pyfwnt_python.h"
 #include "pyfwnt_security_descriptor.h"
 #include "pyfwnt_security_identifier.h"
@@ -49,6 +52,34 @@ PyMethodDef pyfwnt_module_methods[] = {
 	  "get_version() -> String\n"
 	  "\n"
 	  "Retrieves the version." },
+
+	{ "lznt1_decompress",
+	  (PyCFunction) pyfwnt_lznt1_decompress,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "lznt1_compress(compressed_data, uncompressed_data_size) -> Bytes\n"
+	  "\n"
+	  "Decompresses data using LZNT1 compression." },
+
+	{ "lzx_decompress",
+	  (PyCFunction) pyfwnt_lzx_decompress,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "lzx_compress(compressed_data, uncompressed_data_size) -> Bytes\n"
+	  "\n"
+	  "Decompresses data using LZX compression." },
+
+	{ "lzxpress_decompress",
+	  (PyCFunction) pyfwnt_lzxpress_decompress,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "lzxpress_compress(compressed_data, uncompressed_data_size) -> Bytes\n"
+	  "\n"
+	  "Decompresses data using LZXPRESS compression." },
+
+	{ "lzxpress_huffman_decompress",
+	  (PyCFunction) pyfwnt_lzxpress_huffman_decompress,
+	  METH_VARARGS | METH_KEYWORDS,
+	  "lzxpress_huffman_compress(compressed_data, uncompressed_data_size) -> Bytes\n"
+	  "\n"
+	  "Decompresses data using LZXPRESS Huffman compression." },
 
 	/* Sentinel */
 	{ NULL, NULL, 0, NULL }

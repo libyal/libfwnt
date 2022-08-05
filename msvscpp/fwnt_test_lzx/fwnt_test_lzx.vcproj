@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="fwnt_test_lzx"
-	ProjectGUID="{C4249011-7905-4507-B391-27DED15CEB92}"
+	ProjectGUID="{6243C756-903D-4BFE-AE64-ABDF41CCB6ED}"
 	RootNamespace="fwnt_test_lzx"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="fwnt_test_access_control_entry"
-	ProjectGUID="{727010D5-B76E-431D-9283-6141FEB68BD7}"
+	ProjectGUID="{A6141C77-5D8B-4944-8396-8BD419BD3E11}"
 	RootNamespace="fwnt_test_access_control_entry"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"

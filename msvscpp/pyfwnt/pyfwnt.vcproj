@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="pyfwnt"
-	ProjectGUID="{C5D54B9E-4DF8-44FC-80BC-42CC25679614}"
+	ProjectGUID="{A43C773A-3EB7-4598-A99E-F9F03D474A59}"
 	RootNamespace="pyfwnt"
 	TargetFrameworkVersion="131072"
 	>
@@ -198,6 +198,18 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_lznt1.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_lzx.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_lzxpress.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\pyfwnt\pyfwnt_security_descriptor.c"
 				>
 			</File>
@@ -245,6 +257,18 @@
 			</File>
 			<File
 				RelativePath="..\..\pyfwnt\pyfwnt_libfwnt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_lznt1.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_lzx.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\pyfwnt\pyfwnt_lzxpress.h"
 				>
 			</File>
 			<File

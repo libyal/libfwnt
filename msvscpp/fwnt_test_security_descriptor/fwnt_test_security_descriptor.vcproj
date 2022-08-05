@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="fwnt_test_security_descriptor"
-	ProjectGUID="{8C0F2FED-FAE3-40AB-8203-7326C6B09AE4}"
+	ProjectGUID="{9220B7AC-76D9-44DF-A3C6-FB75F675FFF4}"
 	RootNamespace="fwnt_test_security_descriptor"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"

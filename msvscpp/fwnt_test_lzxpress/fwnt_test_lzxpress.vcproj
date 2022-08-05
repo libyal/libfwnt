@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="9,00"
 	Name="fwnt_test_lzxpress"
-	ProjectGUID="{9E02099F-A54D-4A2D-9E73-92234F60EC8D}"
+	ProjectGUID="{3C03E2D5-7286-45BE-A2B4-364F3E1E3B67}"
 	RootNamespace="fwnt_test_lzxpress"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"

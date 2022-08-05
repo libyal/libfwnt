@@ -24,6 +24,9 @@ BUILT_SOURCES = \
 	pyfwnt_integer.c pyfwnt_integer.h \
 	pyfwnt_libcerror.h \
 	pyfwnt_libfwnt.h \
+	pyfwnt_lznt1.c pyfwnt_lznt1.h \
+	pyfwnt_lzx.c pyfwnt_lzx.h \
+	pyfwnt_lzxpress.c pyfwnt_lzxpress.h \
 	pyfwnt_python.h \
 	pyfwnt_security_descriptor.c pyfwnt_security_descriptor.h \
 	pyfwnt_security_identifier.c pyfwnt_security_identifier.h \

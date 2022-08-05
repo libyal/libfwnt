@@ -28,66 +28,6 @@
 #include "libfwnt_libcnotify.h"
 #include "libfwnt_lznt1.h"
 
-/* Compresses data using LZNT1 compression
- * Returns 1 on success or -1 on error
- */
-int libfwnt_lznt1_compress(
-     const uint8_t *uncompressed_data,
-     size_t uncompressed_data_size,
-     uint8_t *compressed_data,
-     size_t *compressed_data_size,
-     libcerror_error_t **error )
-{
-	static char *function = "libfwnt_lznt1_compress";
-
-	if( uncompressed_data == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid uncompressed data.",
-		 function );
-
-		return( -1 );
-	}
-	if( uncompressed_data_size > (size_t) SSIZE_MAX )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_VALUE_EXCEEDS_MAXIMUM,
-		 "%s: invalid uncompressed data size value exceeds maximum.",
-		 function );
-
-		return( -1 );
-	}
-	if( compressed_data == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data.",
-		 function );
-
-		return( -1 );
-	}
-	if( compressed_data_size == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid compressed data size.",
-		 function );
-
-		return( -1 );
-	}
-/* TODO implement */
-	return( -1 );
-}
-
 /* Decompresses a LZNT1 compressed chunk
  * Returns 1 on success or -1 on error
  */

@@ -32,14 +32,6 @@
 extern "C" {
 #endif
 
-LIBFWNT_EXTERN \
-int libfwnt_lznt1_compress(
-     const uint8_t *uncompressed_data,
-     size_t uncompressed_data_size,
-     uint8_t *compressed_data,
-     size_t *compressed_data_size,
-     libcerror_error_t **error );
-
 int libfwnt_lznt1_decompress_chunk(
      const uint8_t *compressed_data,
      size_t compressed_data_size,
