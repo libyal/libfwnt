@@ -18,9 +18,11 @@ TESTS = \
 	$(TESTS_PYFWNT)
 
 check_SCRIPTS = \
+	pyfwnt_test_access_control_entry.py \
+	pyfwnt_test_access_control_list.py \
 	pyfwnt_test_lznt1.py \
-	pyfwnt_test_lzx.py \
 	pyfwnt_test_lzxpress.py \
+	pyfwnt_test_lzx.py \
 	pyfwnt_test_security_descriptor.py \
 	pyfwnt_test_security_identifier.py \
 	pyfwnt_test_support.py \
