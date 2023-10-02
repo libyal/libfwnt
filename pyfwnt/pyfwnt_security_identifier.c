@@ -451,7 +451,6 @@ PyObject *pyfwnt_security_identifier_get_string(
 {
 	PyObject *string_object      = NULL;
 	libcerror_error_t *error     = NULL;
-	const char *errors           = NULL;
 	static char *function        = "pyfwnt_security_identifier_get_string";
 	char *utf8_string            = NULL;
 	size_t string_size           = 0;
@@ -542,7 +541,7 @@ PyObject *pyfwnt_security_identifier_get_string(
 	string_object = PyUnicode_DecodeUTF8(
 	                 utf8_string,
 	                 (Py_ssize_t) string_size - 1,
-	                 errors );
+	                 NULL );
 
 	if( string_object == NULL )
 	{
