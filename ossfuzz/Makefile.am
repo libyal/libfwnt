@@ -64,9 +64,9 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 distclean: clean
-	/bin/rm -f Makefile
+	-rm -f Makefile
 
-splint:
+splint-local:
 	@echo "Running splint on lznt1_fuzzer ..."
 	-splint -preproc -redef $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(lznt1_fuzzer_SOURCES)
 	@echo "Running splint on lzx_fuzzer ..."

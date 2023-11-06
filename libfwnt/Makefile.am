@@ -52,11 +52,13 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 distclean: clean
-	/bin/rm -f libfwnt_definitions.h
-	/bin/rm -f libfwnt.rc
-	/bin/rm -f Makefile
+	-rm -f libfwnt_definitions.h
+	-rm -f libfwnt.rc
+	-rm -f Makefile
 
-splint:
+sources-local: $(BUILT_SOURCES)
+
+splint-local:
 	@echo "Running splint on libfwnt ..."
 	-splint -preproc -redef $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(libfwnt_la_SOURCES)
 

@@ -18,9 +18,9 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 distclean: clean
-	/bin/rm -f libfwnt.h
-	/bin/rm -f libfwnt/definitions.h
-	/bin/rm -f libfwnt/features.h
-	/bin/rm -f libfwnt/types.h
-	/bin/rm -f Makefile
+	-rm -f libfwnt.h
+	-rm -f libfwnt/definitions.h
+	-rm -f libfwnt/features.h
+	-rm -f libfwnt/types.h
+	-rm -f Makefile
 
