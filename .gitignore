@@ -1,6 +1,6 @@
 # Files to ignore by git
 #
-# Version: 20230926
+# Version: 20231119
 
 # Generic auto-generated build files
 *~
@@ -127,7 +127,6 @@ stamp-h[1-9]
 /libfwnt.spec
 /libfwnt/libfwnt.rc
 /libfwnt/libfwnt_definitions.h
-/pyfwnt-python[23]/*.[ch]
 /setup.cfg
 /tests/*.exe
 /tests/fwnt_test_access_control_entry

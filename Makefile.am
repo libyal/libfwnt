@@ -9,8 +9,6 @@ SUBDIRS = \
 	libcnotify \
 	libfwnt \
 	pyfwnt \
-	pyfwnt-python2 \
-	pyfwnt-python3 \
 	po \
 	manuals \
 	tests \
