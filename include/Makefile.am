@@ -14,13 +14,11 @@ EXTRA_DIST = \
 	libfwnt/features.h.in \
 	libfwnt/types.h.in
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	libfwnt.h \
+	libfwnt/definitions.h \
+	libfwnt/features.h \
+	libfwnt/types.h \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f libfwnt.h
-	-rm -f libfwnt/definitions.h
-	-rm -f libfwnt/features.h
-	-rm -f libfwnt/types.h
-	-rm -f Makefile
 

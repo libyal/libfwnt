@@ -1,6 +1,6 @@
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/include \
-	-I$(top_srcdir)/common \
+	-I../include -I$(top_srcdir)/include \
+	-I../common -I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCTHREADS_CPPFLAGS@ \
 	@LIBCDATA_CPPFLAGS@ \
@@ -48,13 +48,11 @@ EXTRA_DIST = \
 	libfwnt.rc \
 	libfwnt.rc.in
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	libfwnt_definitions.h \
+	libfwnt.rc \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f libfwnt_definitions.h
-	-rm -f libfwnt.rc
-	-rm -f Makefile
 
 sources-local: $(BUILT_SOURCES)
 
