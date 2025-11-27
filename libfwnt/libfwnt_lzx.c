@@ -1,7 +1,7 @@
 /*
  * LZX (un)compression functions
  *
- * Copyright (C) 2009-2024, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2009-2025, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -710,7 +710,7 @@ int libfwnt_lzx_decode_huffman(
 						 error,
 						 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 						 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-						 "%s: unable to retrieve symbol from literals and match headers Huffman tree.",
+						 "%s: unable to retrieve symbol from aligned offsets Huffman tree.",
 						 function );
 
 						return( -1 );
