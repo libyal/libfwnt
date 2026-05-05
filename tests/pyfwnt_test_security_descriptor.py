@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 # Python-bindings security_descriptor type test script
 #
@@ -18,8 +18,6 @@
 #
 # You should have received a copy of the GNU Lesser General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from __future__ import unicode_literals
 
 import unittest
 

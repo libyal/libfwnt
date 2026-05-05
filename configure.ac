@@ -148,7 +148,7 @@ AC_CONFIG_FILES([dpkg/changelog])
 AC_CONFIG_FILES([libfwnt/libfwnt.rc])
 AC_CONFIG_FILES([libfwnt.pc])
 AC_CONFIG_FILES([libfwnt.spec])
-AC_CONFIG_FILES([setup.cfg])
+AC_CONFIG_FILES([pyproject.toml])
 dnl Generate a source configuration file
 AC_CONFIG_HEADERS([common/config.h])
 

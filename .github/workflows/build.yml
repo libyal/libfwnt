@@ -75,7 +75,7 @@ jobs:
       run: |
         sudo add-apt-repository universe &&
         sudo apt-get update &&
-        sudo apt-get -y install autoconf automake autopoint build-essential git libtool pkg-config python3-dev python-dev-is-python3
+        sudo apt-get -y install autoconf automake autopoint build-essential git libtool pkg-config python3-dev
     - name: Download test data
       run: |
         if test -x "synctestdata.sh"; then ./synctestdata.sh; fi
@@ -89,7 +89,7 @@ jobs:
         PYTHON_VERSION: ${{ matrix.python_version }}
       run: |
         tests/runtests.sh
-  build_setup_py_ubuntu:
+  build_pyproject_ubuntu:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -97,18 +97,13 @@ jobs:
         - architecture: 'x64'
           compiler: 'gcc'
           configure_options: ''
-          python-version: '3.10'
     steps:
     - uses: actions/checkout@v6
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v6
-      with:
-        python-version: ${{ matrix.python-version }}
     - name: Install build dependencies
       run: |
         sudo add-apt-repository universe &&
         sudo apt-get update &&
-        sudo apt-get -y install autoconf automake autopoint build-essential git libtool pkg-config python3-dev python-dev-is-python3
+        sudo apt-get -y install autoconf automake autopoint build-essential git libtool pkg-config python3 python3-build python3-dev
     - name: Building from source
       env:
         CC: ${{ matrix.compiler }}
@@ -116,7 +111,7 @@ jobs:
         tests/build.sh ${{ matrix.configure_options }}
     - name: Build Python module
       run: |
-        python setup.py build
+        python -m build
   coverage_ubuntu:
     runs-on: ubuntu-latest
     strategy:
@@ -132,7 +127,7 @@ jobs:
     - uses: actions/checkout@v6
     - name: Install build dependencies
       run: |
-        sudo apt-get -y install autoconf automake autopoint build-essential git libtool pkg-config
+        sudo apt-get -y install curl autoconf automake autopoint build-essential git libtool pkg-config
     - name: Download test data
       run: |
         if test -x "synctestdata.sh"; then ./synctestdata.sh; fi
@@ -150,7 +145,7 @@ jobs:
           (cd ${DIRECTORY} && find . -maxdepth 1 -name \*.gcno -type f -exec gcov -pb {} \;) \
         done
     - name: Upload coverage report to Codecov
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         name: linux-${{ matrix.architecture }}-gcc-no-optimization
         token: ${{ secrets.CODECOV_TOKEN }}
