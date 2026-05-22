@@ -25,6 +25,8 @@
 #include <common.h>
 #include <types.h>
 
+#include "libfwnt_extern.h"
+
 #if defined( __cplusplus )
 extern "C" {
 #endif
@@ -46,6 +48,7 @@ struct libfwnt_locale_identifier_language_tag
 	const char *description;
 };
 
+LIBFWNT_EXTERN \
 const char *libfwnt_locale_identifier_language_tag_get_identifier(
              uint16_t lcid_language_tag );
 

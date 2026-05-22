@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 #
 # Script to build and install Python-bindings.
-# Version: 20260505
+# Version: 20260510
 
 import glob
 import gzip
@@ -176,17 +176,17 @@ class custom_build_ext(build_ext):
         compiler = new_compiler(compiler=self.compiler)
         project_information = ProjectInformation(compiler.compiler_type)
 
-        extention = None
-        for ext_module in self.distribution.ext_modules:
-            if ext_module.name == project_information.module_name:
-                extention = ext_module
-
-        if extention is None:
-            raise RuntimeError("Missing ext-module definition")
-
-        extention.define_macros = project_information.define_macros
-        extention.include_dirs = project_information.include_directories
-        extention.sources = project_information.sources
+        # ext_module can be defined multiple times. It is currently assumed that
+        # this is due to the experimental nature of tool.setuptools.ext-modules
+        # at this time. Hence ext_modules is redefined as a single extension.
+        self.distribution.ext_modules = [
+            Extension(
+                project_information.module_name,
+                define_macros=project_information.define_macros,
+                include_dirs=project_information.include_directories,
+                sources=project_information.sources,
+            )
+        ]
 
     def run(self):
         """Runs the build."""

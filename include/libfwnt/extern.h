@@ -31,14 +31,17 @@
  */
 #if defined( LIBFWNT_DLL_EXPORT )
 #define LIBFWNT_EXTERN __declspec(dllexport)
+#define LIBFWNT_EXTERN_VARIABLE extern __declspec(dllexport)
 
 #elif defined( LIBFWNT_DLL_IMPORT )
-#define LIBFWNT_EXTERN extern __declspec(dllimport)
+#define LIBFWNT_EXTERN __declspec(dllimport)
+#define LIBFWNT_EXTERN_VARIABLE extern __declspec(dllimport)
 
 #else
 #define LIBFWNT_EXTERN extern
+#define LIBFWNT_EXTERN_VARIABLE extern
 
-#endif
+#endif /* defined( LIBFWNT_DLL_EXPORT ) */
 
 #endif /* !defined( _LIBFWNT_EXTERN_H ) */
 

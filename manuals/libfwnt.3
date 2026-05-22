@@ -1,4 +1,4 @@
-.Dd December 15, 2019
+.Dd May 22, 2026
 .Dt libfwnt 3
 .Os libfwnt
 .Sh NAME
@@ -32,6 +32,10 @@ Error functions
 .Fn libfwnt_error_backtrace_fprint "libfwnt_error_t *error" "FILE *stream"
 .Ft int
 .Fn libfwnt_error_backtrace_sprint "libfwnt_error_t *error" "char *string" "size_t size"
+.Pp
+Locale identifier (LCID) functions
+.Ft const char *
+.Fn libfwnt_locale_identifier_language_tag_get_identifier "uint16_t lcid_language_tag"
 .Pp
 Security descriptor functions
 .Ft int
