@@ -196,7 +196,6 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 	size_t byte_stream_offset                                              = 0;
 	uint16_t entry_index                                                   = 0;
 	uint16_t number_of_entries                                             = 0;
-	uint16_t size                                                          = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	uint16_t value_16bit                                                   = 0;
@@ -285,10 +284,6 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 	internal_access_control_list->revision_number = byte_stream[ 0 ];
 
 	byte_stream_copy_to_uint16_little_endian(
-	 &( byte_stream[ 2 ] ),
-	 size );
-
-	byte_stream_copy_to_uint16_little_endian(
 	 &( byte_stream[ 4 ] ),
 	 number_of_entries );
 
@@ -305,10 +300,13 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 		 function,
 		 byte_stream[ 1 ] );
 
+		byte_stream_copy_to_uint16_little_endian(
+		 &( byte_stream[ 2 ] ),
+		 value_16bit );
 		libcnotify_printf(
 		 "%s: size\t\t\t: %" PRIu16 "\n",
 		 function,
-		 size );
+		 value_16bit );
 
 		libcnotify_printf(
 		 "%s: number of entries\t: %" PRIu16 "\n",
@@ -326,7 +324,8 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 		libcnotify_printf(
 		 "\n" );
 	}
-#endif
+#endif /* defined( HAVE_DEBUG_OUTPUT ) */
+
 	byte_stream_offset = 8;
 
 /* TODO check bounds of number_of_entries */
@@ -380,7 +379,6 @@ int libfwnt_access_control_list_copy_from_byte_stream(
 			goto on_error;
 		}
 		if( (size_t) internal_access_control_entry->size > byte_stream_size )
-
 		{
 			libcerror_error_set(
 			 error,

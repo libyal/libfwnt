@@ -223,11 +223,11 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 	uint32_t group_sid_offset                                            = 0;
 	uint32_t owner_sid_offset                                            = 0;
 	uint32_t system_acl_offset                                           = 0;
-	uint16_t control_flags                                               = 0;
 
 #if defined( HAVE_DEBUG_OUTPUT )
 	system_character_t *sid_string                                       = NULL;
 	size_t sid_string_size                                               = 0;
+	uint16_t value_16bit                                                 = 0;
 	int result                                                           = 0;
 #endif
 
@@ -346,10 +346,6 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 #endif
 	internal_security_descriptor->revision_number = byte_stream[ 0 ];
 
-	byte_stream_copy_to_uint16_little_endian(
-	 &( byte_stream[ 2 ] ),
-	 control_flags );
-
 	byte_stream_copy_to_uint32_little_endian(
 	 &( byte_stream[ 4 ] ),
 	 owner_sid_offset );
@@ -379,12 +375,15 @@ int libfwnt_security_descriptor_copy_from_byte_stream(
 		 function,
 		 byte_stream[ 1 ] );
 
+		byte_stream_copy_to_uint16_little_endian(
+		 &( byte_stream[ 2 ] ),
+		 value_16bit );
 		libcnotify_printf(
 		 "%s: control flags\t\t: 0x%04" PRIx16 "\n",
 		 function,
-		 control_flags );
+		 value_16bit );
 		libfwnt_debug_print_security_descriptor_control_flags(
-		 control_flags );
+		 value_16bit );
 		libcnotify_printf(
 		 "\n" );
 
