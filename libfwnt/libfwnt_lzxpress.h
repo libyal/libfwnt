@@ -42,7 +42,7 @@ struct libfwnt_lzxpress_huffman_code_symbol
 	 */
 	uint16_t symbol;
 
-	/* The code size 
+	/* The code size
 	 */
 	uint16_t code_size;
 };

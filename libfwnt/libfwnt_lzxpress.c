@@ -322,7 +322,7 @@ int libfwnt_lzxpress_decompress(
 			                byte_stream_copy_to_uint16_little_endian(
 			                 &( compressed_data[ compressed_data_offset ] ),
 			                 compression_tuple_size );
-		
+
 					compressed_data_offset += 2;
 				}
 				/* The size value is stored as
