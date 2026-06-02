@@ -273,7 +273,7 @@ int libfwnt_huffman_tree_build(
 
 		return( -1 );
 	}
-	if( huffman_tree->maximum_code_size < 2 )
+	if( huffman_tree->maximum_code_size == 0 )
 	{
 		libcerror_error_set(
 		 error,

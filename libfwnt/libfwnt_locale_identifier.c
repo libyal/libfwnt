@@ -25,7 +25,7 @@
 
 #include "libfwnt_locale_identifier.h"
 
-libfwnt_locale_identifier_language_tag_t libfwnt_locale_identifier_language_tags[ ] = {
+static libfwnt_locale_identifier_language_tag_t libfwnt_locale_identifier_language_tags[ ] = {
 	{ 0x0001, "ar",			"Arabic" },
 	{ 0x0002, "bg",			"Bulgarian" },
 	{ 0x0003, "ca",			"Catalan" },
