@@ -1,6 +1,6 @@
-.Dd May 22, 2026
-.Dt libfwnt 3
-.Os libfwnt
+.Dd June 11, 2026
+.Dt LIBFWNT 3
+.Os
 .Sh NAME
 .Nm libfwnt.h
 .Nd Library to support common Windows NT specific formats
@@ -8,125 +8,378 @@
 .In libfwnt.h
 .Pp
 Support functions
+.nf
 .Ft const char *
-.Fn libfwnt_get_version "void"
+.Fo libfwnt_get_version
+.Fa "void"
+.Fc
+.fi
 .Pp
 Notify functions
+.nf
 .Ft void
-.Fn libfwnt_notify_set_verbose "int verbose"
+.Fo libfwnt_notify_set_verbose
+.Fa "int verbose"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_notify_set_stream "FILE *stream" "libfwnt_error_t **error"
+.Fo libfwnt_notify_set_stream
+.Fa "FILE *stream"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_notify_stream_open "const char *filename" "libfwnt_error_t **error"
+.Fo libfwnt_notify_stream_open
+.Fa "const char *filename"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_notify_stream_close "libfwnt_error_t **error"
+.Fo libfwnt_notify_stream_close
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 Error functions
+.nf
 .Ft void
-.Fn libfwnt_error_free "libfwnt_error_t **error"
+.Fo libfwnt_error_free
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_error_fprint "libfwnt_error_t *error" "FILE *stream"
+.Fo libfwnt_error_fprint
+.Fa "libfwnt_error_t *error"
+.Fa "FILE *stream"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_error_sprint "libfwnt_error_t *error" "char *string" "size_t size"
+.Fo libfwnt_error_sprint
+.Fa "libfwnt_error_t *error"
+.Fa "char *string"
+.Fa "size_t size"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_error_backtrace_fprint "libfwnt_error_t *error" "FILE *stream"
+.Fo libfwnt_error_backtrace_fprint
+.Fa "libfwnt_error_t *error"
+.Fa "FILE *stream"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_error_backtrace_sprint "libfwnt_error_t *error" "char *string" "size_t size"
+.Fo libfwnt_error_backtrace_sprint
+.Fa "libfwnt_error_t *error"
+.Fa "char *string"
+.Fa "size_t size"
+.Fc
+.fi
 .Pp
 Locale identifier (LCID) functions
+.nf
 .Ft const char *
-.Fn libfwnt_locale_identifier_language_tag_get_identifier "uint16_t lcid_language_tag"
+.Fo libfwnt_locale_identifier_language_tag_get_identifier
+.Fa "uint16_t lcid_language_tag"
+.Fc
+.fi
 .Pp
 Security descriptor functions
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_initialize "libfwnt_security_descriptor_t **security_descriptor" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_initialize
+.Fa "libfwnt_security_descriptor_t **security_descriptor"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_free "libfwnt_security_descriptor_t **security_descriptor" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_free
+.Fa "libfwnt_security_descriptor_t **security_descriptor"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_copy_from_byte_stream "libfwnt_security_descriptor_t *security_descriptor" "const uint8_t *byte_stream" "size_t byte_stream_size" "int byte_order" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_copy_from_byte_stream
+.Fa "libfwnt_security_descriptor_t *security_descriptor"
+.Fa "const uint8_t *byte_stream"
+.Fa "size_t byte_stream_size"
+.Fa "int byte_order"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_get_owner "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_get_owner
+.Fa "libfwnt_security_descriptor_t *security_descriptor"
+.Fa "libfwnt_security_identifier_t **security_identifier"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_get_group "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_get_group
+.Fa "libfwnt_security_descriptor_t *security_descriptor"
+.Fa "libfwnt_security_identifier_t **security_identifier"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_get_discretionary_acl "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_access_control_list_t **access_control_list" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_get_discretionary_acl
+.Fa "libfwnt_security_descriptor_t *security_descriptor"
+.Fa "libfwnt_access_control_list_t **access_control_list"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_descriptor_get_system_acl "libfwnt_security_descriptor_t *security_descriptor" "libfwnt_access_control_list_t **access_control_list" "libfwnt_error_t **error"
+.Fo libfwnt_security_descriptor_get_system_acl
+.Fa "libfwnt_security_descriptor_t *security_descriptor"
+.Fa "libfwnt_access_control_list_t **access_control_list"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 Security identifier (SID) functions
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_initialize "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_initialize
+.Fa "libfwnt_security_identifier_t **security_identifier"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_free "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_free
+.Fa "libfwnt_security_identifier_t **security_identifier"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_from_byte_stream "libfwnt_security_identifier_t *security_identifier" "const uint8_t *byte_stream" "size_t byte_stream_size" "int byte_order" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_from_byte_stream
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "const uint8_t *byte_stream"
+.Fa "size_t byte_stream_size"
+.Fa "int byte_order"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_get_string_size "libfwnt_security_identifier_t *security_identifier" "size_t *string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_get_string_size
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "size_t *string_size"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf8_string "libfwnt_security_identifier_t *security_identifier" "uint8_t *utf8_string" "size_t utf8_string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_to_utf8_string
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "uint8_t *utf8_string"
+.Fa "size_t utf8_string_size"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf8_string_with_index "libfwnt_security_identifier_t *security_identifier" "uint8_t *utf8_string" "size_t utf8_string_size" "size_t *utf8_string_index" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_to_utf8_string_with_index
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "uint8_t *utf8_string"
+.Fa "size_t utf8_string_size"
+.Fa "size_t *utf8_string_index"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf16_string "libfwnt_security_identifier_t *security_identifier" "uint16_t *utf16_string" "size_t utf16_string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_to_utf16_string
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "uint16_t *utf16_string"
+.Fa "size_t utf16_string_size"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf16_string_with_index "libfwnt_security_identifier_t *security_identifier" "uint16_t *utf16_string" "size_t utf16_string_size" "size_t *utf16_string_index" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_to_utf16_string_with_index
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "uint16_t *utf16_string"
+.Fa "size_t utf16_string_size"
+.Fa "size_t *utf16_string_index"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf32_string "libfwnt_security_identifier_t *security_identifier" "uint32_t *utf32_string" "size_t utf32_string_size" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_to_utf32_string
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "uint32_t *utf32_string"
+.Fa "size_t utf32_string_size"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_security_identifier_copy_to_utf32_string_with_index "libfwnt_security_identifier_t *security_identifier" "uint32_t *utf32_string" "size_t utf32_string_size" "size_t *utf32_string_index" "uint32_t string_format_flags" "libfwnt_error_t **error"
+.Fo libfwnt_security_identifier_copy_to_utf32_string_with_index
+.Fa "libfwnt_security_identifier_t *security_identifier"
+.Fa "uint32_t *utf32_string"
+.Fa "size_t utf32_string_size"
+.Fa "size_t *utf32_string_index"
+.Fa "uint32_t string_format_flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 Access control list (ACL) functions
+.nf
 .Ft int
-.Fn libfwnt_access_control_list_free "libfwnt_access_control_list_t **access_control_list" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_list_free
+.Fa "libfwnt_access_control_list_t **access_control_list"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_access_control_list_get_number_of_entries "libfwnt_access_control_list_t *access_control_list" "int *number_of_entries" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_list_get_number_of_entries
+.Fa "libfwnt_access_control_list_t *access_control_list"
+.Fa "int *number_of_entries"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_access_control_list_get_entry_by_index "libfwnt_access_control_list_t *access_control_list" "int entry_index" "libfwnt_access_control_entry_t **access_control_entry" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_list_get_entry_by_index
+.Fa "libfwnt_access_control_list_t *access_control_list"
+.Fa "int entry_index"
+.Fa "libfwnt_access_control_entry_t **access_control_entry"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 Access control entry (ACE) functions
+.nf
 .Ft int
-.Fn libfwnt_access_control_entry_free "libfwnt_access_control_entry_t **access_control_entry" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_entry_free
+.Fa "libfwnt_access_control_entry_t **access_control_entry"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_access_control_entry_get_type "libfwnt_access_control_entry_t *access_control_entry" "uint8_t *type" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_entry_get_type
+.Fa "libfwnt_access_control_entry_t *access_control_entry"
+.Fa "uint8_t *type"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_access_control_entry_get_flags "libfwnt_access_control_entry_t *access_control_entry" "uint8_t *flags" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_entry_get_flags
+.Fa "libfwnt_access_control_entry_t *access_control_entry"
+.Fa "uint8_t *flags"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_access_control_entry_get_access_mask "libfwnt_access_control_entry_t *access_control_entry" "uint32_t *access_mask" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_entry_get_access_mask
+.Fa "libfwnt_access_control_entry_t *access_control_entry"
+.Fa "uint32_t *access_mask"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_access_control_entry_get_security_identifier "libfwnt_access_control_entry_t *access_control_entry" "libfwnt_security_identifier_t **security_identifier" "libfwnt_error_t **error"
+.Fo libfwnt_access_control_entry_get_security_identifier
+.Fa "libfwnt_access_control_entry_t *access_control_entry"
+.Fa "libfwnt_security_identifier_t **security_identifier"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 LZNT1 functions
+.nf
 .Ft int
-.Fn libfwnt_lznt1_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
+.Fo libfwnt_lznt1_decompress
+.Fa "const uint8_t *compressed_data"
+.Fa "size_t compressed_data_size"
+.Fa "uint8_t *uncompressed_data"
+.Fa "size_t *uncompressed_data_size"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 LZX functions
+.nf
 .Ft int
-.Fn libfwnt_lzx_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
+.Fo libfwnt_lzx_decompress
+.Fa "const uint8_t *compressed_data"
+.Fa "size_t compressed_data_size"
+.Fa "uint8_t *uncompressed_data"
+.Fa "size_t *uncompressed_data_size"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Pp
 LZXPRESS functions
+.nf
 .Ft int
-.Fn libfwnt_lzxpress_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
+.Fo libfwnt_lzxpress_decompress
+.Fa "const uint8_t *compressed_data"
+.Fa "size_t compressed_data_size"
+.Fa "uint8_t *uncompressed_data"
+.Fa "size_t *uncompressed_data_size"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
+.nf
 .Ft int
-.Fn libfwnt_lzxpress_huffman_decompress "const uint8_t *compressed_data" "size_t compressed_data_size" "uint8_t *uncompressed_data" "size_t *uncompressed_data_size" "libfwnt_error_t **error"
+.Fo libfwnt_lzxpress_huffman_decompress
+.Fa "const uint8_t *compressed_data"
+.Fa "size_t compressed_data_size"
+.Fa "uint8_t *uncompressed_data"
+.Fa "size_t *uncompressed_data_size"
+.Fa "libfwnt_error_t **error"
+.Fc
+.fi
 .Sh DESCRIPTION
 The
 .Fn libfwnt_get_version
 function is used to retrieve the library version.
 .Sh RETURN VALUES
-Most of the functions return NULL or \-1 on error, dependent on the return type.
-For the actual return values see "libfwnt.h".
+Most of the functions return NULL or \-1 on error, dependent on the return \
+type.
+For the actual return values see
+.In libfwnt.h .
 .Sh ENVIRONMENT
 None
 .Sh FILES
 None
+.Sh SEE ALSO
+.In libfwnt.h
+.Sh AUTHORS
+.An Joachim Metz <joachim.metz@gmail.com>
 .Sh BUGS
-Please report bugs of any kind on the project issue tracker: https://github.com/libyal/libfwnt/issues
-.Sh AUTHOR
-These man pages are generated from "libfwnt.h".
+Please report bugs of any kind on the project issue tracker: \
+https://github.com/libyal/libfwnt/issues
 .Sh COPYRIGHT
 Copyright (C) 2009-2026, Joachim Metz <joachim.metz@gmail.com>.
 .sp
 This is free software; see the source for copying conditions.
-There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-.Sh SEE ALSO
-the libfwnt.h include file
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A \
+PARTICULAR PURPOSE.

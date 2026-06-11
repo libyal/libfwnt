@@ -24,6 +24,19 @@
 
 #include <common.h>
 
+#if !defined( __CYGWIN__ ) && !defined( _WIN32 ) && defined( __has_attribute )
+#if __has_attribute( visibility )
+#define LIBFWNT_INTERNAL	__attribute__((visibility("hidden"))) extern
+
+#else
+#define LIBFWNT_INTERNAL	extern
+
+#endif /* __has_attribute( visibility ) */
+#else
+#define LIBFWNT_INTERNAL	extern
+
+#endif /* !defined( __CYGWIN__ ) && !defined( _WIN32 ) && defined( __has_attribute ) */
+
 /* Define HAVE_LOCAL_LIBFWNT for local use of libfwnt
  */
 #if !defined( HAVE_LOCAL_LIBFWNT )
@@ -32,7 +45,7 @@
 
 #else
 #define LIBFWNT_EXTERN		/* extern */
-#define LIBFWNT_EXTERN_VARIABLE	extern
+#define LIBFWNT_EXTERN_VARIABLE	LIBFWNT_INTERNAL
 
 #endif /* !defined( HAVE_LOCAL_LIBFWNT ) */
 
