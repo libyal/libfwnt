@@ -8,8 +8,6 @@ AM_CPPFLAGS = \
 	@PTHREAD_CPPFLAGS@ \
 	@LIBFWNT_DLL_IMPORT@
 
-check_PYTHONdir = $(abs_top_builddir)
-
 BUILT_SOURCES = package.m4
 
 check_AUTOTESTS = \
@@ -20,7 +18,7 @@ if HAVE_PYTHON_TESTS
 check_AUTOTESTS += test_python_module
 endif
 
-check_PYTHON_SCRIPTS = \
+check_SCRIPTS = \
 	pyfwnt_test_access_control_entry.py \
 	pyfwnt_test_access_control_list.py \
 	pyfwnt_test_lznt1.py \
@@ -230,7 +228,7 @@ test_python_module: package.m4 test_python_module.at
 
 EXTRA_DIST = \
 	$(check_AUTOTESTS:=.at) \
-	$(check_PYTHON_SCRIPTS) \
+	$(check_SCRIPTS) \
 	package.m4 \
 	test_macros.at
 
