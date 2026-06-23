@@ -2,7 +2,7 @@ AC_PREREQ([2.71])
 
 AC_INIT(
   [libfwnt],
-  [20260618],
+  [20260623],
   [https://github.com/libyal/libfwnt/issues])
 
 AC_CONFIG_SRCDIR(
