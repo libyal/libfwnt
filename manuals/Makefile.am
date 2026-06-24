@@ -2,7 +2,7 @@ man_MANS = \
 	libfwnt.3
 
 EXTRA_DIST = \
-	libfwnt.3
+	$(man_MANS)
 
 DISTCLEANFILES = \
 	Makefile \
