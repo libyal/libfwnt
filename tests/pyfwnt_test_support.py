@@ -25,13 +25,13 @@ import pyfwnt
 
 
 class SupportFunctionsTests(unittest.TestCase):
-  """Tests the support functions."""
+    """Tests the support functions."""
 
-  def test_get_version(self):
-    """Tests the get_version function."""
-    version = pyfwnt.get_version()
-    self.assertIsNotNone(version)
+    def test_get_version(self):
+        """Tests the get_version function."""
+        version = pyfwnt.get_version()
+        self.assertIsNotNone(version)
 
 
 if __name__ == "__main__":
-  unittest.main(verbosity=2)
+    unittest.main(verbosity=2)

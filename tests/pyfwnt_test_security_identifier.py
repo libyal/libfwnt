@@ -25,32 +25,36 @@ import pyfwnt
 
 
 class SecurityIdentifierTypeTests(unittest.TestCase):
-  """Tests the security_identifier type."""
+    """Tests the security_identifier type."""
 
-  _TEST_DATA = bytes(bytearray([
-      0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00,
-      0xc7, 0x99, 0x2e, 0x25, 0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01,
-      0xf5, 0x03, 0x00, 0x00]))
+    # fmt: off
 
-  def test_copy_from_byte_stream(self):
-    """Tests the copy_from_byte_stream function."""
-    security_identifier = pyfwnt.security_identifier()
-    security_identifier.copy_from_byte_stream(self._TEST_DATA)
+    _TEST_DATA = bytes(bytearray([
+        0x01, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x05, 0x15, 0x00, 0x00, 0x00,
+        0xc7, 0x99, 0x2e, 0x25, 0x7c, 0x57, 0x85, 0xc0, 0x94, 0x5a, 0xce, 0x01,
+        0xf5, 0x03, 0x00, 0x00]))
 
-    with self.assertRaises(TypeError):
-      security_identifier.copy_from_byte_stream(None)
+    # fmt: on
 
-    with self.assertRaises(IOError):
-      security_identifier.copy_from_byte_stream(b'')
+    def test_copy_from_byte_stream(self):
+        """Tests the copy_from_byte_stream function."""
+        security_identifier = pyfwnt.security_identifier()
+        security_identifier.copy_from_byte_stream(self._TEST_DATA)
 
-  def test_get_string(self):
-    """Tests the get_string function."""
-    security_identifier = pyfwnt.security_identifier()
-    security_identifier.copy_from_byte_stream(self._TEST_DATA)
+        with self.assertRaises(TypeError):
+            security_identifier.copy_from_byte_stream(None)
 
-    string = security_identifier.get_string()
-    self.assertEqual(string, 'S-1-5-21-623811015-3229964156-30300820-1013')
+        with self.assertRaises(IOError):
+            security_identifier.copy_from_byte_stream(b"")
+
+    def test_get_string(self):
+        """Tests the get_string function."""
+        security_identifier = pyfwnt.security_identifier()
+        security_identifier.copy_from_byte_stream(self._TEST_DATA)
+
+        string = security_identifier.get_string()
+        self.assertEqual(string, "S-1-5-21-623811015-3229964156-30300820-1013")
 
 
 if __name__ == "__main__":
-  unittest.main(verbosity=2)
+    unittest.main(verbosity=2)

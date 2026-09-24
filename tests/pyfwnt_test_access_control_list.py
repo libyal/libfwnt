@@ -25,13 +25,13 @@ import pyfwnt
 
 
 class AccessControlListTypeTests(unittest.TestCase):
-  """Tests the access_control_list type."""
+    """Tests the access_control_list type."""
 
-  def test_init(self):
-    """Tests the init function."""
-    with self.assertRaises(NotImplementedError):
-      pyfwnt.access_control_list()
+    def test_init(self):
+        """Tests the init function."""
+        with self.assertRaises(NotImplementedError):
+            pyfwnt.access_control_list()
 
 
 if __name__ == "__main__":
-  unittest.main(verbosity=2)
+    unittest.main(verbosity=2)
