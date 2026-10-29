@@ -252,10 +252,9 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 
 		return( -1 );
 	}
-	internal_security_identifier->revision_number           = byte_stream[ 0 ];
-	internal_security_identifier->number_of_sub_authorities = byte_stream[ 1 ];
+	internal_security_identifier->revision_number = byte_stream[ 0 ];
 
-	if( internal_security_identifier->number_of_sub_authorities > 15 )
+	if( byte_stream[ 1 ] > 15 )
 	{
 		libcerror_error_set(
 		 error,
@@ -266,6 +265,8 @@ int libfwnt_security_identifier_copy_from_byte_stream(
 
 		return( -1 );
 	}
+	internal_security_identifier->number_of_sub_authorities = byte_stream[ 1 ];
+
 	security_identifier_size = 8 + ( (size_t) internal_security_identifier->number_of_sub_authorities * 4 );
 
 	if( (size_t) security_identifier_size > byte_stream_size )
